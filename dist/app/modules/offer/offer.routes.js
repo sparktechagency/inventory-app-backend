@@ -11,4 +11,8 @@ const user_1 = require("../../../enums/user");
 const router = express_1.default.Router();
 // Create product route
 router.post("/create", (0, auth_1.default)(user_1.USER_ROLES.Retailer), offer_controller_1.sendOfferController.createOffer);
+// send response from wholesaler to retailer
+router.patch("/:id", (0, auth_1.default)(user_1.USER_ROLES.Wholesaler), offer_controller_1.sendOfferController.updateOffer);
+// send response from retailer to wholesaler
+router.patch("/retailer/:id", (0, auth_1.default)(user_1.USER_ROLES.Retailer), offer_controller_1.sendOfferController.confirmOrderFromRetailer);
 exports.offerRoutes = router;

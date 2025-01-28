@@ -12,7 +12,9 @@ const createOffer = async (payload: IOrder, io: Server) => {
     if (!order) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create the offer");
     }
-
+    if (payload.wholeSeller) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Wholesaler ID is required");
+    }
     // Notify wholesaler via Socket.IO
     const notificationData = {
         userId: payload.wholeSeller!.toString(),
@@ -59,7 +61,7 @@ const updateOfferIntoDB = async (
 
     // Notify retailer via Socket.IO
     const notificationData = {
-        userId: existingOffer.retailer?.toString(),
+        userId: existingOffer.retailer!.toString(),
         title: "Offer Updated",
         message: `Your order ${offerId} has been updated with new status: ${payload.status}`,
         type: "offer-update",
@@ -73,43 +75,6 @@ const updateOfferIntoDB = async (
 
     return { updatedOffer };
 };
-
-
-// update offer from retailer to wholesaler
-// ! need to do update product quantity it's not done yet
-// const updateOfferFromRetailer = async (
-//     offerId: string,
-//     payload: Partial<IOrder>, // Payload from the retailer
-//     io: Server // Socket.IO instance
-// ) => {
-//     // Step 1: Find the offer by ID
-//     const existingOffer = await OfferModel.findById(offerId);
-//     if (!existingOffer) {
-//         throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
-//     }
-
-//     // Step 2: Update relevant fields (e.g., quantity)
-//     if (payload?.quantity) {
-//         existingOffer.quantity = payload?.quantity;
-//     }
-//     if (payload.status) {
-//         existingOffer.status = payload.status;
-//     }
-
-//     await existingOffer.save();
-
-//     // Step 3: Notify the wholesaler via Socket.IO
-//     const notificationData = {
-//         userId: existingOffer.wholeSeller?.toString(),
-//         title: "Order Updated by Retailer",
-//         message: `Retailer has updated the order ${offerId}.`,
-//         type: "order-update",
-//     };
-
-//     await notificationSender(io, `getNotification::${existingOffer.wholeSeller}`, notificationData);
-
-//     return { updatedOffer: existingOffer };
-// };
 
 
 
@@ -145,7 +110,7 @@ const updateOfferFromRetailer = async (
 
     // Step 4: Notify the wholesaler via Socket.IO
     const notificationData = {
-        userId: existingOffer.wholeSeller?.toString(),
+        userId: existingOffer.wholeSeller!.toString(),
         title: "Order Updated by Retailer",
         message: `Retailer has updated the order ${offerId}.`,
         type: "order-update",

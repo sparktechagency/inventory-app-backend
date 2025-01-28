@@ -19,13 +19,17 @@ const productSchema = new mongoose_1.Schema({
         ref: "User",
         required: true,
     },
+    price: {
+        type: Number,
+        required: true
+    },
     status: {
         type: String,
         enum: Object.values(status_1.STATUS),
         required: true,
-    },
+    }
 }, {
     timestamps: true,
 });
 // Create the model
-exports.OfferModel = (0, mongoose_1.model)("send offer", productSchema);
+exports.OfferModel = (0, mongoose_1.model)("sendOffer", productSchema);
