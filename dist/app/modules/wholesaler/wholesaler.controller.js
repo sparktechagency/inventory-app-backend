@@ -5,19 +5,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.wholesalerController = void 0;
 const http_status_codes_1 = require("http-status-codes");
-const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
 const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const wholesaler_service_1 = require("./wholesaler.service");
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const getAllWholeSalers = (0, catchAsync_1.default)(async (req, res) => {
-    const result = await wholesaler_service_1.wholesalerServices.getAllWholeSaler();
-    if (!result) {
-        throw new ApiError_1.default(http_status_codes_1.StatusCodes.OK, 'No products found!');
-    }
+    const search = req.query.search;
+    // console.log("Query Parameter - Search:", search);
+    // Pass the search parameter to the service
+    const result = await wholesaler_service_1.wholesalerServices.getAllWholeSaler(search);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: "Product retrieved successfully",
+        message: "Wholesalers retrieved successfully",
         data: result,
     });
 });

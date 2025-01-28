@@ -6,17 +6,20 @@ import sendResponse from "../../../shared/sendResponse";
 import { Request, Response } from "express";
 
 const getAllWholeSalers = catchAsync(async (req: Request, res: Response) => {
-    const result = await wholesalerServices.getAllWholeSaler();
-    if (!result) {
-        throw new ApiError(StatusCodes.OK, 'No products found!');
-    }
+    const search = req.query.search as string;
+    // console.log("Query Parameter - Search:", search);
+
+    // Pass the search parameter to the service
+    const result = await wholesalerServices.getAllWholeSaler(search);
+
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
-        message: "Product retrieved successfully",
+        message: "Wholesalers retrieved successfully",
         data: result,
     });
 });
+
 // get single wholesaler
 const getWholeSalerById = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;

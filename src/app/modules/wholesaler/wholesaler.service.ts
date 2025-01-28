@@ -5,22 +5,35 @@ import { USER_ROLES } from "../../../enums/user";
 
 // get all wholesaler from db
 const getAllWholeSaler = async (search?: string) => {
-    // Build the search filter
     const filter: any = { role: USER_ROLES.Wholesaler };
 
+    // console.log("Search parameter received:", search);
+
+    // Add search condition if `search` is provided
     if (search) {
-        filter.name = { $regex: search, $options: 'i' };
+        filter.businessName = { $regex: search, $options: 'i' };
     }
 
-    // Find wholesalers based on the filter
-    const wholeSalerUsers = await User.find(filter);
+    // console.log("Generated Filter:", JSON.stringify(filter, null, 2));
 
-    if (!wholeSalerUsers || wholeSalerUsers.length === 0) {
-        throw new ApiError(StatusCodes.NOT_FOUND, 'No wholesalers found!');
+    try {
+        // Fetch wholesalers matching the filter
+        const wholeSalerUsers = await User.find(filter);
+
+        // console.log("Matched Wholesalers:", wholeSalerUsers);
+
+        if (!wholeSalerUsers || wholeSalerUsers.length === 0) {
+            throw new ApiError(StatusCodes.NOT_FOUND, 'No wholesalers found!');
+        }
+
+        return wholeSalerUsers;
+    } catch (error) {
+        console.error("Error fetching wholesalers:", error);
+        throw error;
     }
-
-    return wholeSalerUsers;
 };
+
+
 
 // get single wholesaler from db
 const getWholeSalerById = async (id: string) => {
