@@ -15,6 +15,7 @@ const getAllWholeSalers = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
+        Total: result.length,
         message: "Wholesalers retrieved successfully",
         data: result,
     });
@@ -40,7 +41,14 @@ const getWholeSalerById = catchAsync(async (req: Request, res: Response) => {
 //collection of retailer
 const getAllRetailers = catchAsync(async (req: Request, res: Response) => {
     const search = req.query.search as string;
+    console.log("Search Parameter:", search);
+
     const result = await wholesalerServices.getAllRetailers(search);
+
+    if (!result || result.length === 0) {
+        throw new ApiError(StatusCodes.NOT_FOUND, 'No retailers found!');
+    }
+
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,

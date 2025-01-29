@@ -46,7 +46,16 @@ const getWholeSalerById = async (id: string) => {
 
 // get all retailers from db
 const getAllRetailers = async (search?: string) => {
-    const retailers = await User.find({ role: USER_ROLES.Retailer });
+    let query: any = { role: USER_ROLES.Retailer };
+    if (search) {
+        query.$or = [
+            { name: { $regex: search, $options: "i" } },
+            { email: { $regex: search, $options: "i" } },
+            { businessName: { $regex: search, $options: "i" } }
+        ]
+    }
+
+    const retailers = await User.find(query);
     if (!retailers || retailers.length === 0) {
         throw new ApiError(StatusCodes.NOT_FOUND, 'No retailers found!');
     }
