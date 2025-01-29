@@ -78,6 +78,14 @@ const updateRetailerIntoDB = async (id: string, payload: Partial<IUser>): Promis
     return updatedRetailer;
 };
 
+// delete retailer from db
+const deleteRetailerFromDB = async (id: string) => {
+    const deletedRetailer = await User.findByIdAndDelete(id);
+    if (!deletedRetailer) {
+        throw new ApiError(StatusCodes.NOT_FOUND, 'Retailer not found!');
+    }
+    return deletedRetailer;
+}
 
 
 export const wholesalerServices = {
@@ -87,5 +95,6 @@ export const wholesalerServices = {
 
     //*  for retailer service
     getAllRetailers,
-    updateRetailerIntoDB
+    updateRetailerIntoDB,
+    deleteRetailerFromDB
 }

@@ -79,6 +79,21 @@ const updateSingleRetailer = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+// retailer delete
+const deleteSingleRetailer = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const deletedRetailer = await wholesalerServices.deleteRetailerFromDB(id);
+    if (!deletedRetailer) {
+        throw new ApiError(StatusCodes.NOT_FOUND, 'Retailer not found! Please provide a valid ID.');
+    }
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: 'Retailer deleted successfully',
+        data: null,
+    });
+})
+
 // 
 export const wholesalerController = {
     // * all wholesaler controller
@@ -88,5 +103,6 @@ export const wholesalerController = {
 
     // * all retailer controller
     getAllRetailers,
-    updateSingleRetailer
+    updateSingleRetailer,
+    deleteSingleRetailer
 }
