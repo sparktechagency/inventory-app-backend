@@ -20,7 +20,8 @@ app.use(express.static('uploads'));
 
 //router
 app.use('/api/v1', router);
-
+export const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+// console.log("stripe::::>>>>>>", stripe);
 //live response
 app.get('/', (req: Request, res: Response) => {
   const date = new Date(Date.now());

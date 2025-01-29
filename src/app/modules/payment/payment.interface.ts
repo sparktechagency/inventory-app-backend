@@ -1,7 +1,9 @@
-import { Model } from 'mongoose';
+import { Types } from "mongoose";
 
-export type IPayment = {
-  // Define the interface for Payment here
-};
-
-export type PaymentModel = Model<IPayment>;
+export interface IPayment {
+  userId: Types.ObjectId | undefined;
+  amount: number;
+  currency: string;
+  paymentIntentId: string;
+  status: "pending" | "succeeded" | "failed";
+}

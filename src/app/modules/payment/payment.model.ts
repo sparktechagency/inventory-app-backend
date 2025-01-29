@@ -1,8 +1,18 @@
-import { Schema, model } from 'mongoose';
-import { IPayment, PaymentModel } from './payment.interface'; 
+import mongoose, { Schema, Document, Types } from "mongoose";
+import { IPayment } from "./payment.interface";
+import { PAYMENT } from "../../../enums/payment";
 
-const paymentSchema = new Schema<IPayment, PaymentModel>({
-  // Define schema fields here
-});
+interface IPaymentModel extends IPayment, Document { }
 
-export const Payment = model<IPayment, PaymentModel>('Payment', paymentSchema);
+const Payment = new Schema<IPaymentModel>(
+  {
+    userId: { type: Types.ObjectId, required: true, ref: "User" },
+    amount: { type: Number, required: true },
+    currency: { type: String, default: "usd" },
+    paymentIntentId: { type: String, required: true },
+    status: { type: String, enum: PAYMENT, default: "pending" },
+  },
+  { timestamps: true }
+);
+
+export const PaymentSchema = mongoose.model<IPaymentModel>("Payment", Payment);
