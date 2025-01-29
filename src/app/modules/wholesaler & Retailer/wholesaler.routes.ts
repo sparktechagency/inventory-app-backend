@@ -10,6 +10,7 @@ router.route("/wholesalers/:id").get(wholesalerController.getWholeSalerById);
 
 // get all retailers
 router.route("/retailers").get(auth(USER_ROLES.Admin), wholesalerController.getAllRetailers);
+router.route("/retailers/:id").put(wholesalerController.updateSingleRetailer);
 
 
 // 

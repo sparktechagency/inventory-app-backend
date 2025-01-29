@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import ApiError from "../../../errors/ApiError";
 import { User } from "../user/user.model";
 import { USER_ROLES } from "../../../enums/user";
+import { IUser } from "../user/user.interface";
 
 // get all wholesaler from db
 const getAllWholeSaler = async (search?: string) => {
@@ -65,9 +66,26 @@ const getAllRetailers = async (search?: string) => {
 
 
 
-// 
+// update Retailer details
+const updateRetailerIntoDB = async (id: string, payload: Partial<IUser>): Promise<IUser | null> => {
+    const updatedRetailer = await User.findByIdAndUpdate(id, payload, {
+        new: true,
+        runValidators: true,
+    });
+    if (!updatedRetailer) {
+        throw new ApiError(StatusCodes.NOT_FOUND, 'Retailer not found!');
+    }
+    return updatedRetailer;
+};
+
+
+
 export const wholesalerServices = {
+    //* for wholesaler service
     getAllWholeSaler,
+    getWholeSalerById,
+
+    //*  for retailer service
     getAllRetailers,
-    getWholeSalerById
+    updateRetailerIntoDB
 }

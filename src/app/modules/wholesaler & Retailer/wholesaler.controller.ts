@@ -59,9 +59,34 @@ const getAllRetailers = catchAsync(async (req: Request, res: Response) => {
 })
 
 
+
+// update retailer details
+const updateSingleRetailer = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const payload = req.body;
+
+    const updatedRetailer = await wholesalerServices.updateRetailerIntoDB(id, payload);
+
+    if (!updatedRetailer) {
+        throw new ApiError(StatusCodes.NOT_FOUND, 'Retailer not found! Please provide a valid ID.');
+    }
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        Total: updateSingleRetailer.length,
+        message: 'Retailer updated successfully',
+        data: updatedRetailer,
+    });
+});
+
 // 
 export const wholesalerController = {
+    // * all wholesaler controller
     getAllWholeSalers,
     getWholeSalerById,
-    getAllRetailers
+
+
+    // * all retailer controller
+    getAllRetailers,
+    updateSingleRetailer
 }
