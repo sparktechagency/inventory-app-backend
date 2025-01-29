@@ -44,11 +44,21 @@ const getWholeSalerById = async (id: string) => {
     return wholeSalerUser;
 };
 
+// get all retailers from db
+const getAllRetailers = async (search?: string) => {
+    const retailers = await User.find({ role: USER_ROLES.Retailer });
+    if (!retailers || retailers.length === 0) {
+        throw new ApiError(StatusCodes.NOT_FOUND, 'No retailers found!');
+    }
+
+    return retailers;
+}
 
 
 
 // 
 export const wholesalerServices = {
     getAllWholeSaler,
+    getAllRetailers,
     getWholeSalerById
 }

@@ -36,8 +36,24 @@ const getWholeSalerById = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+
+//collection of retailer
+const getAllRetailers = catchAsync(async (req: Request, res: Response) => {
+    const search = req.query.search as string;
+    const result = await wholesalerServices.getAllRetailers(search);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        Total: result.length,
+        message: "Retailers retrieved successfully",
+        data: result,
+    });
+})
+
+
 // 
 export const wholesalerController = {
     getAllWholeSalers,
     getWholeSalerById,
+    getAllRetailers
 }
