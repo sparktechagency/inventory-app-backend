@@ -5,7 +5,7 @@ import { USER_ROLES } from '../../../enums/user';
 const router = express.Router()
 
 // get all wholesalers
-router.route("/").get(auth(USER_ROLES.Retailer), wholesalerController.getAllWholeSalers);
+router.route("/").get(auth(USER_ROLES.Admin, USER_ROLES.Retailer), wholesalerController.getAllWholeSalers);
 router.route("/:id").get(wholesalerController.getWholeSalerById);
 
 
