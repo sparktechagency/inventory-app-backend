@@ -36,12 +36,30 @@ const getWholeSalerById = catchAsync(async (req: Request, res: Response) => {
         data: result,
     });
 });
+// update wholesaler details
+const updateSingleWholesaler = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const payload = req.body;
+
+    const updatedRetailer = await wholesalerServices.updateRetailerIntoDB(id, payload);
+
+    if (!updatedRetailer) {
+        throw new ApiError(StatusCodes.NOT_FOUND, 'Retailer not found! Please provide a valid ID.');
+    }
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        Total: updateSingleRetailer.length,
+        message: 'Retailer updated successfully',
+        data: updatedRetailer,
+    });
+});
 
 
 //collection of retailer
 const getAllRetailers = catchAsync(async (req: Request, res: Response) => {
     const search = req.query.search as string;
-    console.log("Search Parameter:", search);
+    // console.log("Search Parameter:", search);
 
     const result = await wholesalerServices.getAllRetailers(search);
 
@@ -99,6 +117,8 @@ export const wholesalerController = {
     // * all wholesaler controller
     getAllWholeSalers,
     getWholeSalerById,
+    // deleteSingleWholesaler,
+    updateSingleWholesaler,
 
 
     // * all retailer controller

@@ -63,6 +63,19 @@ const getAllRetailers = async (search?: string) => {
 
     return retailers;
 }
+// update Wholesaler details
+const updateWholesalerIntoDB = async (id: string, payload: Partial<IUser>): Promise<IUser | null> => {
+    const updatedWholesaler = await User.findByIdAndUpdate(id, payload, {
+        new: true,
+        runValidators: true,
+    });
+    if (!updatedWholesaler) {
+        throw new ApiError(StatusCodes.NOT_FOUND, 'Wholesaler not found!');
+    }
+    return updatedWholesaler;
+};
+
+
 
 
 
@@ -92,7 +105,8 @@ export const wholesalerServices = {
     //* for wholesaler service
     getAllWholeSaler,
     getWholeSalerById,
-
+    // deleteWholesalerFromDB,
+    updateWholesalerIntoDB,
     //*  for retailer service
     getAllRetailers,
     updateRetailerIntoDB,

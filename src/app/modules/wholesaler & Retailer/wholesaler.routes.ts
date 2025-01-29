@@ -7,6 +7,7 @@ const router = express.Router()
 // get all wholesalers
 router.route("/wholesalers").get(auth(USER_ROLES.Admin, USER_ROLES.Retailer), wholesalerController.getAllWholeSalers);
 router.route("/wholesalers/:id").get(wholesalerController.getWholeSalerById);
+router.route("/wholesalers/:id").patch(auth(USER_ROLES.Admin), wholesalerController.updateSingleWholesaler);
 
 // get all retailers
 router.route("/retailers").get(auth(USER_ROLES.Admin), wholesalerController.getAllRetailers);
