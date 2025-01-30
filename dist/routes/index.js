@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const auth_route_1 = require("../app/modules/auth/auth.route");
 const user_routes_1 = require("../app/modules/user/user.routes");
 const order_routes_1 = require("../app/modules/Order/order.routes");
-const wholesaler_routes_1 = require("../app/modules/wholesaler/wholesaler.routes");
+const wholesaler_routes_1 = require("../app/modules/wholesaler & Retailer/wholesaler.routes");
 const offer_routes_1 = require("../app/modules/offer/offer.routes");
 const router = express_1.default.Router();
 const apiRoutes = [
@@ -24,7 +24,7 @@ const apiRoutes = [
         route: order_routes_1.productRoutes
     },
     {
-        path: "/wholesalers",
+        path: "/",
         route: wholesaler_routes_1.wholeSalerRoutes
     },
     {

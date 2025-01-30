@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.stripe = void 0;
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const http_status_codes_1 = require("http-status-codes");
@@ -21,6 +22,8 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.static('uploads'));
 //router
 app.use('/api/v1', routes_1.default);
+exports.stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+// console.log("stripe::::>>>>>>", stripe);
 //live response
 app.get('/', (req, res) => {
     const date = new Date(Date.now());
