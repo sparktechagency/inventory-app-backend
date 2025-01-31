@@ -3,15 +3,15 @@ import Stripe from "stripe";
 import { IPayment } from "./payment.interface";
 import { Payment } from "./payment.model";
 import { User } from "../user/user.model";
+import { stripe } from "../../../config/stripe";
+import config from "../../../config";
 
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-    apiVersion: "2023-10-16" as any, // Force TypeScript to accept the API version
-});
+
 const createPaymentService = async (payload: IPayment) => {
     const { user, package: packageId, price } = payload;
 
-    // Fetch user and package details
+    // Fetch user details
     const existingUser = await User.findById(user);
     if (!existingUser) {
         throw new Error("User not found");
@@ -29,29 +29,43 @@ const createPaymentService = async (payload: IPayment) => {
         await existingUser.save();
     }
 
-    // Create a payment intent for one-time payment
-    const paymentIntent = await stripe.paymentIntents.create({
-        amount: price * 100,
-        currency: "usd",
-        customer: customerId,
+    // ✅ Create Stripe Checkout Session (Replaces Payment Intent)
+    const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
+        mode: "payment",
+        customer: customerId,
+        line_items: [
+            {
+                price_data: {
+                    currency: "usd",
+                    product_data: {
+                        name: "Your Package Name",
+                    },
+                    unit_amount: price * 100,
+                },
+                quantity: 1,
+            },
+        ],
+        success_url: `${config.stripe.paymentSuccess}?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: "https://localhost:500/cancel",
     });
+    // console.log("Redirect user to:", session.url);
 
-    // Save payment details in the database
+    // Save payment details in the database (Status: Pending)
     const payment = await Payment.create({
         customerId,
         price,
         user,
         package: packageId,
-        trxId: paymentIntent.id,
+        trxId: session.id,
         subscriptionId: "",
         currentPeriodStart: new Date().toISOString(),
         currentPeriodEnd: new Date().toISOString(),
         remaining: price,
-        status: "active",
+        status: "pending",
     });
 
-    return { payment, clientSecret: paymentIntent.client_secret };
+    return { payment, checkoutUrl: session.url };
 };
 
 export const PaymentService = {
