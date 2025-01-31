@@ -7,10 +7,8 @@ const createProductZodSchema = z.object({
             .min(3, "Package name must be at least 3 characters long")
             .max(100, "Package name cannot exceed 100 characters"),
 
-        price: z.number({ required_error: "Price is required" })
-            .min(0, "Price cannot be negative"),
-
-        description: z.string({ required_error: "Description is required" }),
+        price: z.string({ required_error: "Price is required" }).nonempty(),
+        description: z.string({ required_error: "Description is required" }).nonempty(),
 
         duration: z.string({ required_error: "Duration is required" }),
 

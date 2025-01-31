@@ -5,37 +5,53 @@ import { IPayment, PaymentModel } from "./payment.interface";
 
 const paymentSchema = new Schema<IPayment>(
   {
-
     customerId: {
       type: String,
-      required: [true, "Customer ID is required"],
+      required: true
     },
     price: {
       type: Number,
-      required: [true, "Price is required"],
+      required: true
     },
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "User is required"],
+      required: true
     },
     package: {
       type: Schema.Types.ObjectId,
-      ref: "Package",
-      required: [true, "Package is required"],
+      ref: "package",
+      required: true
     },
+    trxId: {
+      type: String,
+      required: true
+    },
+    subscriptionId: {
+      type: String,
+      required: true
+    },
+    currentPeriodStart: {
+      type: String,
+      required: true
+    },
+    currentPeriodEnd: {
+      type: String,
+      required: true
+    },
+    remaining: {
+      type: Number,
+      required: true
+    },
+    status: {
+      type: String,
+      enum: ["expired", "active", "cancel"],
+      default: "active",
+      required: true
+    },
+
   },
   { timestamps: true }
 );
 
 export const Payment = mongoose.model<IPayment, PaymentModel>("Payment", paymentSchema);
-// _id?: string;
-//   customerId: string;
-//   price: number;
-//   user: Types.ObjectId;
-//   package: Types.ObjectId;
-//   trxId: string;
-//   subscriptionId: string;
-//   status: 'expired' | 'active' | 'cancel';
-//   currentPeriodStart: string;
-//   currentPeriodEnd: string;
