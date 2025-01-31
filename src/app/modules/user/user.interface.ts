@@ -10,7 +10,7 @@ export type IUser = {
   role: USER_ROLES;
   businessCategory: BUSINESS_CATEGORY;
   location: string;
-  // contact: string;
+  isSubscribed: boolean;
   image?: string;
   status: 'active' | 'delete';
   verified: boolean;

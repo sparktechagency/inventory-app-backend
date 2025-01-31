@@ -4,6 +4,7 @@ import { UserRoutes } from '../app/modules/user/user.routes';
 import { productRoutes } from '../app/modules/Order/order.routes';
 import { wholeSalerRoutes } from '../app/modules/wholesaler & Retailer/wholesaler.routes';
 import { offerRoutes } from '../app/modules/offer/offer.routes';
+import { packageRoutes } from '../app/modules/package/package.routes';
 const router = express.Router();
 
 const apiRoutes = [
@@ -26,6 +27,10 @@ const apiRoutes = [
   {
     path: "/send-offer",
     route: offerRoutes
+  },
+  {
+    path: '/',
+    route: packageRoutes
   },
 
 ];

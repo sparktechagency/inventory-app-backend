@@ -59,6 +59,10 @@ const userSchema = new Schema<IUser, UserModal>(
       type: Boolean,
       default: false,
     },
+    isSubscribed: {
+      type: Boolean,
+      default: false,
+    },
     authentication: {
       type: {
         isResetPassword: {

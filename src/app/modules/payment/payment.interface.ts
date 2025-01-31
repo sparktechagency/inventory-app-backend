@@ -1,9 +1,15 @@
-import { Types } from "mongoose";
+import { Model, Types } from "mongoose";
 
-export interface IPayment {
-  userId: Types.ObjectId | undefined;
-  amount: number;
-  currency: string;
-  paymentIntentId: string;
-  status: "pending" | "succeeded" | "failed";
+export type IPayment = {
+  _id?: string;
+  customerId: string;
+  price: number;
+  user: Types.ObjectId;
+  package: Types.ObjectId;
+  trxId: string;
+  subscriptionId: string;
+  status: 'expired' | 'active' | 'cancel';
+  currentPeriodStart: string;
+  currentPeriodEnd: string;
 }
+export type PaymentModel = Model<IPayment, Record<string, never>>;

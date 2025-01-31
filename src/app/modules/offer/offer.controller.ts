@@ -26,7 +26,7 @@ const updateOffer = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const io = (global as any).io;
 
-    const result = await sendOfferService.updateOfferIntoDB(id, req.body, io);
+    const result = await sendOfferService.updateOfferIntoDB(req.user, id, req.body, io);
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,

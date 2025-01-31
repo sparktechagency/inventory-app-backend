@@ -6,6 +6,8 @@ import { notificationSender } from "../../../helpers/notificationSender";
 import { Server } from "socket.io";
 import { ProductModel } from "../Order/order.model";
 import { STATUS } from "../../../enums/status";
+import { JwtPayload } from "jsonwebtoken";
+import { User } from "../user/user.model";
 // Service to create a new product (order)
 const createOffer = async (payload: IOrder, io: Server) => {
     const order = (await OfferModel.create(payload));
@@ -33,10 +35,21 @@ const createOffer = async (payload: IOrder, io: Server) => {
 
 // update offer from wholesaler
 const updateOfferIntoDB = async (
+    user: JwtPayload,
     offerId: string,
     payload: Partial<IOrder>,
     io: Server
 ) => {
+
+    const isSubscribed: any = await User.findById(user._id).select("isSubscribed").lean();
+
+    const isExistLimit = await OfferModel.countDocuments({ wholeSeller: user._id, status: "Received" });
+
+    if (isSubscribed === false && isExistLimit === 10) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "You can not update more than 10 offers. Now, you need to subscribe before updating.");
+    }
+
+
     // Find the offer first to get the retailer ID for notification
     const existingOffer = await OfferModel.findById(offerId);
     if (!existingOffer) {
@@ -47,7 +60,7 @@ const updateOfferIntoDB = async (
         offerId,
         {
             $set: {
-                status: payload.status,
+                status: "Received",
                 availability: payload.availability,
                 price: payload.price,
             },

@@ -1,18 +1,41 @@
-import mongoose, { Schema, Document, Types } from "mongoose";
-import { IPayment } from "./payment.interface";
-import { PAYMENT } from "../../../enums/payment";
+import mongoose, { Schema, Types } from "mongoose";
+import { IPayment, PaymentModel } from "./payment.interface";
 
-interface IPaymentModel extends IPayment, Document { }
 
-const Payment = new Schema<IPaymentModel>(
+
+const paymentSchema = new Schema<IPayment>(
   {
-    userId: { type: Types.ObjectId, required: true, ref: "User" },
-    amount: { type: Number, required: true },
-    currency: { type: String, default: "usd" },
-    paymentIntentId: { type: String, required: true },
-    status: { type: String, enum: PAYMENT, default: "pending" },
+
+    customerId: {
+      type: String,
+      required: [true, "Customer ID is required"],
+    },
+    price: {
+      type: Number,
+      required: [true, "Price is required"],
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "User is required"],
+    },
+    package: {
+      type: Schema.Types.ObjectId,
+      ref: "Package",
+      required: [true, "Package is required"],
+    },
   },
   { timestamps: true }
 );
 
-export const PaymentSchema = mongoose.model<IPaymentModel>("Payment", Payment);
+export const Payment = mongoose.model<IPayment, PaymentModel>("Payment", paymentSchema);
+// _id?: string;
+//   customerId: string;
+//   price: number;
+//   user: Types.ObjectId;
+//   package: Types.ObjectId;
+//   trxId: string;
+//   subscriptionId: string;
+//   status: 'expired' | 'active' | 'cancel';
+//   currentPeriodStart: string;
+//   currentPeriodEnd: string;
