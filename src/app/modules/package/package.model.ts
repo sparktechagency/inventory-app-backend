@@ -27,6 +27,9 @@ const packageSchema = new Schema<IPackage>(
             type: [String],
             required: [true, "Features is required"],
         },
+        paymentLink: {
+            type: String,
+        },
     },
     { timestamps: true }
 );
