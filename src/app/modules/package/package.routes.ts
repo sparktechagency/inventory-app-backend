@@ -11,6 +11,10 @@ const route = Router()
 route.post("/packages", auth(USER_ROLES.Wholesaler), validateRequest(packageValidation.createProductZodSchema), packageController.createPackage);
 
 
+// get all packages
+route.get("/packages", auth(USER_ROLES.Wholesaler), packageController.getAllPackages);
+route.get("/packages/:id", packageController.getSinglePackage);
+
 
 // export the route
 export const packageRoutes = route;
