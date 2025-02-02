@@ -71,5 +71,7 @@ export const createSubscriptionProductHelper = async (payload: Partial<IPackage>
     if (!paymentLink) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create payment link in stripe")
     }
+
+    // console.log(" This is my payment link=====>", paymentLink);
     return { productId: product.id, paymentLink: paymentLink.url }
 }

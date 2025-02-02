@@ -26,12 +26,15 @@ const createPackageIntoDB = async (payload: IPackage) => {
     }
 
 
-    const createPackage = await Package.create(payload);
-
+    const createPackage = await Package.create({
+        ...payload,
+        productId: product.productId,
+        paymentLink: product.paymentLink,
+    });
     if (!createPackage) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Package not created");
     }
-    console.log("createPackage---------->>>>>>", createPackage);
+    // console.log("createPackage---------->>>>>>", createPackage);
     return createPackage;
 }
 

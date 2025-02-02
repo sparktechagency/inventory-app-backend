@@ -5,7 +5,7 @@ import { productRoutes } from '../app/modules/Order/order.routes';
 import { wholeSalerRoutes } from '../app/modules/wholesaler & Retailer/wholesaler.routes';
 import { offerRoutes } from '../app/modules/offer/offer.routes';
 import { packageRoutes } from '../app/modules/package/package.routes';
-import { paymentRoutes } from '../app/modules/payment/payment.routes';
+// import { paymentRoutes } from '../app/modules/subscription/payment.routes';
 const router = express.Router();
 
 const apiRoutes = [
@@ -33,10 +33,10 @@ const apiRoutes = [
     path: '/',
     route: packageRoutes
   },
-  {
-    path: "/payment",
-    route: paymentRoutes
-  }
+  // {
+  //   path: "/payment",
+  //   route: paymentRoutes
+  // }
 
 ];
 
