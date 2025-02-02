@@ -27,6 +27,14 @@ const packageSchema = new Schema<IPackage>(
             type: [String],
             required: [true, "Features is required"],
         },
+        paymentType: {
+            type: String,
+            required: [true, "Payment type is required"],
+            enum: ["Monthly", "Yearly"],
+        },
+        productId: {
+            type: String,
+        },
         paymentLink: {
             type: String,
         },

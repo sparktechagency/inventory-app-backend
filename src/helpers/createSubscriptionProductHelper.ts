@@ -1,12 +1,14 @@
+import { StatusCodes } from "http-status-codes";
 import { IPackage } from "../app/modules/package/package.interface";
 import config from "../config";
 import { stripe } from "../config/stripe";
+import ApiError from "../errors/ApiError";
 
 export const createSubscriptionProductHelper = async (payload: Partial<IPackage>) => {
     // create product in stripe
     const product = await stripe.products.create({
         name: payload.name as string,
-        description: payload.description,
+        description: payload.description as string,
     })
     let interval: "month" | "year" = "month"; //default for monthly
     let intervalCount = 1 //default to every month
@@ -43,7 +45,7 @@ export const createSubscriptionProductHelper = async (payload: Partial<IPackage>
 
 
     if (!price) {
-        throw new Error("Failed to create price in stripe")
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create price in stripe")
     }
 
     // create payment link
@@ -65,9 +67,9 @@ export const createSubscriptionProductHelper = async (payload: Partial<IPackage>
         }
     })
 
-    // if not found paymenturl
+    // if not found paymentUrl
     if (!paymentLink) {
-        throw new Error("Failed to create payment link in stripe")
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create payment link in stripe")
     }
     return { productId: product.id, paymentLink: paymentLink.url }
 }

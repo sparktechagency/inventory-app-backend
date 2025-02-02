@@ -1,10 +1,12 @@
 import { Model } from "mongoose";
 
 export type IPackage = {
-    name: string;
-    description: string;
+    name: String;
+    description: String;
     price: number;
     duration: '1 month' | '3 months' | '6 months' | '1 year';
+    paymentType: 'Monthly' | 'Yearly';
+    productId?: String;
     features?: string[];
     paymentLink?: string
 }
