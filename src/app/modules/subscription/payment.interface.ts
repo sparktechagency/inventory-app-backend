@@ -6,7 +6,7 @@ export type IPayment = {
   user: Types.ObjectId;
   package: Types.ObjectId;
   trxId: string;
-  remaining: number;
+  // remaining: number;
   subscriptionId: string;
   status: 'expired' | 'active' | 'cancel';
   currentPeriodStart: string;

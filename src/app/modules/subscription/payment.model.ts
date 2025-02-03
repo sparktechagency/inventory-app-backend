@@ -39,10 +39,10 @@ const paymentSchema = new Schema<IPayment>(
       type: String,
       required: true
     },
-    remaining: {
-      type: Number,
-      required: true
-    },
+    // remaining: {
+    //   type: Number,
+    //   required: true
+    // },
     status: {
       type: String,
       enum: ["expired", "active", "cancel"],

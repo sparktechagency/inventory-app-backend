@@ -13,13 +13,34 @@ export const createSubscriptionProductHelper = async (payload: Partial<IPackage>
     let interval: "month" | "year" = "month"; //default for monthly
     let intervalCount = 1 //default to every month
 
+    // switch (payload.duration) {
+    //     case "1 month":
+    //         interval = "month";
+    //         intervalCount = 1;
+    //     case "3 months":
+    //         interval = "month";
+    //         intervalCount = 3;
+    //     case "6 months":
+    //         interval = "month";
+    //         intervalCount = 6;
+    //         break;
+    //     case "1 year":
+    //         interval = "year";
+    //         intervalCount = 1;
+    //         break;
+    //     default:
+    //         interval = "month";
+    //         intervalCount = 1;
+    // }
     switch (payload.duration) {
         case "1 month":
             interval = "month";
             intervalCount = 1;
+            break;
         case "3 months":
             interval = "month";
             intervalCount = 3;
+            break;
         case "6 months":
             interval = "month";
             intervalCount = 6;
@@ -32,6 +53,7 @@ export const createSubscriptionProductHelper = async (payload: Partial<IPackage>
             interval = "month";
             intervalCount = 1;
     }
+
 
     const price = await stripe.prices.create({
         product: product.id,

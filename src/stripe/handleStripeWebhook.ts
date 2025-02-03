@@ -13,8 +13,7 @@ import { handleSubscriptionCreated } from '../helpers/handleSubscriptionCreated'
 
 
 export const handleStripeWebhook = async (req: Request, res: Response) => {
-    console.log("Received webhook:", req.body); // Log the raw body
-    console.log("Headers:", req.headers); // Log the headers (especially the stripe-signature)
+
 
     let event: Stripe.Event | undefined;
     try {

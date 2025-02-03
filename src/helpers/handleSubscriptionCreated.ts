@@ -24,60 +24,104 @@ const getUserByEmail = async (email: string) => {
 // helper function to find and validate pricing plan
 
 const getPackageByProductId = async (productId: string) => {
-    const plan = await Package.findOne({ productId })
+    console.log("Fetching package with productId:", productId);  // Log productId
+    const plan = await Package.findOne({ productId });
     if (!plan) {
-        throw new ApiError(StatusCodes.NOT_FOUND, "Plan not found")
+        throw new ApiError(StatusCodes.NOT_FOUND, `Plan not found for productId: ${productId}`);
     }
-}
+    return plan;  // Ensure the plan is returned correctly
+};
 
 // helper function to create new subscription in database
 
-const createNewSubscription = async (user: ObjectId,
+// const createNewSubscription = async (user: ObjectId,
+//     customerId: string,
+//     packageId: ObjectId,
+//     amountPaid: number,
+//     trxId: string,
+//     subscriptionId: string,
+//     currentPeriodStart: string,
+//     currentPeriodEnd: string,
+// ) => {
+//     const isExistSubscription = await Payment.findOne({ user: user })
+//     if (isExistSubscription) {
+//         const payload = {
+//             customerId,
+//             price: amountPaid,
+//             user,
+//             package: packageId,
+//             trxId,
+//             subscriptionId,
+//             status: 'active',
+//             currentPeriodStart,
+//             currentPeriodEnd,
+//         }
+//         await Payment.findByIdAndUpdate(
+//             { _id: isExistSubscription._id },
+//             payload,
+//             { new: true }
+//         )
+//     } else {
+//         const newSubscription = new Payment({
+//             customerId,
+//             price: amountPaid,
+//             user,
+//             package: packageId, // Ensure this is properly set
+//             trxId,
+//             subscriptionId,
+//             status: 'active',
+//             currentPeriodStart,
+//             currentPeriodEnd,
+//         });
+//         await newSubscription.save();
+//     }
+
+// }
+const createNewSubscription = async (
+    user: ObjectId,
     customerId: string,
     packageId: ObjectId,
     amountPaid: number,
     trxId: string,
     subscriptionId: string,
     currentPeriodStart: string,
-    currentPeriodEnd: string,
-    remaining: number
+    currentPeriodEnd: string
 ) => {
-    const isExistSubscription = await Payment.findOne({ user: user })
+    if (!packageId) {
+        console.error("Error: No valid packageId provided.");  // Log error if packageId is missing
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Package ID is required for the subscription.");
+    }
+
+    const isExistSubscription = await Payment.findOne({ user: user });
     if (isExistSubscription) {
         const payload = {
             customerId,
             price: amountPaid,
             user,
-            package: packageId,
+            package: packageId,  // Ensure this is properly set
             trxId,
             subscriptionId,
             status: 'active',
             currentPeriodStart,
             currentPeriodEnd,
-            remaining
-        }
-        await Payment.findByIdAndUpdate(
-            { _id: isExistSubscription._id },
-            payload,
-            { new: true }
-        )
+        };
+        await Payment.findByIdAndUpdate({ _id: isExistSubscription._id }, payload, { new: true });
     } else {
         const newSubscription = new Payment({
             customerId,
             price: amountPaid,
             user,
-            package: packageId,
+            package: packageId,  // Ensure this is properly set
             trxId,
             subscriptionId,
             status: 'active',
             currentPeriodStart,
             currentPeriodEnd,
-            remaining
         });
         await newSubscription.save();
     }
+};
 
-}
 
 
 // export this helper function
@@ -98,35 +142,31 @@ export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
         const user: any = await getUserByEmail(customer.email as string)
         const packageID: any = await getPackageByProductId(productId)
 
+        if (!packageID) {
+            console.error("Package not found for productId:", productId);
+            throw new ApiError(StatusCodes.NOT_FOUND, "Package not found for productId: " + productId);
+        }
+
         // get the current period start and end dates (unix time stamps)
 
         const currentPeriodStart = new Date(subscription.current_period_start * 1000).toISOString() //convert to human-readable date
         const currentPeriodEnd = new Date(subscription.current_period_end * 1000).toISOString()
 
-        console.log("subscription data==>>>>", subscription);
-        console.log("customer data==>>>>", customer);
-        console.log("productId data==>>>>", productId);
-        console.log("invoice data==>>>>", invoice);
-        console.log("trxId data==>>>>", trxId);
-        console.log("amountPaid data==>>>>", amountPaid);
-        console.log("user data==>>>>", user);
-        console.log("packageID data==>>>>", packageID);
-        console.log("currentPeriodStart data==>>>>", currentPeriodStart);
-        console.log("currentPeriodEnd data==>>>>", currentPeriodEnd);
 
+        console.log("productId data==>>>>", productId);
         // create new subscription and update suer status
 
 
         await createNewSubscription(
-            user._id,
-            customer.id,
-            packageID._id,
+            user?._id,
+            customer?.id,
+            packageID?._id,
             amountPaid,
             trxId,
-            subscription.id,
+            subscription?.id,
             currentPeriodStart,
             currentPeriodEnd,
-            packageID.credit,
+
         )
 
         await User.findByIdAndUpdate(
@@ -136,9 +176,11 @@ export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
         )
 
         const notifications = {
-            text: `${user.company} has arrived`,
-            link: `/subscription-earning?id=${user?._id}`
-        }
+            message: `Your subscription with ${packageID.name} has been successfully activated!`, // Example message
+            title: `Subscription Activated`, // Example title
+            link: `/subscription-earning?id=${user._id}`, // Optional link
+            userId: user._id.toString(), // Ensure the userId is passed correctly
+        };
 
         // send notifications to user
         sendNotifications(notifications)
