@@ -80,7 +80,6 @@ const createNewSubscription = async (user: ObjectId,
 }
 
 
-
 // export this helper function
 export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
     try {
@@ -103,6 +102,17 @@ export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
 
         const currentPeriodStart = new Date(subscription.current_period_start * 1000).toISOString() //convert to human-readable date
         const currentPeriodEnd = new Date(subscription.current_period_end * 1000).toISOString()
+
+        console.log("subscription data==>>>>", subscription);
+        console.log("customer data==>>>>", customer);
+        console.log("productId data==>>>>", productId);
+        console.log("invoice data==>>>>", invoice);
+        console.log("trxId data==>>>>", trxId);
+        console.log("amountPaid data==>>>>", amountPaid);
+        console.log("user data==>>>>", user);
+        console.log("packageID data==>>>>", packageID);
+        console.log("currentPeriodStart data==>>>>", currentPeriodStart);
+        console.log("currentPeriodEnd data==>>>>", currentPeriodEnd);
 
         // create new subscription and update suer status
 

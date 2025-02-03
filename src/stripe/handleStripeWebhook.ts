@@ -1,12 +1,9 @@
 import { Request, Response } from 'express';
 import config from '../config';
 import Stripe from 'stripe';
-import colors from 'colors';
 import { StatusCodes } from 'http-status-codes';
-import { logger } from '../shared/logger';
 import ApiError from '../errors/ApiError';
 import { stripe } from '../config/stripe';
-import { Payment } from '../app/modules/subscription/payment.model';
 import { handleSubscriptionCreated } from '../helpers/handleSubscriptionCreated';
 
 
