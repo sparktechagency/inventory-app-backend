@@ -23,3 +23,12 @@ const subscriptionDetailsFromDB = async (user: JwtPayload): Promise<{ subscripti
     }
     return { subscription }
 }
+
+
+
+
+
+
+export const SubscriptionService = {
+    subscriptionDetailsFromDB
+}
