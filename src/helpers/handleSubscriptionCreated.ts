@@ -6,6 +6,7 @@ import { ObjectId } from "mongoose"
 import { Payment } from "../app/modules/subscription/payment.model"
 import Stripe from "stripe"
 import { stripe } from "../config/stripe"
+import { sendNotifications } from "./notificationsHelper"
 
 
 // helper function to find and validate user
@@ -100,7 +101,7 @@ export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
 
         // get the current period start and end dates (unix time stamps)
 
-        const currentPeriodStart = new Date(subscription.current_period_start * 1000).toISOString //convert to human-readable date
+        const currentPeriodStart = new Date(subscription.current_period_start * 1000).toISOString() //convert to human-readable date
         const currentPeriodEnd = new Date(subscription.current_period_end * 1000).toISOString()
 
         // create new subscription and update suer status
@@ -115,6 +116,7 @@ export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
             subscription.id,
             currentPeriodStart,
             currentPeriodEnd,
+            packageID.credit,
         )
 
         await User.findByIdAndUpdate(
@@ -124,7 +126,7 @@ export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
         )
 
         const notifications = {
-            text: `${user.company} has arrived`
+            text: `${user.company} has arrived`,
             link: `/subscription-earning?id=${user?._id}`
         }
 
@@ -132,7 +134,7 @@ export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
         sendNotifications(notifications)
 
     } catch (error) {
-        console.log("Error handling subscription creation:" error);
+        console.log("Error handling subscription creation:", error);
         throw error;
     }
 }
