@@ -1,6 +1,6 @@
 
 export interface INotification {
-  userId: string;   // reference to the user
+  userId: string;
   title: string;
   message: string;
   isRead: boolean;

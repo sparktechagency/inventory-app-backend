@@ -3,20 +3,25 @@ import ApiError from "../../../errors/ApiError";
 import { IProduct } from "./order.interface";
 import { ProductModel } from "./order.model";
 
-const createProductIntoDB = async (payload: Partial<IProduct>): Promise<IProduct> => {
+const createProductIntoDB = async (payload: Partial<IProduct> | Partial<IProduct>[]): Promise<IProduct | IProduct[]> => {
+    const products = Array.isArray(payload) ? payload : [payload];
 
-
-    const createProduct = await ProductModel.create(payload);
-    if (!payload.name || !payload.unit || payload.quantity === undefined) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, "Missing required fields");
+    // Validate required fields
+    for (const product of products) {
+        if (!product.name || !product.unit || product.quantity === undefined) {
+            throw new ApiError(StatusCodes.BAD_REQUEST, "Missing required fields");
+        }
     }
 
-    if (!createProduct) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create Product');
+    // Create products
+    const createdProducts = await ProductModel.insertMany(products);
+
+    if (!createdProducts || createdProducts.length === 0) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create products');
     }
 
-
-    return createProduct;
+    // Return single product if only one was created
+    return createdProducts.length === 1 ? createdProducts[0] : createdProducts;
 };
 
 // get all products

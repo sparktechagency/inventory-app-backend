@@ -7,19 +7,19 @@ import ApiError from "../../../errors/ApiError";
 // create a new product
 const createProduct = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const { ...productData } = req.body;
+        const productData = req.body;
+
         const result = await orderService.createProductIntoDB(productData);
 
         sendResponse(res, {
             success: true,
             statusCode: StatusCodes.OK,
-            message: 'Product Details Create successfully.',
-            data: {
-                result
-            },
+            message: 'Product(s) created successfully.',
+            data: result,
         });
     }
 );
+
 // get fall products
 const getAllProducts = catchAsync(async (req: Request, res: Response) => {
     const result = await orderService.getAllProducts();
