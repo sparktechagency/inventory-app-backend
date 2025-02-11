@@ -28,7 +28,7 @@ const subscriptionDetailsFromDB = async (user: JwtPayload): Promise<{ subscripti
 
 const companySubscriptionDetailsFromDB = async (id: string): Promise<{ subscription: IPayment | {} }> => {
 
-    const subscription = await Payment.findOne({ user: id }).populate("package", "title credit").lean();
+    const subscription = await Payment.findOne({ user: id }).populate("package").lean();
     if (!subscription) {
         return { subscription: {} }; // Return empty object if no subscription found
     }
@@ -112,5 +112,4 @@ export const SubscriptionService = {
     subscriptionDetailsFromDB,
     subscriptionsFromDB,
     companySubscriptionDetailsFromDB
-
 }

@@ -42,7 +42,9 @@ const confirmOrderFromRetailer = catchAsync(async (req: Request, res: Response) 
     const { id } = req.params;
     const io = (global as any).io;
 
+
     const result = await sendOfferService.updateOfferFromRetailer(id, req.body, io);
+    console.log("Confirm order from retailer:--->>>>>", result);
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,

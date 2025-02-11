@@ -10,12 +10,14 @@ import { JwtPayload } from "jsonwebtoken";
 import { User } from "../user/user.model";
 // Service to create a new product (order)
 const createOffer = async (payload: IOrder, io: Server) => {
-    const order = (await OfferModel.create(payload));
+    if (!payload.wholeSeller || !payload.retailer || !payload.product) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Wholesaler, Retailer, and Product IDs are required");
+    }
+
+    // Create the offer
+    const order = await OfferModel.create(payload);
     if (!order) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create the offer");
-    }
-    if (payload.wholeSeller) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, "Wholesaler ID is required");
     }
     // Notify wholesaler via Socket.IO
     const notificationData = {
@@ -96,42 +98,61 @@ const updateOfferFromRetailer = async (
     payload: { quantity?: number; status?: STATUS },
     io: Server
 ) => {
-    // Step 1: Find the offer by ID
-    const existingOffer = await OfferModel.findById(offerId);
-    if (!existingOffer) {
-        throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
-    }
+    try {
+        // Step 1: Find the offer and populate product details
+        const existingOffer = await OfferModel.findById(offerId).populate("product");
 
-    // Step 2: Check if the quantity needs to be updated
-    if (payload.quantity) {
-        // Step 2a: Find the associated product
-        const product = await ProductModel.findById(existingOffer.product);
-        if (!product) {
-            throw new ApiError(StatusCodes.NOT_FOUND, "Product not found");
+        if (!existingOffer) {
+            throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
         }
 
-        // Step 2b: Update the product's quantity
-        product.quantity = payload.quantity;
-        await product.save();
-    }
+        if (!existingOffer.product) {
+            console.error("❌ Product not found. Check if the product ID is missing or incorrect.");
+            throw new ApiError(StatusCodes.NOT_FOUND, "Product not found. Check if the product ID is missing or incorrect.");
+        }
 
-    // Step 3: Update the offer status if provided
-    if (payload.status) {
-        existingOffer.status = payload.status;
+        const product = existingOffer.product;
+
+        // Step 2: Check if quantity needs to be updated
+        if (payload.quantity) {
+            // if (payload.quantity > product?.quantity) {
+            //     throw new ApiError(
+            //         StatusCodes.BAD_REQUEST,
+            //         `Insufficient stock. Available quantity: ${product?.quantity}`
+            //     );
+            // }
+
+            // Step 3: If status is 'Confirmed', deduct the quantity from product stock
+            if (payload.status === STATUS.confirm) {
+                product?.quantity -= payload.quantity;
+                await product.save();
+                console.log("Updated Product Quantity:", product?.quantity);
+            }
+        }
+
+        // Step 4: Update offer status if provided
+        if (payload.status) {
+            existingOffer.status = payload.status;
+        }
+
+        // Step 5: Save the updated offer
         await existingOffer.save();
+
+        // Step 6: Notify the wholesaler via Socket.IO
+        const notificationData = {
+            userId: existingOffer.wholeSeller!.toString(),
+            title: "Order Updated by Retailer",
+            message: `Retailer has updated the order ${offerId}.`,
+            type: "order-update",
+        };
+
+        await notificationSender(io, `getNotification::${existingOffer.wholeSeller}`, notificationData);
+
+        return { updatedOffer: existingOffer };
+    } catch (error) {
+        console.error("🚨 Error in updateOfferFromRetailer:", error);
+        throw error;
     }
-
-    // Step 4: Notify the wholesaler via Socket.IO
-    const notificationData = {
-        userId: existingOffer.wholeSeller!.toString(),
-        title: "Order Updated by Retailer",
-        message: `Retailer has updated the order ${offerId}.`,
-        type: "order-update",
-    };
-
-    await notificationSender(io, `getNotification::${existingOffer.wholeSeller}`, notificationData);
-
-    return { updatedOffer: existingOffer };
 };
 
 export const sendOfferService = {

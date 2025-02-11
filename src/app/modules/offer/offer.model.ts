@@ -21,13 +21,14 @@ const productSchema = new Schema<IOrder>(
         },
         price: {
             type: Number,
-            required: true
+            // required: true,
+
         },
         status: {
             type: String,
             enum: Object.values(STATUS),
             required: true,
-        }
+        },
 
     },
     {
