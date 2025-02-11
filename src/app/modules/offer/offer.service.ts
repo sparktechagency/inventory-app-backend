@@ -9,30 +9,40 @@ import { STATUS } from "../../../enums/status";
 import { JwtPayload } from "jsonwebtoken";
 import { User } from "../user/user.model";
 // Service to create a new product (order)
-const createOffer = async (payload: IOrder, io: Server) => {
-    if (!payload.wholeSeller || !payload.retailer || !payload.product) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, "Wholesaler, Retailer, and Product IDs are required");
+const createOffers = async (payloads: IOrder[], io: Server) => {
+    if (!Array.isArray(payloads) || payloads.length === 0) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "You must provide at least 1 order");
     }
 
-    // Create the offer
-    const order = await OfferModel.create(payload);
-    if (!order) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create the offer");
+    if (payloads.length > 5) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "You can only send between 1 to 5 orders at a time");
     }
-    // Notify wholesaler via Socket.IO
-    const notificationData = {
-        userId: payload.wholeSeller!.toString(),
-        title: "New Order Received",
-        message: `Retailer has sent an order for ${order?._id}.`,
-        type: "order",
-    };
-    await notificationSender(io, `getNotification::${payload.wholeSeller}`, notificationData);
-    // @ts-ignore
-    // const socket = global.io;
-    // socket.emit(`getNotification::${payload.wholeSeller}`, notificationData);
 
-    return { order };
+    const createdOrders = await Promise.all(payloads.map(async (payload) => {
+        if (!payload.wholeSeller || !payload.retailer || !payload.product) {
+            throw new ApiError(StatusCodes.BAD_REQUEST, "Wholesaler, Retailer, and Product IDs are required");
+        }
+
+        const order = await OfferModel.create(payload);
+        if (!order) {
+            throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create the offer");
+        }
+
+        // Notification
+        const notificationData = {
+            userId: payload.wholeSeller!.toString(),
+            title: "New Order Received",
+            message: `Retailer has sent an order for ${order?._id}.`,
+            type: "order",
+        };
+        await notificationSender(io, `getNotification::${payload.wholeSeller}`, notificationData);
+
+        return order;
+    }));
+
+    return { orders: createdOrders };
 };
+
 
 
 // update offer from wholesaler
@@ -156,7 +166,7 @@ const updateOfferFromRetailer = async (
 };
 
 export const sendOfferService = {
-    createOffer,
+    createOffers,
     updateOfferIntoDB,
     updateOfferFromRetailer
 };

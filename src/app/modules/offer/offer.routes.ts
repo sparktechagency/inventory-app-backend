@@ -6,7 +6,7 @@ const router = express.Router()
 // Create product route
 
 
-router.post("/create", auth(USER_ROLES.Retailer), sendOfferController.createOffer);
+router.post("/create", auth(USER_ROLES.Retailer), sendOfferController.createOfferController);
 // send response from wholesaler to retailer
 router.patch("/:id", auth(USER_ROLES.Wholesaler), sendOfferController.updateOffer)
 // send response from retailer to wholesaler

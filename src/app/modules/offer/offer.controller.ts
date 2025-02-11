@@ -6,18 +6,16 @@ import ApiError from "../../../errors/ApiError";
 import { sendOfferService } from "./offer.service";
 
 // Create a new product Controller
-const createOffer = catchAsync(async (req: Request, res: Response) => {
+const createOfferController = catchAsync(async (req: Request, res: Response) => {
     const io = (global as any).io;
-    const result = await sendOfferService.createOffer(req.body, io);
-    // console.log("result:--->>>>>", result);
+    const result = await sendOfferService.createOffers(req.body, io);
     sendResponse(res, {
         statusCode: StatusCodes.CREATED,
         success: true,
-        message: "Order created and notification sent successfully",
-        data: result.order,
+        message: `Successfully created ${result.orders.length} order(s) and sent notifications`,
+        data: result.orders,
     });
 });
-
 
 
 
@@ -44,7 +42,6 @@ const confirmOrderFromRetailer = catchAsync(async (req: Request, res: Response) 
 
 
     const result = await sendOfferService.updateOfferFromRetailer(id, req.body, io);
-    console.log("Confirm order from retailer:--->>>>>", result);
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
@@ -56,7 +53,7 @@ const confirmOrderFromRetailer = catchAsync(async (req: Request, res: Response) 
 
 
 export const sendOfferController = {
-    createOffer,
+    createOfferController,
     updateOffer,
     confirmOrderFromRetailer
 };
