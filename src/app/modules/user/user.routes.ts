@@ -31,5 +31,6 @@ router
     validateRequest(UserValidation.createUserZodSchema),
     UserController.createUser
   );
+router.route("/verify-otp").post(UserController.verifyOtp);
 
 export const UserRoutes = router;

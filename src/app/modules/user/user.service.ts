@@ -10,32 +10,39 @@ import { IUser } from './user.interface';
 import { User } from './user.model';
 
 const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
-  //set role
-  // payload.role = USER_ROLES.Retailer;
+  // Create the user
   const createUser = await User.create(payload);
   if (!createUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create user');
   }
 
-  //send email
+  // Generate OTP
   const otp = generateOTP();
   const values = {
     name: createUser.name,
     otp: otp,
     email: createUser.email!,
   };
+
+  // Send OTP email
   const createAccountTemplate = emailTemplate.createAccount(values);
   emailHelper.sendEmail(createAccountTemplate);
 
-  //save to DB
+  // Save OTP and expiry to the DB
   const authentication = {
     oneTimeCode: otp,
     expireAt: new Date(Date.now() + 3 * 60000),
   };
-  await User.findOneAndUpdate(
+
+  const updatedUser = await User.findOneAndUpdate(
     { _id: createUser._id },
-    { $set: { authentication } }
+    { $set: { authentication } },
+    { new: true } // Ensure the updated document is returned
   );
+
+  if (!updatedUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to save OTP');
+  }
 
   return createUser;
 };
@@ -74,8 +81,41 @@ const updateProfileToDB = async (
   return updateDoc;
 };
 
+
+const verifyOtp = async (email: string, otp: number): Promise<boolean> => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "User not found!");
+  }
+
+  console.log("User found:", user.authentication?.oneTimeCode);  // Debugging
+
+  if (!user.authentication || !user.authentication.oneTimeCode) {
+    console.log("OTP Not Found in DB!", user?.authentication?.oneTimeCode);
+    throw new ApiError(StatusCodes.BAD_REQUEST, "OTP not generated!");
+  }
+
+  if (new Date() > user.authentication.expireAt) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "OTP has expired!");
+  }
+
+  if (user.authentication.oneTimeCode !== Number(otp)) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid OTP!");
+  }
+
+  // ✅ Mark user as verified & remove OTP
+  user.verified = true;
+  user.authentication = undefined;
+  await user.save();
+
+  return true;
+};
+
+
 export const UserService = {
   createUserToDB,
   getUserProfileFromDB,
   updateProfileToDB,
+  verifyOtp,
 };

@@ -64,21 +64,9 @@ const userSchema = new Schema<IUser, UserModal>(
       default: false,
     },
     authentication: {
-      type: {
-        isResetPassword: {
-          type: Boolean,
-          default: false,
-        },
-        oneTimeCode: {
-          type: Number,
-          default: null,
-        },
-        expireAt: {
-          type: Date,
-          default: null,
-        },
-      },
-      select: false,
+      isResetPassword: { type: Boolean, default: false },
+      oneTimeCode: { type: Number, default: null },  // This will be null initially
+      expireAt: { type: Date, default: null },  // This will also be null initially
     },
   },
   { timestamps: true }
