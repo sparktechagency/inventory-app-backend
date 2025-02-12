@@ -7,15 +7,30 @@ import { sendOfferService } from "./offer.service";
 
 // Create a new product Controller
 const createOfferController = catchAsync(async (req: Request, res: Response) => {
-    const io = (global as any).io;
-    const result = await sendOfferService.createOffers(req.body, io);
-    sendResponse(res, {
-        statusCode: StatusCodes.CREATED,
-        success: true,
-        message: `Successfully created ${result.orders.length} order(s) and sent notifications`,
-        data: result.orders,
-    });
+    try {
+
+        const io = (global as any).io;
+        if (!io) {
+            console.error("Socket.IO instance is missing");
+            throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Socket.IO is not initialized");
+        }
+
+        const result = await sendOfferService.createOffers(req.body, io);
+
+
+        sendResponse(res, {
+            statusCode: StatusCodes.CREATED,
+            success: true,
+            message: `Successfully created ${result.orders.length} orders and sent notifications`,
+            data: result.orders,
+        });
+
+    } catch (error) {
+        console.error("Error in createOfferController:", error);
+        throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to create orders");
+    }
 });
+
 
 
 
@@ -33,8 +48,6 @@ const updateOffer = catchAsync(async (req: Request, res: Response) => {
         data: result.updatedOffer,
     });
 })
-
-
 // Again update from retailer to wholesaler
 const confirmOrderFromRetailer = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;

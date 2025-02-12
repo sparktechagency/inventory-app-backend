@@ -14,6 +14,7 @@ router
     UserController.getUserProfile)
   .patch(
     // auth(USER_ROLES.SUPER_ADMIN, USER_ROLES.Retailer, USER_ROLES.USER),
+    auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler, USER_ROLES.Admin),
     fileUploadHandler(),
     (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {

@@ -9,39 +9,57 @@ import { STATUS } from "../../../enums/status";
 import { JwtPayload } from "jsonwebtoken";
 import { User } from "../user/user.model";
 // Service to create a new product (order)
+
 const createOffers = async (payloads: IOrder[], io: Server) => {
+
     if (!Array.isArray(payloads) || payloads.length === 0) {
+        console.error("Invalid payloads: Must be an array with at least 1 item");
         throw new ApiError(StatusCodes.BAD_REQUEST, "You must provide at least 1 order");
     }
 
     if (payloads.length > 5) {
+        console.error("Too many orders: Cannot exceed 5");
         throw new ApiError(StatusCodes.BAD_REQUEST, "You can only send between 1 to 5 orders at a time");
     }
 
-    const createdOrders = await Promise.all(payloads.map(async (payload) => {
+    const createdOrders = [];
+
+    for (const payload of payloads) {
+
+
         if (!payload.wholeSeller || !payload.retailer || !payload.product) {
+            console.error("Missing required fields in payload:", payload);
             throw new ApiError(StatusCodes.BAD_REQUEST, "Wholesaler, Retailer, and Product IDs are required");
         }
 
         const order = await OfferModel.create(payload);
         if (!order) {
+
             throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create the offer");
         }
 
-        // Notification
+        createdOrders.push(order);
+
+
+        // Send Notification
         const notificationData = {
-            userId: payload.wholeSeller!.toString(),
+            userId: payload.wholeSeller.toString(),
             title: "New Order Received",
-            message: `Retailer has sent an order for ${order?._id}.`,
+            message: `Retailer has sent an order for ${order._id}.`,
             type: "order",
         };
-        await notificationSender(io, `getNotification::${payload.wholeSeller}`, notificationData);
 
-        return order;
-    }));
+
+
+        await notificationSender(io, `getNotification::${payload.wholeSeller}`, notificationData);
+    }
+
 
     return { orders: createdOrders };
 };
+
+
+
 
 
 
