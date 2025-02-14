@@ -56,6 +56,7 @@ const updateProfile = catchAsync(
 // otp verification in controller
 const verifyOtp = catchAsync(async (req: Request, res: Response) => {
   const { email, otp } = req.body;
+
   const result = await UserService.verifyOtp(email, otp);
   sendResponse(res, {
     success: true,
@@ -64,6 +65,7 @@ const verifyOtp = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 
 
 export const UserController = { createUser, getUserProfile, updateProfile, verifyOtp };

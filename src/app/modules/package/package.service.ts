@@ -7,7 +7,6 @@ import { Package } from "./package.model";
 
 // create a new package
 const createPackageIntoDB = async (payload: IPackage) => {
-
     const productPayload = {
         name: payload.name,
         description: payload.description,

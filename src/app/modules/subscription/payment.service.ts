@@ -46,7 +46,6 @@ const companySubscriptionDetailsFromDB = async (id: string): Promise<{ subscript
     return { subscription };
 };
 
-
 const subscriptionsFromDB = async (query: Record<string, unknown>): Promise<IPayment[]> => {
     const anyConditions: any[] = [];
 

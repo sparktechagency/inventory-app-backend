@@ -89,10 +89,7 @@ const verifyOtp = async (email: string, otp: number): Promise<boolean> => {
     throw new ApiError(StatusCodes.NOT_FOUND, "User not found!");
   }
 
-  console.log("User found:", user.authentication?.oneTimeCode);  // Debugging
-
   if (!user.authentication || !user.authentication.oneTimeCode) {
-    console.log("OTP Not Found in DB!", user?.authentication?.oneTimeCode);
     throw new ApiError(StatusCodes.BAD_REQUEST, "OTP not generated!");
   }
 
@@ -100,17 +97,17 @@ const verifyOtp = async (email: string, otp: number): Promise<boolean> => {
     throw new ApiError(StatusCodes.BAD_REQUEST, "OTP has expired!");
   }
 
-  if (user.authentication.oneTimeCode !== Number(otp)) {
+  if (Number(user.authentication.oneTimeCode) !== Number(otp)) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid OTP!");
   }
 
-  // ✅ Mark user as verified & remove OTP
   user.verified = true;
   user.authentication = undefined;
   await user.save();
 
   return true;
 };
+
 
 
 export const UserService = {
