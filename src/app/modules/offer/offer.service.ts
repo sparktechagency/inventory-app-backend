@@ -93,6 +93,7 @@ const updateOfferIntoDB = async (
                 status: "Received",
                 availability: payload.availability,
                 price: payload.price,
+                Delivery: payload.Delivery,
             },
         },
         { new: true }
@@ -135,7 +136,6 @@ const updateOfferFromRetailer = async (
         }
 
         if (!existingOffer.product) {
-            console.error("❌ Product not found. Check if the product ID is missing or incorrect.");
             throw new ApiError(StatusCodes.NOT_FOUND, "Product not found. Check if the product ID is missing or incorrect.");
         }
 
@@ -154,7 +154,6 @@ const updateOfferFromRetailer = async (
             if (payload.status === STATUS.confirm) {
                 product?.quantity -= payload.quantity;
                 await product.save();
-                console.log("Updated Product Quantity:", product?.quantity);
             }
         }
 
@@ -178,8 +177,7 @@ const updateOfferFromRetailer = async (
 
         return { updatedOffer: existingOffer };
     } catch (error) {
-        console.error("🚨 Error in updateOfferFromRetailer:", error);
-        throw error;
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Error updating order")
     }
 };
 

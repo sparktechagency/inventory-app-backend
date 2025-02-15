@@ -29,6 +29,10 @@ const productSchema = new Schema<IOrder>(
             enum: Object.values(STATUS),
             required: true,
         },
+        Delivery: {
+            type: Boolean,
+            // default: false
+        }
 
     },
     {

@@ -10,4 +10,5 @@ export interface IOrder {
     status: STATUS;
     availability?: boolean;
     price?: number
+    Delivery: boolean
 }

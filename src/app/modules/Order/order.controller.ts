@@ -6,7 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import ApiError from "../../../errors/ApiError";
 // create a new product
 const createProduct = catchAsync(
-    async (req: Request, res: Response, next: NextFunction) => {
+    async (req: Request, res: Response) => {
         const productData = req.body;
 
         const result = await orderService.createProductIntoDB(productData);
@@ -14,7 +14,7 @@ const createProduct = catchAsync(
         sendResponse(res, {
             success: true,
             statusCode: StatusCodes.OK,
-            message: 'Product(s) created successfully.',
+            message: "Product's created successfully.",
             data: result,
         });
     }
