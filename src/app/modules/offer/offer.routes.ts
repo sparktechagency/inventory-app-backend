@@ -8,10 +8,20 @@ const router = express.Router()
 
 router.post("/create", auth(USER_ROLES.Retailer), sendOfferController.createOfferController);
 
+// !confirm get single one
+// ! also delete one 
+
+
+
+// !after come from wholesaler get offer
+// ! single one get
+
+
+
+
+// ! delete single pending offers from retailer
 
 //! get single pending offers from retailer
-
-// ! delete routes
 
 //! get all pending product from retailer
 
