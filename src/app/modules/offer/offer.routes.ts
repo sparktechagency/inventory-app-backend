@@ -7,7 +7,18 @@ const router = express.Router()
 
 
 router.post("/create", auth(USER_ROLES.Retailer), sendOfferController.createOfferController);
+
+
+//! get single pending offers from retailer
+
+// ! delete routes
+
+//! get all pending product from retailer
+
 // send response from wholesaler to retailer
+
+
+
 router.patch("/:id", auth(USER_ROLES.Wholesaler), sendOfferController.updateOffer)
 // send response from retailer to wholesaler
 router.patch("/retailer/:id", auth(USER_ROLES.Retailer), sendOfferController.confirmOrderFromRetailer)
