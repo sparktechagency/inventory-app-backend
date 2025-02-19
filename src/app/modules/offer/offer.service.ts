@@ -259,6 +259,49 @@ const getSingleReceiveOfferFromRetailerIntoDB = async (retailerId: string, offer
     return offer;
 }
 
+
+// confirm 
+
+
+// get all from confirm
+
+const getAllConfirmOffers = async (user: JwtPayload) => {
+    const offers = await OfferModel.find({
+        retailer: user.id,
+        status: STATUS.confirm,
+    })
+
+    if (!offers) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No confirmed offers found");
+    }
+    return offers
+
+}
+
+// confirm single one
+const getSingleConfirmOffer = async (user: JwtPayload) => {
+    const offer = await OfferModel.findOne({
+        retailer: user.id,
+        status: STATUS.confirm,
+    });
+    if (!offer) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No confirmed offers found");
+    }
+    return offer
+}
+
+// delete confirm offers
+const deleteConfirmOffers = async (user: JwtPayload) => {
+    const deletedOffers = await OfferModel.deleteMany({
+        retailer: user.id,
+        status: STATUS.confirm,
+    });
+    if (!deletedOffers) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No confirmed offers found to delete");
+    }
+    return deletedOffers
+}
+
 export const sendOfferService = {
     createOffers,
     updateOfferIntoDB,
@@ -267,5 +310,10 @@ export const sendOfferService = {
     getSinglePendingOfferFromRetailerIntoDB,
     deleteSinglePendingOfferFromRetailer,
     getAllReceiveOffers,
-    getSingleReceiveOfferFromRetailerIntoDB
+    getSingleReceiveOfferFromRetailerIntoDB,
+
+    // confirm
+    getAllConfirmOffers,
+    getSingleConfirmOffer,
+    deleteConfirmOffers
 };

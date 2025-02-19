@@ -16,12 +16,12 @@ router.post("/create", auth(USER_ROLES.Retailer), sendOfferController.createOffe
 
 
 
-// send response from wholesaler to retailer
-router.get("/received", auth(USER_ROLES.Retailer), sendOfferController.getAllReceiveOffers)
 
-// get single one
-router.get("/received/:id", auth(USER_ROLES.Retailer), sendOfferController.getSingleReceiveOfferFromRetailerIntoDB)
 
+
+/*
+Pending
+*/
 router.patch("/:id", auth(USER_ROLES.Wholesaler), sendOfferController.updateOffer)
 // send response from retailer to wholesaler
 router.patch("/retailer/:id", auth(USER_ROLES.Retailer), sendOfferController.confirmOrderFromRetailer)
@@ -31,5 +31,31 @@ router.get('/pending-retailer', auth(USER_ROLES.Retailer), sendOfferController.g
 router.get("/pending/:id", auth(USER_ROLES.Retailer), sendOfferController.getSinglePendingOfferFromRetailer);
 //  delete single pending offers from retailer
 router.delete("/pending/:id", auth(USER_ROLES.Retailer), sendOfferController.deleteSinglePendingOfferFromRetailer);
+
+
+/**
+Received 
+*/
+// send response from wholesaler to retailer
+router.get("/received", auth(USER_ROLES.Retailer), sendOfferController.getAllReceiveOffers)
+
+// get single one
+router.get("/received/:id", auth(USER_ROLES.Retailer), sendOfferController.getSingleReceiveOfferFromRetailerIntoDB)
+
+
+
+
+/*
+Confirm
+*/
+
+router.get("/confirm", auth(USER_ROLES.Retailer), sendOfferController.getAllConfirmOffers)
+
+// get single one
+router.get("/confirm/:id", auth(USER_ROLES.Retailer), sendOfferController.getSingleConfirmOffer)
+
+//  delete single confirm offers from retailer
+
+router.delete("/confirm/:id", auth(USER_ROLES.Retailer), sendOfferController.deleteSingleConfirmOffer);
 
 export const offerRoutes = router;

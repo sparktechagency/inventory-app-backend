@@ -171,6 +171,60 @@ const getSingleReceiveOfferFromRetailerIntoDB = catchAsync(async (req: Request, 
     })
 })
 
+// confirm
+const getAllConfirmOffers = async (req: Request, res: Response) => {
+    const user = req.user as JwtPayload;
+    if (!user?.id) {
+        throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
+    }
+    const result = await sendOfferService.getAllConfirmOffers(user);
+
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Successfully fetched received offers",
+        data: result,
+    });
+}
+
+// single one 
+const getSingleConfirmOffer = async (req: Request, res: Response) => {
+    const user = req.user as JwtPayload;
+    if (!user?.id) {
+        throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
+    }
+    const { id } = req.params;
+    if (!id) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Offer ID is required");
+    }
+    const offer = await sendOfferService.getSingleConfirmOffer(user);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Successfully fetched single receive offer",
+        data: offer,
+    })
+}
+
+// delete confirm offers
+const deleteSingleConfirmOffer = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user as JwtPayload;
+    if (!user?.id) {
+        throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
+    }
+    const { id } = req.params;
+    if (!id) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Offer ID is required");
+    }
+    await sendOfferService.deleteConfirmOffers(user);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Successfully deleted single confirm offer",
+        data: null,
+    })
+})
+
 
 export const sendOfferController = {
     createOfferController,
@@ -180,5 +234,12 @@ export const sendOfferController = {
     getSinglePendingOfferFromRetailer,
     deleteSinglePendingOfferFromRetailer,
     getAllReceiveOffers,
-    getSingleReceiveOfferFromRetailerIntoDB
+    getSingleReceiveOfferFromRetailerIntoDB,
+
+
+
+    // confirm
+    getAllConfirmOffers,
+    getSingleConfirmOffer,
+    deleteSingleConfirmOffer
 };
