@@ -20,7 +20,7 @@ const createProduct = catchAsync(
     }
 );
 
-// get fall products
+// get all products
 const getAllProducts = catchAsync(async (req: Request, res: Response) => {
     const result = await orderService.getAllProducts();
     if (!result) {

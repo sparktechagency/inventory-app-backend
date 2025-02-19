@@ -4,6 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import sendResponse from "../../../shared/sendResponse";
 import ApiError from "../../../errors/ApiError";
 import { sendOfferService } from "./offer.service";
+import { JwtPayload } from "jsonwebtoken";
 
 // Create a new product Controller
 const createOfferController = catchAsync(async (req: Request, res: Response) => {
@@ -92,6 +93,28 @@ const getPendingOffersFromRetailer = catchAsync(async (req: Request, res: Respon
     });
 });
 
+// get single offer from db for retailer
+const getSinglePendingOfferFromRetailer = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user as JwtPayload;
+    if (!user?.id) {
+        throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
+    }
+
+    const { id } = req.params;
+    if (!id) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Offer ID is required");
+    }
+
+    const offer = await sendOfferService.getSinglePendingOfferFromRetailerIntoDB(user.id, id);
+
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Successfully fetched single pending offer",
+        data: offer,
+    });
+});
+
 
 
 
@@ -99,5 +122,6 @@ export const sendOfferController = {
     createOfferController,
     updateOffer,
     confirmOrderFromRetailer,
-    getPendingOffersFromRetailer
+    getPendingOffersFromRetailer,
+    getSinglePendingOfferFromRetailer
 };

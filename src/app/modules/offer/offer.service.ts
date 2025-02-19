@@ -197,11 +197,29 @@ const getPendingOffersFromRetailerIntoDB = async (user: JwtPayload) => {
     return { offers };
 };
 
+// single pending Offer From retailer
+const getSinglePendingOfferFromRetailerIntoDB = async (retailerId: string, offerId: string) => {
+    const offer = await OfferModel.findOne({
+        _id: offerId,
+        retailer: retailerId, // Ensuring the offer belongs to the retailer
+        status: STATUS.pending,
+    });
+
+    if (!offer) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
+    }
+
+    return offer;
+};
+
+
+
 
 
 export const sendOfferService = {
     createOffers,
     updateOfferIntoDB,
     updateOfferFromRetailer,
-    getPendingOffersFromRetailerIntoDB
+    getPendingOffersFromRetailerIntoDB,
+    getSinglePendingOfferFromRetailerIntoDB,
 };
