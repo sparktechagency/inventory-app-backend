@@ -19,6 +19,8 @@ router.post("/create", auth(USER_ROLES.Retailer), sendOfferController.createOffe
 // send response from wholesaler to retailer
 router.get("/received", auth(USER_ROLES.Retailer), sendOfferController.getAllReceiveOffers)
 
+// get single one
+router.get("/received/:id", auth(USER_ROLES.Retailer), sendOfferController.getSingleReceiveOfferFromRetailerIntoDB)
 
 router.patch("/:id", auth(USER_ROLES.Wholesaler), sendOfferController.updateOffer)
 // send response from retailer to wholesaler

@@ -244,6 +244,21 @@ const getAllReceiveOffers = async (user: JwtPayload) => {
 }
 
 
+// single receive offer from wholesaler
+const getSingleReceiveOfferFromRetailerIntoDB = async (retailerId: string, offerId: string) => {
+    const offer = await OfferModel.findOne({
+        _id: offerId,
+        retailer: retailerId,
+        status: STATUS.received,
+    });
+
+    if (!offer) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
+    }
+
+    return offer;
+}
+
 export const sendOfferService = {
     createOffers,
     updateOfferIntoDB,
@@ -251,5 +266,6 @@ export const sendOfferService = {
     getPendingOffersFromRetailerIntoDB,
     getSinglePendingOfferFromRetailerIntoDB,
     deleteSinglePendingOfferFromRetailer,
-    getAllReceiveOffers
+    getAllReceiveOffers,
+    getSingleReceiveOfferFromRetailerIntoDB
 };
