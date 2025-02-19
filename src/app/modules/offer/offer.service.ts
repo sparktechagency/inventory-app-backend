@@ -213,7 +213,20 @@ const getSinglePendingOfferFromRetailerIntoDB = async (retailerId: string, offer
 };
 
 
+//  delete single pending offers from retailer
 
+
+const deleteSinglePendingOfferFromRetailer = async (retailerId: string, offerId: string) => {
+    const deletedOffer = await OfferModel.findByIdAndDelete({
+        _id: offerId,
+        retailer: retailerId,
+        status: STATUS.pending,
+    });
+    if (!deletedOffer) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
+    }
+    return deletedOffer
+}
 
 
 export const sendOfferService = {
@@ -222,4 +235,5 @@ export const sendOfferService = {
     updateOfferFromRetailer,
     getPendingOffersFromRetailerIntoDB,
     getSinglePendingOfferFromRetailerIntoDB,
+    deleteSinglePendingOfferFromRetailer
 };

@@ -116,6 +116,26 @@ const getSinglePendingOfferFromRetailer = catchAsync(async (req: Request, res: R
 });
 
 
+// delete single pending offers from retailer
+
+const deleteSinglePendingOfferFromRetailer = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user as JwtPayload;
+    if (!user?.id) {
+        throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
+    }
+    const { id } = req.params;
+    if (!id) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Offer ID is required");
+    }
+    const offer = await sendOfferService.deleteSinglePendingOfferFromRetailer(user.id, id);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Successfully deleted single pending offer",
+        data: offer,
+    })
+})
+
 
 
 export const sendOfferController = {
@@ -123,5 +143,6 @@ export const sendOfferController = {
     updateOffer,
     confirmOrderFromRetailer,
     getPendingOffersFromRetailer,
-    getSinglePendingOfferFromRetailer
+    getSinglePendingOfferFromRetailer,
+    deleteSinglePendingOfferFromRetailer
 };
