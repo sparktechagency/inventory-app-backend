@@ -229,11 +229,27 @@ const deleteSinglePendingOfferFromRetailer = async (retailerId: string, offerId:
 }
 
 
+//  for receive offer from wholesaler
+const getAllReceiveOffers = async (user: JwtPayload) => {
+    const offers = await OfferModel.find({
+        retailer: user.id,
+        status: STATUS.received,
+    })
+
+    if (!offers) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No received offers found");
+    }
+    return offers
+
+}
+
+
 export const sendOfferService = {
     createOffers,
     updateOfferIntoDB,
     updateOfferFromRetailer,
     getPendingOffersFromRetailerIntoDB,
     getSinglePendingOfferFromRetailerIntoDB,
-    deleteSinglePendingOfferFromRetailer
+    deleteSinglePendingOfferFromRetailer,
+    getAllReceiveOffers
 };

@@ -136,6 +136,21 @@ const deleteSinglePendingOfferFromRetailer = catchAsync(async (req: Request, res
     })
 })
 
+// ! delete single pending offers from retailer
+const getAllReceiveOffers = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user as JwtPayload;
+    if (!user?.id) {
+        throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
+    }
+    const result = await sendOfferService.getAllReceiveOffers(user);
+
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Successfully fetched received offers",
+        data: result,
+    });
+})
 
 
 export const sendOfferController = {
@@ -144,5 +159,6 @@ export const sendOfferController = {
     confirmOrderFromRetailer,
     getPendingOffersFromRetailer,
     getSinglePendingOfferFromRetailer,
-    deleteSinglePendingOfferFromRetailer
+    deleteSinglePendingOfferFromRetailer,
+    getAllReceiveOffers
 };

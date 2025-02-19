@@ -11,22 +11,13 @@ router.post("/create", auth(USER_ROLES.Retailer), sendOfferController.createOffe
 // !confirm get single one
 // ! also delete one 
 
-
-
 // !after come from wholesaler get offer
 // ! single one get
 
 
 
-
-
-
-
-
-
-
 // send response from wholesaler to retailer
-
+router.get("/received", auth(USER_ROLES.Retailer), sendOfferController.getAllReceiveOffers)
 
 
 router.patch("/:id", auth(USER_ROLES.Wholesaler), sendOfferController.updateOffer)
@@ -36,7 +27,7 @@ router.patch("/retailer/:id", auth(USER_ROLES.Retailer), sendOfferController.con
 router.get('/pending-retailer', auth(USER_ROLES.Retailer), sendOfferController.getPendingOffersFromRetailer)
 // get single pending offers from retailer
 router.get("/pending/:id", auth(USER_ROLES.Retailer), sendOfferController.getSinglePendingOfferFromRetailer);
-// ! delete single pending offers from retailer
+//  delete single pending offers from retailer
 router.delete("/pending/:id", auth(USER_ROLES.Retailer), sendOfferController.deleteSinglePendingOfferFromRetailer);
 
 export const offerRoutes = router;
