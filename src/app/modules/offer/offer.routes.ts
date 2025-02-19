@@ -23,7 +23,7 @@ router.post("/create", auth(USER_ROLES.Retailer), sendOfferController.createOffe
 
 //! get single pending offers from retailer
 
-//! get all pending product from retailer
+
 
 // send response from wholesaler to retailer
 
@@ -32,5 +32,7 @@ router.post("/create", auth(USER_ROLES.Retailer), sendOfferController.createOffe
 router.patch("/:id", auth(USER_ROLES.Wholesaler), sendOfferController.updateOffer)
 // send response from retailer to wholesaler
 router.patch("/retailer/:id", auth(USER_ROLES.Retailer), sendOfferController.confirmOrderFromRetailer)
+//! get all pending product from retailer
+router.get('/pending-retailer', auth(USER_ROLES.Retailer), sendOfferController.getPendingOffersFromRetailer)
 
 export const offerRoutes = router;

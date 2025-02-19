@@ -63,10 +63,41 @@ const confirmOrderFromRetailer = catchAsync(async (req: Request, res: Response) 
         data: result.updatedOffer,
     });
 });
+// get all pending product from retailer
+const getPendingOffersFromRetailer = catchAsync(async (req: Request, res: Response) => {
+
+    if (!req.user || !req.user.id) {
+        return res.status(400).json({
+            success: false,
+            message: "User not authenticated",
+        });
+    }
+
+    const result = await sendOfferService.getPendingOffersFromRetailerIntoDB(req.user);
+
+
+    if (result.offers.length === 0) {
+        return res.status(200).json({
+            success: true,
+            message: "No pending offers found",
+            data: [],
+        });
+    }
+
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Successfully fetched pending offers",
+        data: result.offers,
+    });
+});
+
+
 
 
 export const sendOfferController = {
     createOfferController,
     updateOffer,
-    confirmOrderFromRetailer
+    confirmOrderFromRetailer,
+    getPendingOffersFromRetailer
 };

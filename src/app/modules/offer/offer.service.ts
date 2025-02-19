@@ -4,7 +4,6 @@ import ApiError from "../../../errors/ApiError";
 import { IOrder } from "./offer.interface";
 import { notificationSender } from "../../../helpers/notificationSender";
 import { Server } from "socket.io";
-import { ProductModel } from "../Order/order.model";
 import { STATUS } from "../../../enums/status";
 import { JwtPayload } from "jsonwebtoken";
 import { User } from "../user/user.model";
@@ -181,8 +180,28 @@ const updateOfferFromRetailer = async (
     }
 };
 
+
+
+// get all pending product from retailer
+
+
+const getPendingOffersFromRetailerIntoDB = async (user: JwtPayload) => {
+    const offers = await OfferModel.find({
+        retailer: user.id,
+        status: STATUS.pending,
+    })
+
+    if (!offers) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No pending offers found");
+    }
+    return { offers };
+};
+
+
+
 export const sendOfferService = {
     createOffers,
     updateOfferIntoDB,
-    updateOfferFromRetailer
+    updateOfferFromRetailer,
+    getPendingOffersFromRetailerIntoDB
 };
