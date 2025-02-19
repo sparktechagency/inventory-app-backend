@@ -178,7 +178,9 @@ const getAllConfirmOffers = async (req: Request, res: Response) => {
         throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
     }
     const result = await sendOfferService.getAllConfirmOffers(user);
-
+    if (!result) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No received offers found");
+    }
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
@@ -198,6 +200,9 @@ const getSingleConfirmOffer = async (req: Request, res: Response) => {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Offer ID is required");
     }
     const offer = await sendOfferService.getSingleConfirmOffer(user);
+    if (!offer) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No received offer found");
+    }
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
