@@ -234,7 +234,7 @@ const getAllReceiveOffers = async (user: JwtPayload) => {
     const offers = await OfferModel.find({
         retailer: user.id,
         status: STATUS.received,
-    })
+    }).populate("retailer").populate("wholeSeller").populate("product").lean();
 
     if (!offers) {
         throw new ApiError(StatusCodes.NOT_FOUND, "No received offers found");
@@ -257,6 +257,20 @@ const getSingleReceiveOfferFromRetailerIntoDB = async (retailerId: string, offer
     }
 
     return offer;
+}
+
+
+// delete receive offers
+const deleteReceiveOffers = async (user: JwtPayload, offerId: string) => {
+    const deletedOffer = await OfferModel.findByIdAndDelete({
+        _id: offerId,
+        retailer: user.id,
+        status: STATUS.received,
+    });
+    if (!deletedOffer) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
+    }
+    return deletedOffer
 }
 
 
@@ -311,6 +325,9 @@ export const sendOfferService = {
     deleteSinglePendingOfferFromRetailer,
     getAllReceiveOffers,
     getSingleReceiveOfferFromRetailerIntoDB,
+
+    // receive
+    deleteReceiveOffers,
 
     // confirm
     getAllConfirmOffers,

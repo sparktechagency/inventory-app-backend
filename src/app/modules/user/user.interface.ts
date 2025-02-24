@@ -6,10 +6,7 @@ export type IUser = {
   email: string;
   password: string;
   confirmPassword: string;
-  businessName: string;
   role: USER_ROLES;
-  businessCategory: BUSINESS_CATEGORY;
-  location: string;
   isSubscribed: boolean;
   image?: string;
   status: 'active' | 'delete';
@@ -18,6 +15,11 @@ export type IUser = {
     isResetPassword: boolean;
     oneTimeCode: number;
     expireAt: Date;
+  };
+  storeInformation?: {
+    businessName: string;
+    businessCategory: BUSINESS_CATEGORY;
+    location: string;
   };
 };
 

@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
-import { USER_ROLES } from '../../../enums/user';
+import { BUSINESS_CATEGORY, USER_ROLES } from '../../../enums/user';
 import ApiError from '../../../errors/ApiError';
 import { emailHelper } from '../../../helpers/emailHelper';
 import { emailTemplate } from '../../../shared/emailTemplate';
@@ -8,6 +8,7 @@ import unlinkFile from '../../../shared/unlinkFile';
 import generateOTP from '../../../util/generateOTP';
 import { IUser } from './user.interface';
 import { User } from './user.model';
+import mongoose from 'mongoose';
 
 const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
   // Create the user
@@ -108,6 +109,29 @@ const verifyOtp = async (email: string, otp: number): Promise<boolean> => {
   return true;
 };
 
+const updateStoreData = async (
+  userId: string,
+  storeData: {
+    businessName: string;
+    businessCategory: BUSINESS_CATEGORY;
+    location: string;
+  }
+): Promise<IUser | null> => {
+  const result = await User.findByIdAndUpdate(
+    userId,
+    { $set: { storeInformation: storeData } },
+    { new: true }
+  );
+
+  if (!result) {
+    throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+
+  return result;
+};
+
+
+
 
 
 export const UserService = {
@@ -115,4 +139,5 @@ export const UserService = {
   getUserProfileFromDB,
   updateProfileToDB,
   verifyOtp,
+  updateStoreData
 };

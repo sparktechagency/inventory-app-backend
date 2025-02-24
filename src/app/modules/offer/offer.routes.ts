@@ -39,6 +39,10 @@ Received
 // send response from wholesaler to retailer
 router.get("/received", auth(USER_ROLES.Retailer), sendOfferController.getAllReceiveOffers)
 
+// delete single Receive 
+
+router.delete("/received/:id", auth(USER_ROLES.Retailer), sendOfferController.deleteSingleReceiveOfferFromRetailer);
+
 // get single one
 router.get("/received/:id", auth(USER_ROLES.Retailer), sendOfferController.getSingleReceiveOfferFromRetailerIntoDB)
 

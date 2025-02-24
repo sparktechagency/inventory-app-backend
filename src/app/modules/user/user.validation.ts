@@ -13,20 +13,21 @@ const createUserZodSchema = z.object({
     confirmPassword: z
       .string({ required_error: "Confirm password is required" })
       .min(8, { message: "Confirm password must be at least 8 characters long" }),
-    businessName: z.string({ required_error: "Business name is required" }),
+    // businessName: z.string({ required_error: "Business name is required" }),
     role: z.enum(Object.values(USER_ROLES) as [USER_ROLES, ...USER_ROLES[]], {
       required_error: "Role is required",
     }),
-    businessCategory: z.enum(
-      Object.values(BUSINESS_CATEGORY) as [BUSINESS_CATEGORY, ...BUSINESS_CATEGORY[]],
-      {
-        required_error: "Business category is required",
-      }
-    ),
-    location: z.string({ required_error: "Location is required" }),
+    // businessCategory: z.enum(
+    //   Object.values(BUSINESS_CATEGORY) as [BUSINESS_CATEGORY, ...BUSINESS_CATEGORY[]],
+    //   {
+    //     required_error: "Business category is required",
+    //   }
+    // ),
+    // location: z.string({ required_error: "Location is required" }),
+    verified: z.boolean({ required_error: "Verified is required" }),
     image: z.string().optional(),
     status: z.enum(['active', 'delete'], { required_error: "Status is required" }),
-    verified: z.boolean({ required_error: "Verified is required" }),
+
     authentication: z
       .object({
         isResetPassword: z.boolean().optional(),

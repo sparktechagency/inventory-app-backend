@@ -28,24 +28,7 @@ const userSchema = new Schema<IUser, UserModal>(
       type: String,
       required: true,
     },
-    businessName: {
-      type: String,
-      required: true,
-    },
-    role: {
-      type: String,
-      enum: Object.values(USER_ROLES),
-      required: true,
-    },
-    businessCategory: {
-      type: String,
-      enum: Object.values(BUSINESS_CATEGORY),
-      required: true,
-    },
-    location: {
-      type: String,
-      required: true,
-    },
+
     image: {
       type: String,
       default: 'https://i.ibb.co/z5YHLV9/profile.png',
@@ -55,19 +38,35 @@ const userSchema = new Schema<IUser, UserModal>(
       enum: ['active', 'delete'],
       default: 'active',
     },
+
+    isSubscribed: {
+      type: Boolean,
+      default: false,
+    },
     verified: {
       type: Boolean,
       default: false,
     },
-    isSubscribed: {
-      type: Boolean,
-      default: false,
+    role: {
+      type: String,
+      enum: Object.values(USER_ROLES),
+      required: true
+    },
+    storeInformation: {
+      businessName: { type: String },
+      businessCategory: { type: String, enum: Object.values(BUSINESS_CATEGORY) },
+      location: { type: String },
+      verified: {
+        type: Boolean,
+        default: false,
+      },
     },
     authentication: {
       isResetPassword: { type: Boolean, default: false },
       oneTimeCode: { type: Number, default: null },  // This will be null initially
       expireAt: { type: Date, default: null },  // This will also be null initially
-    },
+    }
+
   },
   { timestamps: true }
 );

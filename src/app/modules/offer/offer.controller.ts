@@ -143,7 +143,7 @@ const getAllReceiveOffers = catchAsync(async (req: Request, res: Response) => {
         throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
     }
     const result = await sendOfferService.getAllReceiveOffers(user);
-
+    console.log(result);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
@@ -168,6 +168,26 @@ const getSingleReceiveOfferFromRetailerIntoDB = catchAsync(async (req: Request, 
         success: true,
         message: "Successfully fetched single receive offer",
         data: offer,
+    })
+})
+
+
+// delete single received offers from retailer
+const deleteSingleReceiveOfferFromRetailer = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user as JwtPayload;
+    if (!user?.id) {
+        throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
+    }
+    const { id } = req.params;
+    if (!id) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Offer ID is required");
+    }
+    await sendOfferService.deleteReceiveOffers(user.id, id);
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Successfully deleted single receive offer",
+        data: null,
     })
 })
 
@@ -241,7 +261,8 @@ export const sendOfferController = {
     getAllReceiveOffers,
     getSingleReceiveOfferFromRetailerIntoDB,
 
-
+    // receive offers
+    deleteSingleReceiveOfferFromRetailer,
 
     // confirm
     getAllConfirmOffers,

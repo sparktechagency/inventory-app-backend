@@ -4,6 +4,9 @@ import catchAsync from '../../../shared/catchAsync';
 import { getSingleFilePath } from '../../../shared/getFilePath';
 import sendResponse from '../../../shared/sendResponse';
 import { UserService } from './user.service';
+import { JwtPayload } from 'jsonwebtoken';
+import ApiError from '../../../errors/ApiError';
+import { IUser } from './user.interface';
 
 const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -67,5 +70,29 @@ const verifyOtp = catchAsync(async (req: Request, res: Response) => {
 });
 
 
+//update store information
 
-export const UserController = { createUser, getUserProfile, updateProfile, verifyOtp };
+const updateStoreInformation = catchAsync(
+  async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    const storeData = req.body;
+
+    const result = await UserService.updateStoreData(userId, storeData);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Store information updated successfully',
+      data: result,
+    });
+  }
+);
+
+
+
+
+
+export const UserController = {
+  createUser, getUserProfile, updateProfile, verifyOtp,
+  updateStoreInformation
+};

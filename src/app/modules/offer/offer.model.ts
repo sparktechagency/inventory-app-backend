@@ -32,6 +32,10 @@ const productSchema = new Schema<IOrder>(
         Delivery: {
             type: Boolean,
             // default: false
+        },
+        availability: {
+            type: Boolean,
+            // default: false
         }
 
     },
