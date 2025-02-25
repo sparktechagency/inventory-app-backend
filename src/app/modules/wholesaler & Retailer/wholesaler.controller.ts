@@ -6,11 +6,9 @@ import sendResponse from "../../../shared/sendResponse";
 import { Request, Response } from "express";
 
 const getAllWholeSalers = catchAsync(async (req: Request, res: Response) => {
-    const search = req.query.search as string;
-    // console.log("Query Parameter - Search:", search);
+    const { search, email, name }: any = req.query;
 
-    // Pass the search parameter to the service
-    const result = await wholesalerServices.getAllWholeSaler(search);
+    const result = await wholesalerServices.getAllWholeSaler({ search, email, name });
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
@@ -20,6 +18,7 @@ const getAllWholeSalers = catchAsync(async (req: Request, res: Response) => {
         data: result,
     });
 });
+
 
 // get single wholesaler
 const getWholeSalerById = catchAsync(async (req: Request, res: Response) => {

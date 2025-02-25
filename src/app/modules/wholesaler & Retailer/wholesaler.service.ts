@@ -5,34 +5,31 @@ import { USER_ROLES } from "../../../enums/user";
 import { IUser } from "../user/user.interface";
 
 // get all wholesaler from db
-const getAllWholeSaler = async (search?: string) => {
-    const filter: any = { role: USER_ROLES.Wholesaler };
+const getAllWholeSaler = async ({ search, email, name }: { search?: string, email?: string, name?: string }) => {
+    const filter: any = { role: "Wholesaler" };
 
-    // console.log("Search parameter received:", search);
-
-    // Add search condition if `search` is provided
     if (search) {
-        filter.businessName = { $regex: search, $options: 'i' };
+        filter.$or = [
+            { name: { $regex: search, $options: "i" } },
+            { email: { $regex: search, $options: "i" } }
+        ];
     }
 
-    // console.log("Generated Filter:", JSON.stringify(filter, null, 2));
-
-    try {
-        // Fetch wholesalers matching the filter
-        const wholeSalerUsers = await User.find(filter);
-
-        // console.log("Matched Wholesalers:", wholeSalerUsers);
-
-        if (!wholeSalerUsers || wholeSalerUsers.length === 0) {
-            throw new ApiError(StatusCodes.NOT_FOUND, 'No wholesalers found!');
-        }
-
-        return wholeSalerUsers;
-    } catch (error) {
-        console.error("Error fetching wholesalers:", error);
-        throw error;
+    if (email) {
+        filter.email = { $regex: email, $options: "i" };
     }
+
+    if (name) {
+        filter.name = { $regex: name, $options: "i" };
+    }
+
+    console.log("Generated Filter:", JSON.stringify(filter, null, 2)); // Debugging
+
+    return await User.find(filter);
 };
+
+
+
 
 
 
