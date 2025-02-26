@@ -73,7 +73,7 @@ const verifyOtp = catchAsync(async (req: Request, res: Response) => {
 //update store information
 
 const updateStoreInformation = catchAsync(
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.params;
     const storeData = req.body;
 
@@ -82,11 +82,12 @@ const updateStoreInformation = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,
-      message: 'Store information updated successfully',
+      message: 'Store information updated successfully. Please check your email for OTP verification.',
       data: result,
     });
   }
 );
+
 
 
 

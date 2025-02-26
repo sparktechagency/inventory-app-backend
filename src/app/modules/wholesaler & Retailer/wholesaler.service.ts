@@ -23,7 +23,6 @@ const getAllWholeSaler = async ({ search, email, name }: { search?: string, emai
         filter.name = { $regex: name, $options: "i" };
     }
 
-    console.log("Generated Filter:", JSON.stringify(filter, null, 2)); // Debugging
 
     return await User.find(filter);
 };

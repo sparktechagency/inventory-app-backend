@@ -8,46 +8,51 @@ import unlinkFile from '../../../shared/unlinkFile';
 import generateOTP from '../../../util/generateOTP';
 import { IUser } from './user.interface';
 import { User } from './user.model';
-import mongoose from 'mongoose';
 
+// const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
+//   // Create the user
+//   const createUser = await User.create(payload);
+//   if (!createUser) {
+//     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create user');
+//   }
+
+//   // Generate OTP
+//   const otp = generateOTP();
+//   const values = {
+//     name: createUser.name,
+//     otp: otp,
+//     email: createUser.email!,
+//   };
+
+//   // Send OTP email
+//   const createAccountTemplate = emailTemplate.createAccount(values);
+//   emailHelper.sendEmail(createAccountTemplate);
+
+//   // Save OTP and expiry to the DB
+//   const authentication = {
+//     oneTimeCode: otp,
+//     expireAt: new Date(Date.now() + 3 * 60000),
+//   };
+
+//   const updatedUser = await User.findOneAndUpdate(
+//     { _id: createUser._id },
+//     { $set: { authentication } },
+//     { new: true } // Ensure the updated document is returned
+//   );
+
+//   if (!updatedUser) {
+//     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to save OTP');
+//   }
+
+//   return createUser;
+// };
 const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
-  // Create the user
   const createUser = await User.create(payload);
   if (!createUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create user');
   }
-
-  // Generate OTP
-  const otp = generateOTP();
-  const values = {
-    name: createUser.name,
-    otp: otp,
-    email: createUser.email!,
-  };
-
-  // Send OTP email
-  const createAccountTemplate = emailTemplate.createAccount(values);
-  emailHelper.sendEmail(createAccountTemplate);
-
-  // Save OTP and expiry to the DB
-  const authentication = {
-    oneTimeCode: otp,
-    expireAt: new Date(Date.now() + 3 * 60000),
-  };
-
-  const updatedUser = await User.findOneAndUpdate(
-    { _id: createUser._id },
-    { $set: { authentication } },
-    { new: true } // Ensure the updated document is returned
-  );
-
-  if (!updatedUser) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to save OTP');
-  }
-
   return createUser;
 };
-
 const getUserProfileFromDB = async (
   user: JwtPayload
 ): Promise<Partial<IUser>> => {
@@ -117,9 +122,39 @@ const updateStoreData = async (
     location: string;
   }
 ): Promise<IUser | null> => {
+  // Generate OTP
+  const otp = generateOTP();
+
+  // Get user info
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
+  }
+
+  // Send OTP via email
+  const values = {
+    name: user.name,
+    otp: otp,
+    email: user.email!,
+  };
+
+  const otpTemplate = emailTemplate.createAccount(values);
+  emailHelper.sendEmail(otpTemplate);
+
+  // Save OTP in DB
+  const authentication = {
+    oneTimeCode: otp,
+    expireAt: new Date(Date.now() + 3 * 60000), // 3 minutes expiry
+  };
+
   const result = await User.findByIdAndUpdate(
     userId,
-    { $set: { storeInformation: storeData } },
+    {
+      $set: {
+        storeInformation: storeData,
+        authentication,
+      },
+    },
     { new: true }
   );
 
@@ -129,7 +164,6 @@ const updateStoreData = async (
 
   return result;
 };
-
 
 
 

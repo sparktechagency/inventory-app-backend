@@ -189,7 +189,7 @@ const getPendingOffersFromRetailerIntoDB = async (user: JwtPayload) => {
     const offers = await OfferModel.find({
         retailer: user.id,
         status: STATUS.pending,
-    })
+    }).populate("retailer").populate("wholeSeller").populate("product").lean();
 
     if (!offers) {
         throw new ApiError(StatusCodes.NOT_FOUND, "No pending offers found");
