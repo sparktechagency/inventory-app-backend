@@ -203,7 +203,7 @@ const getSinglePendingOfferFromRetailerIntoDB = async (retailerId: string, offer
         _id: offerId,
         retailer: retailerId, // Ensuring the offer belongs to the retailer
         status: STATUS.pending,
-    });
+    }).populate("retailer").populate("wholeSeller").populate("product").lean();;
 
     if (!offer) {
         throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
@@ -250,7 +250,7 @@ const getSingleReceiveOfferFromRetailerIntoDB = async (retailerId: string, offer
         _id: offerId,
         retailer: retailerId,
         status: STATUS.received,
-    });
+    }).populate("retailer").populate("wholeSeller").populate("product").lean();;
 
     if (!offer) {
         throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
@@ -283,7 +283,7 @@ const getAllConfirmOffers = async (user: JwtPayload) => {
     const offers = await OfferModel.find({
         retailer: user.id,
         status: STATUS.confirm,
-    })
+    }).populate("retailer").populate("wholeSeller").populate("product").lean();
 
     if (!offers) {
         throw new ApiError(StatusCodes.NOT_FOUND, "No confirmed offers found");
@@ -297,7 +297,7 @@ const getSingleConfirmOffer = async (user: JwtPayload) => {
     const offer = await OfferModel.findOne({
         retailer: user.id,
         status: STATUS.confirm,
-    });
+    }).populate("retailer").populate("wholeSeller").populate("product").lean();;
     if (!offer) {
         throw new ApiError(StatusCodes.NOT_FOUND, "No confirmed offers found");
     }

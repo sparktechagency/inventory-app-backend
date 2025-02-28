@@ -143,7 +143,6 @@ const getAllReceiveOffers = catchAsync(async (req: Request, res: Response) => {
         throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
     }
     const result = await sendOfferService.getAllReceiveOffers(user);
-    console.log(result);
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,

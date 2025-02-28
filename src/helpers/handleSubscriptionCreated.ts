@@ -24,7 +24,6 @@ const getUserByEmail = async (email: string) => {
 // helper function to find and validate pricing plan
 
 const getPackageByProductId = async (productId: string) => {
-    console.log("Fetching package with productId:", productId);  // Log productId
     const plan = await Package.findOne({ productId });
     if (!plan) {
         throw new ApiError(StatusCodes.NOT_FOUND, `Plan not found for productId: ${productId}`);

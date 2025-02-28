@@ -9,7 +9,6 @@ export const notificationSender = async (
     try {
         // Emit the notification through Socket.IO
         io.emit(channel, data);
-        console.log(`Notification sent to channel: ${channel}`, data);
 
         // Save the notification in the database
         const notificationPayload = {
@@ -21,7 +20,6 @@ export const notificationSender = async (
 
         await NotificationServices.createNotification(notificationPayload);
 
-        console.log('Notification stored in the database successfully.');
     } catch (error) {
         console.error("Error sending or storing notification:", error);
     }
