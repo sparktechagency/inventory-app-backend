@@ -28,21 +28,17 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
     }
 
     if (!event) {
-        console.log("Event not found");
         throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid event received!");
     }
 
-    console.log("Verified event:", event);
 
     const eventType = event.type;
-    console.log("Event type:", eventType); // Log event type
 
     // Handle the event
     try {
         switch (eventType) {
             case "customer.subscription.created":
                 await handleSubscriptionCreated(event.data.object as Stripe.Subscription);
-                console.log("Webhook connected");
                 break;
             default:
                 console.log(`Unhandled event type ${eventType}`);

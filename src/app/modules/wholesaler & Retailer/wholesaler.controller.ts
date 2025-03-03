@@ -58,7 +58,6 @@ const updateSingleWholesaler = catchAsync(async (req: Request, res: Response) =>
 //collection of retailer
 const getAllRetailers = catchAsync(async (req: Request, res: Response) => {
     const search = req.query.search as string;
-    // console.log("Search Parameter:", search);
 
     const result = await wholesalerServices.getAllRetailers(search);
 

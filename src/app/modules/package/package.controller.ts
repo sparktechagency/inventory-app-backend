@@ -8,7 +8,6 @@ const createPackage = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const { ...productData } = req.body;
         const result = await packageService.createPackageIntoDB(productData);
-        // console.log("Package controller result =========>", result);
         sendResponse(res, {
             success: true,
             statusCode: StatusCodes.OK,

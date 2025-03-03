@@ -33,7 +33,6 @@ const createPackageIntoDB = async (payload: IPackage) => {
     if (!createPackage) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Package not created");
     }
-    // console.log("createPackage---------->>>>>>", createPackage);
     return createPackage;
 }
 

@@ -323,10 +323,10 @@ export const sendOfferService = {
     getPendingOffersFromRetailerIntoDB,
     getSinglePendingOfferFromRetailerIntoDB,
     deleteSinglePendingOfferFromRetailer,
+    // receive
     getAllReceiveOffers,
     getSingleReceiveOfferFromRetailerIntoDB,
 
-    // receive
     deleteReceiveOffers,
 
     // confirm

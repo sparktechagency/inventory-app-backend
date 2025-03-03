@@ -257,10 +257,10 @@ export const sendOfferController = {
     getPendingOffersFromRetailer,
     getSinglePendingOfferFromRetailer,
     deleteSinglePendingOfferFromRetailer,
+    // receive offers
     getAllReceiveOffers,
     getSingleReceiveOfferFromRetailerIntoDB,
 
-    // receive offers
     deleteSingleReceiveOfferFromRetailer,
 
     // confirm

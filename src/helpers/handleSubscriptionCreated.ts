@@ -152,7 +152,6 @@ export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
         const currentPeriodEnd = new Date(subscription.current_period_end * 1000).toISOString()
 
 
-        console.log("productId data==>>>>", productId);
         // create new subscription and update suer status
 
 
