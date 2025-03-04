@@ -51,20 +51,26 @@ import { twilioClient } from '../../../util/twilioClient';
 //   return createUser;
 // };
 const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
-  const existingUser = await User.findOne({
-    $or: [{ email: payload.email }, { phone: payload.phone }]
-  });
+  if (!payload.email && !payload.phone) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Either email or phone is required.');
+  }
 
+  const existingUser = await User.isExistUserByEmailOrPhone(payload.email || payload.phone || '');
   if (existingUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'User already exists with this email or phone.');
   }
-  const createUser = await User.create(payload);
-  if (!createUser) {
+
+  try {
+    const createUser = await User.create(payload);
+    return createUser;
+  } catch (error: any) {
+    if (error.code === 11000) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, 'User already exists with this email or phone.');
+    }
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create user');
   }
-
-  return createUser;
 };
+
 const getUserProfileFromDB = async (
   user: JwtPayload
 ): Promise<Partial<IUser>> => {

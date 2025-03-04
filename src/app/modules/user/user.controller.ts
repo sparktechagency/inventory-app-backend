@@ -16,11 +16,12 @@ const createUser = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,
-      message: 'User created successfully please check your email for verification code.',
+      message: 'User created successfully. Please check your email for the verification code.',
       data: result,
     });
   }
 );
+
 
 const getUserProfile = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;

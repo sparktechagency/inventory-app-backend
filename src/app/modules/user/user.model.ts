@@ -28,7 +28,6 @@ const userSchema = new Schema<IUser, UserModal>(
       type: String,
       required: true,
       select: false,
-      minlength: 8,
     },
     confirmPassword: {
       type: String,
@@ -78,6 +77,10 @@ const userSchema = new Schema<IUser, UserModal>(
   { timestamps: true }
 );
 
+// Check if a user exists by Email or Phone
+userSchema.statics.isExistUserByEmailOrPhone = async function (identifier: string): Promise<IUser | null> {
+  return await this.findOne({ $or: [{ email: identifier }, { phone: identifier }] });
+};
 // Check if a user exists by ID
 userSchema.statics.isExistUserById = async function (id: string): Promise<IUser | null> {
   return await this.findById(id);

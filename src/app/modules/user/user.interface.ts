@@ -24,8 +24,13 @@ export type IUser = {
   };
 };
 
+// export type UserModal = {
+//   isExistUserById(id: string): any;
+//   isExistUserByEmail(email: string): any;
+//   isMatchPassword(password: string, hashPassword: string): boolean;
+// } & Model<IUser>;
 export type UserModal = {
   isExistUserById(id: string): any;
-  isExistUserByEmail(email: string): any;
+  isExistUserByEmailOrPhone(identifier: string): any;
   isMatchPassword(password: string, hashPassword: string): boolean;
 } & Model<IUser>;
