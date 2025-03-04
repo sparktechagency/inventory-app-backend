@@ -12,12 +12,7 @@ const app = express();
 //morgan
 app.use(Morgan.successHandler);
 app.use(Morgan.errorHandler);
-// Stripe webhook route
-// app.use(
-//   '/api/stripe/webhook',
-//   express.raw({ type: 'application/json' }),
-//   handleStripeWebhook
-// );
+
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook)
 //body parser
 app.use(cors());

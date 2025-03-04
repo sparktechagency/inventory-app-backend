@@ -14,13 +14,15 @@ const userSchema = new Schema<IUser, UserModal>(
     },
     email: {
       type: String,
-      required: true,
+
       unique: true,
-      lowercase: true,
+      sparse: true,  // Multiple null values allowed
+      lowercase: true
     },
     phone: {
       type: String,
-      required: false
+      unique: true,
+      sparse: true  // Multiple null values allowed
     },
     password: {
       type: String,
@@ -115,6 +117,13 @@ userSchema.pre('save', async function (next) {
 
   next();
 });
+
+
+
+
+
+
+
 
 
 // Export the model

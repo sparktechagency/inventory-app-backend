@@ -8,6 +8,10 @@ import unlinkFile from '../../../shared/unlinkFile';
 import generateOTP from '../../../util/generateOTP';
 import { IUser } from './user.interface';
 import { User } from './user.model';
+import { Twilio } from 'twilio';
+import config from '../../../config';
+import { formatPhoneNumber } from '../../../util/formatPhoneNumber';
+import { twilioClient } from '../../../util/twilioClient';
 
 // const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
 //   // Create the user
@@ -47,10 +51,18 @@ import { User } from './user.model';
 //   return createUser;
 // };
 const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
+  const existingUser = await User.findOne({
+    $or: [{ email: payload.email }, { phone: payload.phone }]
+  });
+
+  if (existingUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'User already exists with this email or phone.');
+  }
   const createUser = await User.create(payload);
   if (!createUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create user');
   }
+
   return createUser;
 };
 const getUserProfileFromDB = async (
@@ -114,11 +126,14 @@ const verifyOtp = async (email: string, otp: number): Promise<boolean> => {
   return true;
 };
 
+
+
+
 const updateStoreData = async (
   userId: string,
   storeData: {
     businessName: string;
-    businessCategory: BUSINESS_CATEGORY;
+    businessCategory: string;
     location: string;
   }
 ): Promise<IUser | null> => {
@@ -131,15 +146,49 @@ const updateStoreData = async (
     throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
   }
 
-  // Send OTP via email
-  const values = {
-    name: user.name,
-    otp: otp,
-    email: user.email!,
-  };
+  let otpDeliveryMethod: string;
 
-  const otpTemplate = emailTemplate.createAccount(values);
-  emailHelper.sendEmail(otpTemplate);
+  // Check if user has phone number, send OTP via phone (Twilio) or email
+  if (user.phone) {
+    otpDeliveryMethod = 'phone';
+
+    // Send OTP via Twilio (Phone)
+    const formattedNumber = formatPhoneNumber(user.phone);
+    const otpMessage = `Your OTP is ${otp}`;
+
+    try {
+      await twilioClient.messages.create({
+        body: otpMessage,
+        from: process.env.TWILIO_PHONE_NUMBER, // Make sure to use the correct Twilio number
+        to: formattedNumber,
+      });
+      console.log("Twilio Response: OTP sent to phone number.");
+    } catch (twilioError) {
+      console.error("Twilio API Error:", twilioError);
+      throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to send OTP to phone number.");
+    }
+
+  } else if (user.email) {
+    otpDeliveryMethod = 'email';
+
+    // Send OTP via email
+    const values = {
+      name: user.name,
+      otp: otp,
+      email: user.email,
+    };
+
+    const otpTemplate = emailTemplate.createAccount(values);
+    try {
+      emailHelper.sendEmail(otpTemplate);
+      console.log("OTP sent to email:", user.email);
+    } catch (emailError) {
+      console.error("Email sending error:", emailError);
+      throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to send OTP via email.");
+    }
+  } else {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'No valid contact method (phone or email) found.');
+  }
 
   // Save OTP in DB
   const authentication = {
@@ -164,7 +213,6 @@ const updateStoreData = async (
 
   return result;
 };
-
 
 
 

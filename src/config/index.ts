@@ -28,6 +28,11 @@ export default {
     stripeSecretKey: process.env.STRIPE_API_SECRET,
     webhookSecret: process.env.WEBHOOK_SECRET,
     paymentSuccess: process.env.STRIPE_PAYMENT_SUCCESS_LINK
+  },
+  // twilo
+  twilio: {
+    TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
   }
 };
 
