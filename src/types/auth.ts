@@ -4,8 +4,10 @@ export type IVerifyEmail = {
 };
 
 export type ILoginData = {
-  email: string;
+  email?: string;
   password: string;
+  phone?: string;
+  otp?: number
 };
 
 export type IAuthResetPassword = {

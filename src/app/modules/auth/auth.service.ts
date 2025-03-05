@@ -19,37 +19,55 @@ import { User } from '../user/user.model';
 
 //login
 const loginUserFromDB = async (payload: ILoginData) => {
-  const { email, password } = payload;
-  const isExistUser = await User.findOne({ email }).select('+password');
+  const { email, phone, password, otp } = payload;
+
+  // Check if user exists with email or phone number (preferably one of them is provided)
+  let isExistUser;
+  if (email) {
+    isExistUser = await User.findOne({ email }).select('+password');
+  } else if (phone) {
+    isExistUser = await User.findOne({ phone }).select('+password');
+  }
+
   if (!isExistUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }
 
-  //check verified and status
-  if (!isExistUser.verified) {
-    throw new ApiError(
-      StatusCodes.BAD_REQUEST,
-      'Please verify your account, then try to login again'
-    );
-  }
-
-  //check user status
+  // Check user status (e.g., deleted or disabled accounts)
   if (isExistUser.status === 'delete') {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      'You don’t have permission to access this content.It looks like your account has been deactivated.'
+      'You don’t have permission to access this content. It looks like your account has been deactivated.'
     );
   }
 
-  //check match password
-  if (
-    password &&
-    !(await User.isMatchPassword(password, isExistUser.password))
-  ) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Password is incorrect!');
+  // If user is not verified and OTP is provided, verify OTP
+  if (!isExistUser.verified) {
+    // If OTP is not provided, throw an error
+    if (!otp) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, 'Please verify your account using OTP.');
+    }
+
+    // Verify OTP
+    const otpVerified = await verifyOtp(isExistUser.email || isExistUser.phone, otp);  // Assuming you already have a `verifyOtp` function
+    if (!otpVerified) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, 'Invalid or expired OTP!');
+    }
+
+    // After successful OTP verification, mark the user as verified
+    isExistUser.verified = true;
+    await isExistUser.save();
   }
 
-  //create token
+  // If the user is verified, check the password
+  if (password) {
+    // Check match password
+    if (!(await User.isMatchPassword(password, isExistUser.password))) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, 'Password is incorrect!');
+    }
+  }
+
+  // Create token after verifying the password or OTP
   const createToken = jwtHelper.createToken(
     { id: isExistUser._id, role: isExistUser.role, email: isExistUser.email },
     config.jwt.jwt_secret as Secret,
@@ -63,9 +81,10 @@ const loginUserFromDB = async (payload: ILoginData) => {
   };
 };
 
+
 //forget password
 const forgetPasswordToDB = async (email: string) => {
-  const isExistUser = await User.isExistUserByEmail(email);
+  const isExistUser = await User.isExistUserByEmailOrPhone(email);
   if (!isExistUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }

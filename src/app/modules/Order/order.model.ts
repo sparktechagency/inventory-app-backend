@@ -11,7 +11,7 @@ const productSchema = new Schema<IProduct>(
             required: true,
         },
         quantity: { type: Number, required: true },
-        additionalInfo: { type: String, default: null },
+        additionalInfo: { type: String },
         Delivery: { type: Boolean, default: false }
     },
     { timestamps: true }

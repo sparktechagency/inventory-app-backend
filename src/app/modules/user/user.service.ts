@@ -8,10 +8,10 @@ import unlinkFile from '../../../shared/unlinkFile';
 import generateOTP from '../../../util/generateOTP';
 import { IUser } from './user.interface';
 import { User } from './user.model';
-import { Twilio } from 'twilio';
-import config from '../../../config';
+import AWS from "aws-sdk";
+import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { formatPhoneNumber } from '../../../util/formatPhoneNumber';
-import { twilioClient } from '../../../util/twilioClient';
+
 
 // const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
 //   // Create the user
@@ -106,33 +106,14 @@ const updateProfileToDB = async (
 };
 
 
-const verifyOtp = async (email: string, otp: number): Promise<boolean> => {
-  const user = await User.findOne({ email });
 
-  if (!user) {
-    throw new ApiError(StatusCodes.NOT_FOUND, "User not found!");
-  }
-
-  if (!user.authentication || !user.authentication.oneTimeCode) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, "OTP not generated!");
-  }
-
-  if (new Date() > user.authentication.expireAt) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, "OTP has expired!");
-  }
-
-  if (Number(user.authentication.oneTimeCode) !== Number(otp)) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid OTP!");
-  }
-
-  user.verified = true;
-  user.authentication = undefined;
-  await user.save();
-
-  return true;
-};
-
-
+const snsClient = new SNSClient({
+  region: process.env.AWS_REGION as string, // Get from env variable
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+  },
+});
 
 
 const updateStoreData = async (
@@ -154,23 +135,25 @@ const updateStoreData = async (
 
   let otpDeliveryMethod: string;
 
-  // Check if user has phone number, send OTP via phone (Twilio) or email
+  // Check if user has phone number, send OTP via phone (AWS SNS) or email
   if (user.phone) {
     otpDeliveryMethod = 'phone';
 
-    // Send OTP via Twilio (Phone)
-    const formattedNumber = formatPhoneNumber(user.phone);
+    // Send OTP via AWS SNS (Phone)
+    const formattedNumber = formatPhoneNumber(user.phone); // Ensure the number is correctly formatted
     const otpMessage = `Your OTP is ${otp}`;
 
     try {
-      await twilioClient.messages.create({
-        body: otpMessage,
-        from: process.env.TWILIO_PHONE_NUMBER, // Make sure to use the correct Twilio number
-        to: formattedNumber,
+      const command = new PublishCommand({
+        Message: otpMessage,
+        PhoneNumber: formattedNumber,
       });
-      console.log("Twilio Response: OTP sent to phone number.");
-    } catch (twilioError) {
-      console.error("Twilio API Error:", twilioError);
+
+      // Send the message
+      await snsClient.send(command);
+      console.log("AWS SNS Response: OTP sent to phone number.");
+    } catch (snsError) {
+      console.error("AWS SNS API Error:", snsError);
       throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to send OTP to phone number.");
     }
 
@@ -219,6 +202,102 @@ const updateStoreData = async (
 
   return result;
 };
+
+
+// const verifyOtp = async (email: string, otp: number): Promise<boolean> => {
+//   const user = await User.findOne({ email });
+
+//   if (!user) {
+//     throw new ApiError(StatusCodes.NOT_FOUND, "User not found!");
+//   }
+
+//   if (!user.authentication || !user.authentication.oneTimeCode) {
+//     throw new ApiError(StatusCodes.BAD_REQUEST, "OTP not generated!");
+//   }
+
+//   // Define grace period (e.g., 5 seconds)
+//   const gracePeriod = 5000; // 5 seconds
+
+
+
+//   // Convert expireAt and current time to timestamps
+//   const otpExpiryTime = new Date(user.authentication.expireAt).getTime();
+//   const currentTime = new Date().getTime();
+
+//   // Log the timestamps for comparison
+//   console.log("OTP Expiry Timestamp:", otpExpiryTime);
+//   console.log("Current Timestamp:", currentTime);
+
+//   // Check if the OTP is expired with grace period
+//   if (currentTime > otpExpiryTime + gracePeriod) {
+//     console.log("OTP expired");
+//     throw new ApiError(StatusCodes.BAD_REQUEST, "OTP has expired!");
+//   }
+
+//   // Validate OTP
+//   if (Number(user.authentication.oneTimeCode) !== Number(otp)) {
+//     throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid OTP!");
+//   }
+
+//   // Mark the user as verified and clear the OTP from the database
+//   user.verified = true;
+//   user.authentication = undefined;
+//   await user.save();
+
+//   return true;
+// };
+const verifyOtp = async (identifier: string, otp: number): Promise<boolean> => {
+  // Check if the identifier is email or phone
+  const isEmail = identifier.includes('@'); // Basic check for email
+
+  let user;
+
+  if (isEmail) {
+    // If it's an email, search by email
+    user = await User.findOne({ email: identifier });
+  } else {
+    // If it's a phone number, search by phone number
+    user = await User.findOne({ phone: identifier });
+  }
+
+  if (!user) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "User not found!");
+  }
+
+  if (!user.authentication || !user.authentication.oneTimeCode) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "OTP not generated!");
+  }
+
+  // Define grace period (e.g., 5 seconds)
+  const gracePeriod = 5000; // 5 seconds
+
+  // Convert expireAt and current time to timestamps
+  const otpExpiryTime = new Date(user.authentication.expireAt).getTime();
+  const currentTime = new Date().getTime();
+
+  // Log the timestamps for comparison
+  console.log("OTP Expiry Timestamp:", otpExpiryTime);
+  console.log("Current Timestamp:", currentTime);
+
+  // Check if the OTP is expired with grace period
+  if (currentTime > otpExpiryTime + gracePeriod) {
+    console.log("OTP expired");
+    throw new ApiError(StatusCodes.BAD_REQUEST, "OTP has expired!");
+  }
+
+  // Validate OTP
+  if (Number(user.authentication.oneTimeCode) !== Number(otp)) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid OTP!");
+  }
+
+  // Mark the user as verified and clear the OTP from the database
+  user.verified = true;
+  user.authentication = undefined; // Clear the OTP
+  await user.save();
+
+  return true;
+};
+
 
 
 

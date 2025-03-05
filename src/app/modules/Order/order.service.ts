@@ -24,6 +24,7 @@ const createProductIntoDB = async (payload: Partial<IProduct> | Partial<IProduct
     return createdProducts.length === 1 ? createdProducts[0] : createdProducts;
 };
 
+
 // get all products
 const getAllProducts = async () => {
     const products = await ProductModel.find();

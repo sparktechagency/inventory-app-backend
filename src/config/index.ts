@@ -33,6 +33,12 @@ export default {
   twilio: {
     TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
     TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
+  },
+  // paystack
+  paystack: {
+    secretKey: process.env.PAYSTACK_PAYMET_SECRECT_KEY,
+    paymentSuccess: process.env.paymentSuccess,
+    PAYSTACK_BASE_URL: process.env.PAYSTACK_BASE_URL
   }
 };
 
