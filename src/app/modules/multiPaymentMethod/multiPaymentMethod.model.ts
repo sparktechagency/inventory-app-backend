@@ -1,53 +1,17 @@
-import mongoose, { Schema, Types } from "mongoose";
-import { IMultiPaymentMethod } from "./multiPaymentMethod.interface";
+import { model, Schema } from "mongoose";
+import { IPaymentVerification } from "./multiPaymentMethod.interface";
 
-
-
-const multiPaymentSchema = new Schema<IMultiPaymentMethod>(
+const PaymentVerificationSchema = new Schema<IPaymentVerification>(
     {
-        customerId: {
-            type: String,
-            required: true
-        },
-        price: {
-            type: Number,
-            required: true
-        },
-        user: {
-            type: Schema.Types.ObjectId,
-            ref: "User",
-            required: true
-        },
-        trxId: {
-            type: String,
-            required: true
-        },
-        subscriptionId: {
-            type: String,
-            required: true
-        },
-        currentPeriodStart: {
-            type: String,
-            required: true
-        },
-        currentPeriodEnd: {
-            type: String,
-            required: true
-        },
-        paymentMethod: {
-            type: String,
-            enum: ['flutterwave', 'paystack'],
-            required: true
-        },
-        status: {
-            type: String,
-            enum: ["expired", "active", "cancel"],
-            default: "active",
-            required: true
-        },
-
+        userEmail: { type: String, required: true },
+        transactionId: { type: String, unique: true, required: true },
+        amount: { type: Number, required: true },
+        currency: { type: String, required: true },
+        status: { type: String, enum: ["successful", "failed"], required: true },
+        // verifiedAt: { type: Date, required: true, default: Date.now }, // Stores verification timestamp
     },
     { timestamps: true }
 );
 
-export const Payment = mongoose.model<IMultiPaymentMethod>("package", multiPaymentSchema);
+
+export const paymentVerificationModel = model<IPaymentVerification>("paymentVerification", PaymentVerificationSchema);

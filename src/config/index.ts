@@ -39,6 +39,11 @@ export default {
     secretKey: process.env.PAYSTACK_PAYMET_SECRECT_KEY,
     paymentSuccess: process.env.paymentSuccess,
     PAYSTACK_BASE_URL: process.env.PAYSTACK_BASE_URL
+  },
+  // flutter wave
+  FLUTTER_WAVE: {
+    SECRETKEY: process.env.SECRET_KEY,
+    PUBLISHKEY: process.env.PUBLICK_KEY
   }
 };
 

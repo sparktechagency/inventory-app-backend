@@ -11,6 +11,10 @@ const createProductZodSchema = z.object({
             .number({ required_error: "Quantity is required" })
             .min(0, { message: "Quantity must be a positive number" }),
         additionalInfo: z.string().optional(),
+        availability: z.boolean({ required_error: "Availability field is required" }),
+        // price:z.string({
+        //     required_error:"Price is "
+        // })
     }),
 });
 

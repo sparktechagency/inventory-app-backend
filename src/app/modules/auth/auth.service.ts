@@ -49,7 +49,7 @@ const loginUserFromDB = async (payload: ILoginData) => {
     }
 
     // Verify OTP
-    const otpVerified = await verifyOtp(isExistUser.email || isExistUser.phone, otp);  // Assuming you already have a `verifyOtp` function
+    const otpVerified = await verifyOtp(isExistUser.email || isExistUser.phone, otp);
     if (!otpVerified) {
       throw new ApiError(StatusCodes.BAD_REQUEST, 'Invalid or expired OTP!');
     }

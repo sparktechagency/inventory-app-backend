@@ -12,7 +12,9 @@ const productSchema = new Schema<IProduct>(
         },
         quantity: { type: Number, required: true },
         additionalInfo: { type: String },
-        Delivery: { type: Boolean, default: false }
+        Delivery: { type: Boolean, default: false },
+        availability: { type: Boolean, default: false },
+        price: { type: Number }
     },
     { timestamps: true }
 );

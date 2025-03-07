@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import { STATUS } from "../../../enums/status";
 import { JwtPayload } from "jsonwebtoken";
 import { User } from "../user/user.model";
+import { USER_ROLES } from "../../../enums/user";
 // Service to create a new product (order)
 
 const createOffers = async (payloads: IOrder[], io: Server) => {
@@ -185,16 +186,20 @@ const updateOfferFromRetailer = async (
 // get all pending product from retailer
 
 
-const getPendingOffersFromRetailerIntoDB = async (user: JwtPayload) => {
-    const offers = await OfferModel.find({
-        retailer: user.id,
-        status: STATUS.pending,
-    }).populate("retailer").populate("wholeSeller").populate("product").lean();
+const getPendingOffersFromRetailerIntoDB = async (userId: string, role: string) => {
+    let filter: any = { status: STATUS.pending };
 
-    if (!offers) {
-        throw new ApiError(StatusCodes.NOT_FOUND, "No pending offers found");
+    if (role === USER_ROLES.Retailer) {
+        filter.retailer = userId;
+    } else if (role === USER_ROLES.Wholesaler) {
+        filter.wholeSeller = userId;
     }
-    return { offers };
+
+    return await OfferModel.find(filter)
+        .populate("retailer")
+        .populate("wholeSeller")
+        .populate("product")
+        .lean();
 };
 
 // single pending Offer From retailer
@@ -251,7 +256,6 @@ const getSingleReceiveOfferFromRetailerIntoDB = async (retailerId: string, offer
         retailer: retailerId,
         status: STATUS.received,
     }).populate("retailer").populate("wholeSeller").populate("product").lean();;
-
     if (!offer) {
         throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
     }

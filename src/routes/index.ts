@@ -8,6 +8,8 @@ import { offerRoutes } from '../app/modules/offer/offer.routes';
 import { paymentRoutes } from '../app/modules/subscription/payment.routes';
 import { PackageRoutes } from '../app/modules/PaymentPaystack/PaymentPaystack.routes';
 import { TransactionRoutes } from '../app/modules/Transaction/ITransaction.routes';
+import { NotificationRoutes } from '../app/modules/notification/notification.route';
+import { flutterWaveRouter } from '../app/modules/flutterwavePackage/flutterwavePackage.route';
 const router = express.Router();
 
 const apiRoutes = [
@@ -31,10 +33,10 @@ const apiRoutes = [
     path: "/send-offer",
     route: offerRoutes
   },
-  // {
-  //   path: '/',
-  //   route: packageRoutes
-  // },
+  {
+    path: '/notification',
+    route: NotificationRoutes
+  },
   {
     path: "/subscription",
     route: paymentRoutes
@@ -46,7 +48,12 @@ const apiRoutes = [
   {
     path: "/transaction",
     route: TransactionRoutes
+  },
+  {
+    path: "/flutter-wave-package",
+    route: flutterWaveRouter
   }
+
 
 ];
 

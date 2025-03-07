@@ -8,48 +8,11 @@ import unlinkFile from '../../../shared/unlinkFile';
 import generateOTP from '../../../util/generateOTP';
 import { IUser } from './user.interface';
 import { User } from './user.model';
-import AWS from "aws-sdk";
 import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 import { formatPhoneNumber } from '../../../util/formatPhoneNumber';
 
 
-// const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
-//   // Create the user
-//   const createUser = await User.create(payload);
-//   if (!createUser) {
-//     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create user');
-//   }
 
-//   // Generate OTP
-//   const otp = generateOTP();
-//   const values = {
-//     name: createUser.name,
-//     otp: otp,
-//     email: createUser.email!,
-//   };
-
-//   // Send OTP email
-//   const createAccountTemplate = emailTemplate.createAccount(values);
-//   emailHelper.sendEmail(createAccountTemplate);
-
-//   // Save OTP and expiry to the DB
-//   const authentication = {
-//     oneTimeCode: otp,
-//     expireAt: new Date(Date.now() + 3 * 60000),
-//   };
-
-//   const updatedUser = await User.findOneAndUpdate(
-//     { _id: createUser._id },
-//     { $set: { authentication } },
-//     { new: true } // Ensure the updated document is returned
-//   );
-
-//   if (!updatedUser) {
-//     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to save OTP');
-//   }
-
-//   return createUser;
-// };
 const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
   if (!payload.email && !payload.phone) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Either email or phone is required.');
@@ -108,7 +71,7 @@ const updateProfileToDB = async (
 
 
 const snsClient = new SNSClient({
-  region: process.env.AWS_REGION as string, // Get from env variable
+  region: process.env.AWS_REGION as string,
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
@@ -150,7 +113,8 @@ const updateStoreData = async (
       });
 
       // Send the message
-      await snsClient.send(command);
+      const res = await snsClient.send(command);
+      console.log(res);
       console.log("AWS SNS Response: OTP sent to phone number.");
     } catch (snsError) {
       console.error("AWS SNS API Error:", snsError);

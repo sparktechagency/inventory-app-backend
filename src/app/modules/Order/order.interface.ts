@@ -7,5 +7,7 @@ export interface IProduct {
     unit: UNIT;
     quantity: number;
     additionalInfo?: string;
-    Delivery: boolean
+    Delivery: boolean;
+    availability: boolean;
+    price?: number
 }

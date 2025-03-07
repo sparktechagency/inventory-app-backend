@@ -24,9 +24,9 @@ Pending
 */
 router.patch("/:id", auth(USER_ROLES.Wholesaler), sendOfferController.updateOffer)
 // send response from retailer to wholesaler
-router.patch("/retailer/:id", auth(USER_ROLES.Retailer), sendOfferController.confirmOrderFromRetailer)
+router.patch("/retailer/:id", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler), sendOfferController.confirmOrderFromRetailer)
 // get all pending product from retailer
-router.get('/pending-retailer', auth(USER_ROLES.Retailer), sendOfferController.getPendingOffersFromRetailer)
+router.get('/pending-retailer', auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler), sendOfferController.getPendingOffersFromRetailer)
 // get single pending offers from retailer
 router.get("/pending/:id", auth(USER_ROLES.Retailer), sendOfferController.getSinglePendingOfferFromRetailer);
 //  delete single pending offers from retailer
