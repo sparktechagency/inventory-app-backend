@@ -284,17 +284,30 @@ const deleteReceiveOffers = async (user: JwtPayload, offerId: string) => {
 // get all from confirm
 
 const getAllConfirmOffers = async (user: JwtPayload) => {
-    const offers = await OfferModel.find({
-        retailer: user.id,
-        status: STATUS.confirm,
-    }).populate("retailer").populate("wholeSeller").populate("product").lean();
+    let query: any = {};
 
-    if (!offers) {
-        throw new ApiError(StatusCodes.NOT_FOUND, "No confirmed offers found");
+    if (user.role === "Retailer") {
+        query.retailer = user.id;
+        query.status = STATUS.confirm;
+    } else if (user.role === "Wholesaler") {
+        query.wholeSeller = user.id;
+        query.status = STATUS.confirm;
+    } else {
+        throw new ApiError(StatusCodes.FORBIDDEN, "Access denied");
     }
-    return offers
 
-}
+    const offers = await OfferModel.find(query)
+        .populate("retailer")
+        .populate("wholeSeller")
+        .populate("product")
+        .lean();
+
+    if (!offers || offers.length === 0) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No offers found");
+    }
+
+    return offers;
+};
 
 // confirm single one
 const getSingleConfirmOffer = async (user: JwtPayload) => {

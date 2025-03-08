@@ -53,7 +53,7 @@ router.get("/received/:id", auth(USER_ROLES.Retailer), sendOfferController.getSi
 Confirm
 */
 
-router.get("/confirm", auth(USER_ROLES.Retailer), sendOfferController.getAllConfirmOffers)
+router.get("/confirm", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler), sendOfferController.getAllConfirmOffers)
 
 // get single one
 router.get("/confirm/:id", auth(USER_ROLES.Retailer), sendOfferController.getSingleConfirmOffer)

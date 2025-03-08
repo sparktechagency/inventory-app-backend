@@ -183,20 +183,21 @@ const deleteSingleReceiveOfferFromRetailer = catchAsync(async (req: Request, res
 // confirm
 const getAllConfirmOffers = async (req: Request, res: Response) => {
     const user = req.user as JwtPayload;
-    if (!user?.id) {
+
+    if (!user?.id || !user?.role) {
         throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
     }
+
     const result = await sendOfferService.getAllConfirmOffers(user);
-    if (!result) {
-        throw new ApiError(StatusCodes.NOT_FOUND, "No received offers found");
-    }
+
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
         message: "Successfully fetched received offers",
         data: result,
     });
-}
+};
+
 
 // single one 
 const getSingleConfirmOffer = async (req: Request, res: Response) => {
