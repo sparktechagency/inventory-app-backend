@@ -11,7 +11,6 @@ import { USER_ROLES } from "../../../enums/user";
 // Service to create a new product (order)
 
 const createOffers = async (payloads: IOrder[], io: Server) => {
-
     if (!Array.isArray(payloads) || payloads.length === 0) {
         console.error("Invalid payloads: Must be an array with at least 1 item");
         throw new ApiError(StatusCodes.BAD_REQUEST, "You must provide at least 1 order");
@@ -25,35 +24,38 @@ const createOffers = async (payloads: IOrder[], io: Server) => {
     const createdOrders = [];
 
     for (const payload of payloads) {
-
-
-        if (!payload.wholeSeller || !payload.retailer || !payload.product) {
+        if (!payload.wholeSeller || !payload.retailer || !Array.isArray(payload.products) || payload.products.length === 0) {
             console.error("Missing required fields in payload:", payload);
-            throw new ApiError(StatusCodes.BAD_REQUEST, "Wholesaler, Retailer, and Product IDs are required");
+            throw new ApiError(StatusCodes.BAD_REQUEST, "Wholesaler, Retailer, and at least one Product ID are required");
         }
 
-        const order = await OfferModel.create(payload);
-        if (!order) {
+        // Create a single order with multiple products
+        const order = await OfferModel.create({
+            retailer: payload.retailer,
+            wholeSeller: payload.wholeSeller,
+            product: payload.product,  // Store all products in one order
+            status: payload.status,
+            price: payload.price,
+            Delivery: payload.Delivery,
+            availability: payload.availability
+        });
 
+        if (!order) {
             throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create the offer");
         }
 
         createdOrders.push(order);
 
-
         // Send Notification
         const notificationData = {
             userId: payload.wholeSeller.toString(),
             title: "New Order Received",
-            message: `Retailer has sent an order for ${order._id}.`,
+            message: `Retailer has sent an order with multiple products for ${order._id}.`,
             type: "order",
         };
 
-
-
         await notificationSender(io, `getNotification::${payload.wholeSeller}`, notificationData);
     }
-
 
     return { orders: createdOrders };
 };
@@ -70,55 +72,56 @@ const updateOfferIntoDB = async (
     payload: Partial<IOrder>,
     io: Server
 ) => {
-
-    const isSubscribed: any = await User.findById(user._id).select("isSubscribed").lean();
-
-    const isExistLimit = await OfferModel.countDocuments({ wholeSeller: user._id, status: "Received" });
-
-    if (isSubscribed === false && isExistLimit === 10) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, "You can not update more than 10 offers. Now, you need to subscribe before updating.");
+    // Check if user is subscribed
+    const userData = await User.findById(user._id).select("isSubscribed").lean();
+    if (!userData) {
+        throw new ApiError(StatusCodes.UNAUTHORIZED, "User not found");
     }
 
+    const isSubscribed = userData.isSubscribed;
+    const isExistLimit = await OfferModel.countDocuments({ wholeSeller: user._id, status: "Received" });
 
-    // Find the offer first to get the retailer ID for notification
+    if (!isSubscribed && isExistLimit >= 10) {
+        throw new ApiError(
+            StatusCodes.BAD_REQUEST,
+            "You can not update more than 10 offers. Subscribe to update more offers."
+        );
+    }
+
+    // Find existing offer
     const existingOffer = await OfferModel.findById(offerId);
     if (!existingOffer) {
         throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
     }
 
-    const updatedOffer = await OfferModel.findByIdAndUpdate(
-        offerId,
-        {
-            $set: {
-                status: "Received",
-                availability: payload.availability,
-                price: payload.price,
-                Delivery: payload.Delivery,
-            },
-        },
-        { new: true }
-    );
+    // Prepare update fields, only setting values if they exist in payload
+    const updateFields: Partial<IOrder> = {
+        status: "Received", // Always update status
+        ...(payload.availability !== undefined && { availability: payload.availability }),
+        ...(payload.price !== undefined && { price: payload.price }),
+        ...(payload.Delivery !== undefined && { Delivery: payload.Delivery }),
+    };
+
+    // Update offer
+    const updatedOffer = await OfferModel.findByIdAndUpdate(offerId, { $set: updateFields }, { new: true });
 
     if (!updatedOffer) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update the offer");
     }
 
-    // Notify retailer via Socket.IO
+    // Notify retailer
     const notificationData = {
         userId: existingOffer.retailer!.toString(),
         title: "Offer Updated",
-        message: `Your order ${offerId} has been updated with new status: ${payload.status}`,
+        message: `Your order ${offerId} has been updated to "Received".`,
         type: "offer-update",
     };
 
-    await notificationSender(
-        io,
-        `getNotification::${existingOffer.retailer}`,
-        notificationData
-    );
+    await notificationSender(io, `getNotification::${existingOffer.retailer}`, notificationData);
 
     return { updatedOffer };
 };
+
 
 
 
@@ -187,26 +190,39 @@ const updateOfferFromRetailer = async (
 
 
 const getPendingOffersFromRetailerIntoDB = async (userId: string, role: string) => {
-    let filter: any = { status: STATUS.pending };
+    try {
+        if (!userId || !role) {
+            throw new ApiError(StatusCodes.UNAUTHORIZED, "Invalid user credentials");
+        }
 
-    if (role === USER_ROLES.Retailer) {
-        filter.retailer = userId;
-    } else if (role === USER_ROLES.Wholesaler) {
-        filter.wholeSeller = userId;
+        let filter: any = { status: STATUS.pending };
+
+        if (role === USER_ROLES.Retailer) {
+            filter.retailer = userId;
+        } else if (role === USER_ROLES.Wholesaler) {
+            filter.wholeSeller = userId;
+        } else {
+            throw new ApiError(StatusCodes.FORBIDDEN, "Unauthorized access");
+        }
+
+        const pendingOffers = await OfferModel.find(filter)
+            .populate("retailer") // Only select necessary fields
+            .populate("wholeSeller") // Only select necessary fields
+            .populate("product") // Only select necessary fields
+            .lean();
+
+        return pendingOffers || [];
+    } catch (error) {
+        throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to fetch pending offers");
     }
-
-    return await OfferModel.find(filter)
-        .populate("retailer")
-        .populate("wholeSeller")
-        .populate("product")
-        .lean();
 };
+
 
 // single pending Offer From retailer
 const getSinglePendingOfferFromRetailerIntoDB = async (retailerId: string, offerId: string) => {
     const offer = await OfferModel.findOne({
         _id: offerId,
-        retailer: retailerId, // Ensuring the offer belongs to the retailer
+        retailer: retailerId,
         status: STATUS.pending,
     }).populate("retailer").populate("wholeSeller").populate("product").lean();;
 
@@ -241,7 +257,7 @@ const getAllReceiveOffers = async (user: JwtPayload) => {
         status: STATUS.received,
     }).populate("retailer").populate("wholeSeller").populate("product").lean();
 
-    if (!offers) {
+    if (offers.length === 0) {  // Fix: Properly check for empty array
         throw new ApiError(StatusCodes.NOT_FOUND, "No received offers found");
     }
     return offers

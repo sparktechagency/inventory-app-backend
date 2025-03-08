@@ -15,7 +15,6 @@ const createOfferController = catchAsync(async (req: Request, res: Response) => 
             console.error("Socket.IO instance is missing");
             throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Socket.IO is not initialized");
         }
-
         const result = await sendOfferService.createOffers(req.body, io);
 
 
@@ -40,6 +39,10 @@ const updateOffer = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const io = (global as any).io;
 
+    if (!io) {
+        throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Socket.IO instance not initialized");
+    }
+
     const result = await sendOfferService.updateOfferIntoDB(req.user, id, req.body, io);
 
     sendResponse(res, {
@@ -48,7 +51,10 @@ const updateOffer = catchAsync(async (req: Request, res: Response) => {
         message: "Offer updated and notification sent successfully",
         data: result.updatedOffer,
     });
-})
+});
+
+
+
 // Again update from retailer to wholesaler
 const confirmOrderFromRetailer = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;

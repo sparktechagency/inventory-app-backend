@@ -9,11 +9,13 @@ const productSchema = new Schema<IOrder>(
             ref: "User",
             required: true,
         },
-        product: {
-            type: Types.ObjectId,
-            ref: "Product",
-            required: true,
-        },
+        product: [
+            {
+                type: Types.ObjectId,
+                ref: "Product",
+                required: true,
+            }
+        ],
         wholeSeller: {
             type: Types.ObjectId,
             ref: "User",
