@@ -8,20 +8,21 @@ import { initiateSubscriptionPayment } from "../../../helpers/initiateSubscripti
 import { verifyPaymentTransaction } from "../../../helpers/paymentVerificationHelper";
 
 const createPackage = catchAsync(async (req: Request, res: Response) => {
-    const { userEmail, amount } = req.body
+    const { userEmail, amount } = req.body;
 
     if (!userEmail || !amount) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, "Please provide userEmail and amount")
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Please provide userEmail and amount");
     }
-    const paymentData = await initiateSubscriptionPayment(userEmail, amount);
+
+    const paymentData = await initiateSubscriptionPayment(userEmail, amount); // Generate one payment link for this user
     sendResponse(res, {
         statusCode: 200,
         success: true,
-        message: "Successfully create Package",
-        data: paymentData.data
-    })
+        message: "Successfully created Package",
+        data: paymentData.data // Return the generated payment link
+    });
+});
 
-})
 
 
 const verifySubscriptionPayment = catchAsync(async (req: Request, res: Response) => {

@@ -25,8 +25,6 @@ const loginUserFromDB = async (payload: ILoginData) => {
   let isExistUser;
   if (email) {
     isExistUser = await User.findOne({ email }).select('+password');
-  } else if (phone) {
-    isExistUser = await User.findOne({ phone }).select('+password');
   }
 
   if (!isExistUser) {
@@ -41,7 +39,7 @@ const loginUserFromDB = async (payload: ILoginData) => {
     );
   }
 
-  // If user is not verified and OTP is provided, verify OTP
+  /* // If user is not verified and OTP is provided, verify OTP
   if (!isExistUser.verified) {
     // If OTP is not provided, throw an error
     if (!otp) {
@@ -57,7 +55,7 @@ const loginUserFromDB = async (payload: ILoginData) => {
     // After successful OTP verification, mark the user as verified
     isExistUser.verified = true;
     await isExistUser.save();
-  }
+  } */
 
   // If the user is verified, check the password
   if (password) {

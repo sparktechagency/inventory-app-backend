@@ -11,20 +11,24 @@ const productSchema = new Schema<IOrder>(
         },
         product: [
             {
-                type: Types.ObjectId,
-                ref: "Product",
-                required: true,
+                productId: {
+                    type: Types.ObjectId,
+                    ref: "Product",
+                    required: true,
+                },
+                availability: {
+                    type: Boolean,
+                    default: false,
+                },
+                price: {
+                    type: Number,
+                }
             }
         ],
         wholeSeller: {
             type: Types.ObjectId,
             ref: "User",
             required: true,
-        },
-        price: {
-            type: Number,
-            // required: true,
-
         },
         status: {
             type: String,
@@ -33,13 +37,7 @@ const productSchema = new Schema<IOrder>(
         },
         Delivery: {
             type: Boolean,
-            // default: false
-        },
-        availability: {
-            type: Boolean,
-            // default: false
         }
-
     },
     {
         timestamps: true,

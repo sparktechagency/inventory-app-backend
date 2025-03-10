@@ -12,16 +12,20 @@ const createOfferController = catchAsync(async (req: Request, res: Response) => 
 
         const io = (global as any).io;
         if (!io) {
-            console.error("Socket.IO instance is missing");
             throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Socket.IO is not initialized");
         }
-        const result = await sendOfferService.createOffers(req.body, io);
 
+        // Validate req.body (if necessary, depends on your requirements)
+        if (!req.body || !Array.isArray(req.body) || req.body.length === 0) {
+            throw new ApiError(StatusCodes.BAD_REQUEST, "Request body must be an array with at least one order");
+        }
+
+        const result = await sendOfferService.createOffers(req.body, io);
 
         sendResponse(res, {
             statusCode: StatusCodes.CREATED,
             success: true,
-            message: `Successfully created ${result.orders.length} orders and sent notifications`,
+            message: `Successfully created ${result.orders.length} order${result.orders.length > 1 ? 's' : ''} and sent notifications`,
             data: result.orders,
         });
 
@@ -36,22 +40,37 @@ const createOfferController = catchAsync(async (req: Request, res: Response) => 
 
 // update offer from wholesaler
 const updateOffer = catchAsync(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const io = (global as any).io;
+    const { id } = req.params;  // Extract offer ID from URL parameters
+    const { productUpdates, status } = req.body;  // Extract product updates and status from the request body
+    const io = (global as any).io;  // Access the global io instance for notifications
 
+    // Check if Socket.IO is initialized
     if (!io) {
         throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Socket.IO instance not initialized");
     }
 
-    const result = await sendOfferService.updateOfferIntoDB(req.user, id, req.body, io);
+    // Call the service to update the offer and its products
+    const result = await sendOfferService.updateOfferIntoDB(req.user, id, productUpdates, status, io);
 
+    console.log("Controller Response Data:", result.updatedOffer); // Debug log for the updated offer
+
+    // Return a structured response with updated offer data
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
         message: "Offer updated and notification sent successfully",
-        data: result.updatedOffer,
+        data: result.updatedOffer ? {
+            status: result.updatedOffer.status,
+            productUpdates: result.updatedOffer.product?.map(p => ({
+                productId: p.productId?.toString(), // Ensure productId is returned as string
+                availability: p.availability,
+                price: p.price
+            }))
+        } : {}  // Prevent sending empty data if no updated offer
     });
 });
+
+
 
 
 
@@ -145,7 +164,7 @@ const getAllReceiveOffers = catchAsync(async (req: Request, res: Response) => {
         message: "Successfully fetched received offers",
         data: result,
     });
-})
+});
 
 // get single offer from db for retailer
 const getSingleReceiveOfferFromRetailerIntoDB = catchAsync(async (req: Request, res: Response) => {
@@ -189,11 +208,6 @@ const deleteSingleReceiveOfferFromRetailer = catchAsync(async (req: Request, res
 // confirm
 const getAllConfirmOffers = async (req: Request, res: Response) => {
     const user = req.user as JwtPayload;
-
-    if (!user?.id || !user?.role) {
-        throw new ApiError(StatusCodes.UNAUTHORIZED, "User is not authenticated");
-    }
-
     const result = await sendOfferService.getAllConfirmOffers(user);
 
     sendResponse(res, {
