@@ -291,12 +291,9 @@ const getPendingOffersFromRetailerIntoDB = async (userId: string, role: string) 
                 model: "Product",
                 select: "name unit quantity additionalInfo", // Select only necessary fields
             })
-            .lean(); // Convert to plain object for better performance
+            .lean();
 
         return {
-            success: true,
-            Total: pendingOffers.length,
-            message: "Successfully fetched pending offers",
             data: pendingOffers || []
         };
     } catch (error) {
@@ -422,7 +419,8 @@ const getAllConfirmOffers = async (user: JwtPayload) => {
         }).lean();
 
     if (!offers || offers.length === 0) {
-        throw new ApiError(StatusCodes.NOT_FOUND, "No offers found");
+        // throw new ApiError(StatusCodes.NOT_FOUND, "No offers found");
+        return []
     }
 
     return offers;

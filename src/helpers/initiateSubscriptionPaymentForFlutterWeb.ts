@@ -16,7 +16,7 @@ export const initiateSubscriptionPayment = async (userEmail: string, amount: num
         }
 
         const tx_ref = `tx_${Date.now()}`;
-        const redirect_url = "http://localhost:3000/payment-success";
+        const redirect_url = ".0payment-success";
 
         const response = await axios.post(
             FLW_API_URL,

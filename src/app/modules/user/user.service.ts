@@ -114,8 +114,6 @@ const updateStoreData = async (
 
       // Send the message
       const res = await snsClient.send(command);
-      console.log(res);
-      console.log("AWS SNS Response: OTP sent to phone number.");
     } catch (snsError) {
       console.error("AWS SNS API Error:", snsError);
       throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to send OTP to phone number.");
@@ -134,7 +132,6 @@ const updateStoreData = async (
     const otpTemplate = emailTemplate.createAccount(values);
     try {
       emailHelper.sendEmail(otpTemplate);
-      console.log("OTP sent to email:", user.email);
     } catch (emailError) {
       console.error("Email sending error:", emailError);
       throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to send OTP via email.");
@@ -167,49 +164,6 @@ const updateStoreData = async (
   return result;
 };
 
-
-// const verifyOtp = async (email: string, otp: number): Promise<boolean> => {
-//   const user = await User.findOne({ email });
-
-//   if (!user) {
-//     throw new ApiError(StatusCodes.NOT_FOUND, "User not found!");
-//   }
-
-//   if (!user.authentication || !user.authentication.oneTimeCode) {
-//     throw new ApiError(StatusCodes.BAD_REQUEST, "OTP not generated!");
-//   }
-
-//   // Define grace period (e.g., 5 seconds)
-//   const gracePeriod = 5000; // 5 seconds
-
-
-
-//   // Convert expireAt and current time to timestamps
-//   const otpExpiryTime = new Date(user.authentication.expireAt).getTime();
-//   const currentTime = new Date().getTime();
-
-//   // Log the timestamps for comparison
-//   console.log("OTP Expiry Timestamp:", otpExpiryTime);
-//   console.log("Current Timestamp:", currentTime);
-
-//   // Check if the OTP is expired with grace period
-//   if (currentTime > otpExpiryTime + gracePeriod) {
-//     console.log("OTP expired");
-//     throw new ApiError(StatusCodes.BAD_REQUEST, "OTP has expired!");
-//   }
-
-//   // Validate OTP
-//   if (Number(user.authentication.oneTimeCode) !== Number(otp)) {
-//     throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid OTP!");
-//   }
-
-//   // Mark the user as verified and clear the OTP from the database
-//   user.verified = true;
-//   user.authentication = undefined;
-//   await user.save();
-
-//   return true;
-// };
 const verifyOtp = async (identifier: string, otp: number): Promise<boolean> => {
   // Check if the identifier is email or phone
   const isEmail = identifier.includes('@'); // Basic check for email
@@ -239,13 +193,9 @@ const verifyOtp = async (identifier: string, otp: number): Promise<boolean> => {
   const otpExpiryTime = new Date(user.authentication.expireAt).getTime();
   const currentTime = new Date().getTime();
 
-  // Log the timestamps for comparison
-  console.log("OTP Expiry Timestamp:", otpExpiryTime);
-  console.log("Current Timestamp:", currentTime);
 
   // Check if the OTP is expired with grace period
   if (currentTime > otpExpiryTime + gracePeriod) {
-    console.log("OTP expired");
     throw new ApiError(StatusCodes.BAD_REQUEST, "OTP has expired!");
   }
 

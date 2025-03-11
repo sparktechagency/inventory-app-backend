@@ -62,7 +62,7 @@ const updateOffer = catchAsync(async (req: Request, res: Response) => {
         data: result.updatedOffer ? {
             status: result.updatedOffer.status,
             productUpdates: result.updatedOffer.product?.map(p => ({
-                productId: p.productId?.toString(), // Ensure productId is returned as string
+                productId: p.productId?.toString(),
                 availability: p.availability,
                 price: p.price
             }))
@@ -97,14 +97,11 @@ const getPendingOffersFromRetailer = catchAsync(async (req: Request, res: Respon
             message: "User not authenticated",
         });
     }
-
     const result = await sendOfferService.getPendingOffersFromRetailerIntoDB(req.user.id, req.user.role);
-
     return sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
-        message: result.length ? "Successfully fetched pending offers" : "No pending offers found",
-        data: result,
+        data: result.data,
     });
 });
 
