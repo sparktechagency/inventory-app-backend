@@ -52,7 +52,8 @@ route.patch("/users/:id",
             throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid file upload");
         }
     },
-    auth(USER_ROLES.SUPER_ADMIN), adminController.updateUser);
+    auth(USER_ROLES.SUPER_ADMIN), adminController.updateUser
+);
 
 
 

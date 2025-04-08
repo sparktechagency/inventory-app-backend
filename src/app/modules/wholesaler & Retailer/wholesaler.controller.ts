@@ -4,38 +4,43 @@ import catchAsync from "../../../shared/catchAsync";
 import { wholesalerServices } from "./wholesaler.service";
 import sendResponse from "../../../shared/sendResponse";
 import { Request, Response } from "express";
+import { IPaginationOptions } from "../../../types/pagination";
 
 const getAllWholeSalers = catchAsync(async (req: Request, res: Response) => {
-    // Destructure query parameters
-    const { search, email, name, phone, businessName }: any = req.query;
+    const { search, email, name, phone, businessName, page, limit, sortBy, sortOrder }: any = req.query;
   
-    // Ensure the businessName is wrapped in storeInformation
     const storeInformation = businessName ? { businessName } : undefined;
   
-    // Log the full query to verify
+    const paginationOptions = {
+      page,
+      limit,
+      sortBy,
+      sortOrder,
+    };
   
-    // Call service with the search parameters
     const result = await wholesalerServices.getAllWholeSaler({
       search,
       email,
       name,
       phone,
       storeInformation,
+      paginationOptions,
     });
   
-    // Set search criteria message
-    let searchCriteriaMessage = "Wholesalers retrieved successfully";
-    if (search || email || name || phone || businessName) {
-      searchCriteriaMessage = "Wholesalers retrieved based on your search criteria";
-    }
+    const { meta, data } = result;
   
-    // Send the response
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
-      Total: result.length,
-      message: searchCriteriaMessage,
-      data: result,
+      message: "Wholesalers retrieved successfully",
+      Total: meta.total,
+      pagination: {
+        page: meta.page,
+        limit: meta.limit,
+        totalPage: Math.ceil(meta.total / meta.limit),
+        total: meta.total,
+      },
+      data,
     });
   });
   
@@ -80,21 +85,46 @@ const updateSingleWholesaler = catchAsync(async (req: Request, res: Response) =>
 
 //collection of retailer
 const getAllRetailers = catchAsync(async (req: Request, res: Response) => {
-
-    const result = await wholesalerServices.getAllRetailers();
-
-    if (!result || result.length === 0) {
-        throw new ApiError(StatusCodes.NOT_FOUND, 'No retailers found!');
-    }
-
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        success: true,
-        Total: result.length,
-        message: "Retailers retrieved successfully",
-        data: result,
+    const { search, email, name, phone, businessName, page, limit, sortBy, sortOrder }: any = req.query;
+  
+    const paginationOptions = {
+      page,
+      limit,
+      sortBy,
+      sortOrder,
+    };
+  
+    const storeInformation = businessName ? { businessName } : undefined;
+  
+    const result = await wholesalerServices.getAllRetailers({
+      search,
+      email,
+      name,
+      phone,
+      storeInformation,
+      paginationOptions,
     });
-});
+  
+    const { meta, data } = result;
+  
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Retailers retrieved successfully",
+      Total: meta.total,
+      pagination: {
+        page: meta.page,
+        limit: meta.limit,
+        totalPage: Math.ceil(meta.total / meta.limit),
+        total: meta.total,
+      },
+      data,
+    });
+  });
+  
+  
+  
+
 
 const getRetailersByMonth = catchAsync(async (req: Request, res: Response) => {
     const result = await wholesalerServices.getRetailersByMonth();

@@ -1,4 +1,0 @@
-Mon Apr 07 2025 14:28:21 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/retailer 404 - 2.182 ms
-Mon Apr 07 2025 14:31:13 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/retailer 404 - 0.457 ms
-Mon Apr 07 2025 14:32:15 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 400 - 5.995 ms
-Mon Apr 07 2025 14:44:56 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 400 - 426.667 ms

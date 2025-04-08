@@ -6,8 +6,7 @@ import { StatusCodes } from "http-status-codes";
 const createUser = catchAsync(async (req: Request, res: Response) => {
     const { Password, confirmPassword, image, isVerified, ...userData } = req.body;
 
-    // Convert the `isVerified` field to boolean if it's a string
-    const verified = true; // Set verified to true if passed or default to true
+    const verified = true; 
 
     // Check if password and confirmPassword exist
     if (!Password || !confirmPassword) {
@@ -28,9 +27,9 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
     // Proceed to create the user with password and other fields
     const user = await adminService.createUserIntoDB({
         ...userData,
-        password: Password, // Send the correct password
-        image: image || null, // If no image uploaded, set it to null
-        verified // Ensure verified is set to true
+        password: Password, 
+        image: image || null, 
+        verified
     });
 
     res.status(201).json({
