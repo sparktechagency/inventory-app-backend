@@ -41,3 +41,61 @@ Tue Apr 08 2025 12:7:8 [SERVER-NAME] error: UnhandleException Detected listen EA
 Tue Apr 08 2025 12:7:16 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
 Tue Apr 08 2025 12:10:13 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?email=jowelahmed.sparktech9@gmail.com 401 - 8.263 ms
 Tue Apr 08 2025 12:14:26 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/wholesalers 401 - 3.603 ms
+Tue Apr 08 2025 12:37:19 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:38:59 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:39:25 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:39:28 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:39:38 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:40:12 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:40:15 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:40:33 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:40:44 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:40:53 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:40:59 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:41:26 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:41:27 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:41:46 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi%20Treader 500 - 21.954 ms
+Tue Apr 08 2025 12:41:55 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:41:59 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:42:4 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:42:48 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:43:7 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:44:41 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:44:45 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:45:3 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:45:12 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:45:33 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:45:34 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:45:35 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:45:38 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:46:38 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:46:39 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi%20Treader 404 - 11.250 ms
+Tue Apr 08 2025 12:46:52 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/wholesalers 404 - 2.645 ms
+Tue Apr 08 2025 12:46:53 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/wholesalers 404 - 1.982 ms
+Tue Apr 08 2025 12:46:54 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/wholesalers 404 - 1.964 ms
+Tue Apr 08 2025 12:46:56 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/wholesalers 404 - 1.799 ms
+Tue Apr 08 2025 12:47:6 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:47:37 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:47:40 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:48:2 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:49:45 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:49:49 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:49:55 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:50:3 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:50:19 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:50:23 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:50:33 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:51:9 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:51:32 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:51:33 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:51:41 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:53:41 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:53:45 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:55:26 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:55:28 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:56:15 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:56:58 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:57:13 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:57:33 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:59:1 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 12:59:21 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006

@@ -132,3 +132,210 @@ Tue Apr 08 2025 12:25:57 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/whole
 Tue Apr 08 2025 12:25:57 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers 304 - 5.576 ms
 Tue Apr 08 2025 12:25:59 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/retailers 204 - 0.102 ms
 Tue Apr 08 2025 12:25:59 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/retailers 200 - 4.100 ms
+Tue Apr 08 2025 12:32:48 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription? 204 - 1.307 ms
+Tue Apr 08 2025 12:32:48 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription? 200 - 75.482 ms
+Tue Apr 08 2025 12:35:48 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers 200 - 7.904 ms
+Tue Apr 08 2025 12:36:3 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers 200 - 4.244 ms
+Tue Apr 08 2025 12:36:13 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?name=Jowel%20Ahmed 200 - 15.516 ms
+Tue Apr 08 2025 12:36:26 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?email=jowelahmed.sparktech344@gmail.com 200 - 5.308 ms
+Tue Apr 08 2025 12:37:19 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:37:19 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:37:19 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:37:21 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?email=jowelahmed.sparktech344@gmail.com&phone 200 - 9.060 ms
+Tue Apr 08 2025 12:37:32 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?email=jowelahmed.sparktech344@gmail.com&phone=123456781122 200 - 12.949 ms
+Tue Apr 08 2025 12:37:34 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?phone=123456781122 200 - 4.200 ms
+Tue Apr 08 2025 12:37:37 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?phone=123456781122 200 - 5.641 ms
+Tue Apr 08 2025 12:37:57 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers 200 - 6.279 ms
+Tue Apr 08 2025 12:38:59 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:38:59 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:38:59 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:39:25 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:39:25 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:39:25 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:39:28 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:39:28 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:39:28 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:39:38 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:39:38 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:39:38 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:40:12 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:12 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:12 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:40:15 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:15 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:15 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:40:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:33 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:40:44 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:44 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:44 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:40:53 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:53 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:53 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:40:59 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:59 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:40:59 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:41:26 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:41:26 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:41:26 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:41:27 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:41:27 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:41:27 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:41:55 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:41:55 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:41:55 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:41:59 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:41:59 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:41:59 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:42:4 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:42:4 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:42:4 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:42:48 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:42:48 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:42:48 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:43:7 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:43:7 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:43:7 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:43:42 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/user/profile 204 - 1.215 ms
+Tue Apr 08 2025 12:43:42 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=&email= 204 - 0.204 ms
+Tue Apr 08 2025 12:43:42 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/user/profile 304 - 13.609 ms
+Tue Apr 08 2025 12:43:42 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=&email= 200 - 17.414 ms
+Tue Apr 08 2025 12:43:43 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers 200 - 7.414 ms
+Tue Apr 08 2025 12:44:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:44:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:44:41 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:44:45 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:44:45 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:44:45 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:45:3 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:3 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:3 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:45:6 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/user/profile 204 - 0.648 ms
+Tue Apr 08 2025 12:45:6 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=&email= 204 - 0.129 ms
+Tue Apr 08 2025 12:45:6 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/user/profile 304 - 7.730 ms
+Tue Apr 08 2025 12:45:6 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=&email= 304 - 5.924 ms
+Tue Apr 08 2025 12:45:12 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:12 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:12 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:45:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:33 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:45:34 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:34 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:34 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:45:35 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:35 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:35 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:45:38 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:38 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:45:38 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:45:42 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi%20Treader 200 - 9.387 ms
+Tue Apr 08 2025 12:46:38 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:46:38 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:46:38 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:47:6 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:47:6 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:47:6 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:47:8 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers 200 - 9.323 ms
+Tue Apr 08 2025 12:47:37 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:47:37 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:47:37 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:47:40 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:47:40 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:47:40 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:48:2 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:48:2 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:48:2 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:48:6 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi%20Treader 200 - 9.510 ms
+Tue Apr 08 2025 12:49:45 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:49:45 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:49:45 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:49:49 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:49:49 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:49:49 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:49:55 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:49:55 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:49:55 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:50:3 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:50:3 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:50:3 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:50:19 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:50:19 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:50:19 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:50:23 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:50:23 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:50:23 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:50:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:50:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:50:33 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:51:9 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:51:9 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:51:9 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:51:32 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:51:32 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:51:32 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:51:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:51:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:51:33 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:51:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:51:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:51:41 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:51:44 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi%20Treader 200 - 9.170 ms
+Tue Apr 08 2025 12:52:18 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/user/profile 204 - 0.429 ms
+Tue Apr 08 2025 12:52:18 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=&email= 204 - 0.094 ms
+Tue Apr 08 2025 12:52:18 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/user/profile 304 - 9.948 ms
+Tue Apr 08 2025 12:52:18 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=&email= 304 - 16.524 ms
+Tue Apr 08 2025 12:52:27 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers 200 - 4.947 ms
+Tue Apr 08 2025 12:53:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:53:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:53:41 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:53:45 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:53:45 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:53:45 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:53:50 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=&email= 204 - 0.707 ms
+Tue Apr 08 2025 12:53:50 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/user/profile 204 - 0.110 ms
+Tue Apr 08 2025 12:53:50 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/user/profile 304 - 11.045 ms
+Tue Apr 08 2025 12:53:50 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=&email= 304 - 12.682 ms
+Tue Apr 08 2025 12:54:2 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi%20Treader 200 - 7.093 ms
+Tue Apr 08 2025 12:54:3 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi%20Treader 200 - 5.902 ms
+Tue Apr 08 2025 12:54:10 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi 200 - 5.245 ms
+Tue Apr 08 2025 12:55:26 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:55:26 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:55:26 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:55:28 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:55:28 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:55:28 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:55:47 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi%20Treader 200 - 9.391 ms
+Tue Apr 08 2025 12:55:54 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi 200 - 4.170 ms
+Tue Apr 08 2025 12:56:15 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:56:15 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:56:15 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:56:58 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:56:58 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:56:58 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:57:13 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:57:13 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:57:13 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:57:15 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi 200 - 9.593 ms
+Tue Apr 08 2025 12:57:17 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi 200 - 4.197 ms
+Tue Apr 08 2025 12:57:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:57:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:57:33 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:57:33 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi 200 - 10.383 ms
+Tue Apr 08 2025 12:57:42 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi 200 - 6.696 ms
+Tue Apr 08 2025 12:58:26 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=&email= 204 - 0.535 ms
+Tue Apr 08 2025 12:58:26 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/user/profile 204 - 0.179 ms
+Tue Apr 08 2025 12:58:26 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/user/profile 304 - 12.460 ms
+Tue Apr 08 2025 12:58:26 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=&email= 304 - 16.699 ms
+Tue Apr 08 2025 12:59:1 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:59:1 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:59:1 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:59:21 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:59:21 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 12:59:21 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 12:59:23 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi 200 - 9.594 ms
+Tue Apr 08 2025 12:59:40 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=&email= 204 - 0.248 ms
+Tue Apr 08 2025 12:59:40 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/user/profile 204 - 0.075 ms
+Tue Apr 08 2025 12:59:40 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/user/profile 304 - 9.080 ms
+Tue Apr 08 2025 12:59:40 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=&email= 304 - 12.188 ms

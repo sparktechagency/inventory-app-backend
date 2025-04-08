@@ -6,18 +6,41 @@ import sendResponse from "../../../shared/sendResponse";
 import { Request, Response } from "express";
 
 const getAllWholeSalers = catchAsync(async (req: Request, res: Response) => {
-    const { search, email, name, phone }: any = req.query;
-
-    const result = await wholesalerServices.getAllWholeSaler({ search, email, name, phone });
-
-    sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        success: true,
-        Total: result.length,
-        message: "Wholesalers retrieved successfully",
-        data: result,
+    // Destructure query parameters
+    const { search, email, name, phone, businessName }: any = req.query;
+  
+    // Ensure the businessName is wrapped in storeInformation
+    const storeInformation = businessName ? { businessName } : undefined;
+  
+    // Log the full query to verify
+  
+    // Call service with the search parameters
+    const result = await wholesalerServices.getAllWholeSaler({
+      search,
+      email,
+      name,
+      phone,
+      storeInformation,
     });
-});
+  
+    // Set search criteria message
+    let searchCriteriaMessage = "Wholesalers retrieved successfully";
+    if (search || email || name || phone || businessName) {
+      searchCriteriaMessage = "Wholesalers retrieved based on your search criteria";
+    }
+  
+    // Send the response
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      Total: result.length,
+      message: searchCriteriaMessage,
+      data: result,
+    });
+  });
+  
+  
+  
 
 
 // get single wholesaler

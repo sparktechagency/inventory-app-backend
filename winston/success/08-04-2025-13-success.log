@@ -1,0 +1,23 @@
+Tue Apr 08 2025 13:0:17 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=&email= 204 - 0.066 ms
+Tue Apr 08 2025 13:0:17 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/user/profile 204 - 0.114 ms
+Tue Apr 08 2025 13:0:18 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/user/profile 304 - 5.176 ms
+Tue Apr 08 2025 13:0:18 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=&email= 304 - 7.582 ms
+Tue Apr 08 2025 13:0:38 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 13:0:38 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 13:0:38 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 13:0:39 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi 200 - 9.395 ms
+Tue Apr 08 2025 13:0:49 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Rakibi%20Treader 200 - 6.429 ms
+Tue Apr 08 2025 13:0:52 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?businessName=Treader 200 - 4.716 ms
+Tue Apr 08 2025 13:0:56 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers 200 - 6.644 ms
+Tue Apr 08 2025 13:1:0 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?phone=123456781122 200 - 5.101 ms
+Tue Apr 08 2025 13:1:3 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?email=jowelahmed.sparktech344@gmail.com 200 - 6.197 ms
+Tue Apr 08 2025 13:1:9 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers 200 - 3.506 ms
+Tue Apr 08 2025 13:1:19 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=&email= 204 - 0.274 ms
+Tue Apr 08 2025 13:1:19 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/user/profile 204 - 0.080 ms
+Tue Apr 08 2025 13:1:19 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=&email= 304 - 7.806 ms
+Tue Apr 08 2025 13:1:19 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/user/profile 304 - 12.401 ms
+Tue Apr 08 2025 13:1:24 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 13:1:24 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Tue Apr 08 2025 13:1:24 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Tue Apr 08 2025 13:1:29 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=3&email=3 204 - 0.693 ms
+Tue Apr 08 2025 13:1:39 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=j&email=j 204 - 0.108 ms
