@@ -2,3 +2,9 @@ Tue Apr 08 2025 13:0:38 [SERVER-NAME] error: UnhandleException Detected listen E
 Tue Apr 08 2025 13:1:24 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
 Tue Apr 08 2025 13:1:29 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=3&email=3 404 - 12.592 ms
 Tue Apr 08 2025 13:1:39 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=j&email=j 404 - 11.043 ms
+Tue Apr 08 2025 13:1:47 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=j&email=j 404 - 7.628 ms
+Tue Apr 08 2025 13:1:48 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=jo&email=jo 404 - 6.223 ms
+Tue Apr 08 2025 13:1:48 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=joe&email=joe 404 - 6.405 ms
+Tue Apr 08 2025 13:1:49 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=jo&email=jo 404 - 5.459 ms
+Tue Apr 08 2025 13:1:50 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=j&email=j 404 - 5.921 ms
+Tue Apr 08 2025 13:1:52 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?name=w&email=w 404 - 10.174 ms

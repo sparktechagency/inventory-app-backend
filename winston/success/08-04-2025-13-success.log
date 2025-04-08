@@ -21,3 +21,7 @@ Tue Apr 08 2025 13:1:24 [SERVER-NAME] info: [32m🚀 Database connected success
 Tue Apr 08 2025 13:1:24 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
 Tue Apr 08 2025 13:1:29 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=3&email=3 204 - 0.693 ms
 Tue Apr 08 2025 13:1:39 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=j&email=j 204 - 0.108 ms
+Tue Apr 08 2025 13:1:47 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=j&email=j 204 - 0.123 ms
+Tue Apr 08 2025 13:1:47 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=jo&email=jo 204 - 0.119 ms
+Tue Apr 08 2025 13:1:48 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=joe&email=joe 204 - 0.176 ms
+Tue Apr 08 2025 13:1:51 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/flutter-wave-package/total-user-subscription?name=w&email=w 204 - 0.120 ms
