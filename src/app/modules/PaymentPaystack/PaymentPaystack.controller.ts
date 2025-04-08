@@ -8,7 +8,7 @@ import sendResponse from "../../../shared/sendResponse";
 const createPackage = catchAsync(async (req: Request, res: Response) => {
     const { name, description, price, duration, paymentType, features, userEmail } = req.body
     if (!name || !description || !price || !duration || !paymentType || !features || !userEmail) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, "All fields are required, including userEmail")
+        throw new ApiError(StatusCodes.BAD_REQUEST, "All fields are required, including email")
     }
     const newPackage = await PaymentPaystackService.createPaystackPackageIntoDB(req.body, userEmail);
     sendResponse(res, {

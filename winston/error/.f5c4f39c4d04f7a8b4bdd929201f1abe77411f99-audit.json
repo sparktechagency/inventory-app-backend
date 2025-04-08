@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 1
+    },
+    "auditLog": "C:\\Users\\STA\\Desktop\\New folder\\Expense list\\winston\\error\\.f5c4f39c4d04f7a8b4bdd929201f1abe77411f99-audit.json",
+    "files": [
+        {
+            "date": 1743521743901,
+            "name": "C:\\Users\\STA\\Desktop\\New folder\\Expense list\\winston\\error\\01-04-2025-21-error.log",
+            "hash": "d6284b15585bfeb6584f534ad2b33e25154f108d7d9abd80f2c9cc70580aac8c"
+        }
+    ],
+    "hashType": "sha256"
+}

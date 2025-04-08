@@ -1,0 +1,12 @@
+Mon Mar 24 2025 17:38:3 [SERVER-NAME] info: 10.0.70.188 - POST /api/v1/auth/login 200 - 203.775 ms
+Mon Mar 24 2025 17:38:4 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/notification/ 200 - 13.871 ms
+Mon Mar 24 2025 17:38:4 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers 200 - 11.693 ms
+Mon Mar 24 2025 17:38:4 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/user/profile 200 - 13.914 ms
+Mon Mar 24 2025 17:38:4 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/send-offer/confirm 200 - 23.120 ms
+Mon Mar 24 2025 17:38:4 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/send-offer/pending-retailer 200 - 24.828 ms
+Mon Mar 24 2025 17:40:59 [SERVER-NAME] info: 10.0.70.188 - POST /api/v1/auth/login 200 - 206.639 ms
+Mon Mar 24 2025 17:40:59 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/notification/ 200 - 9.496 ms
+Mon Mar 24 2025 17:41:0 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/send-offer/confirm 200 - 6.372 ms
+Mon Mar 24 2025 17:41:0 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers 200 - 14.678 ms
+Mon Mar 24 2025 17:41:0 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/user/profile 200 - 15.260 ms
+Mon Mar 24 2025 17:41:0 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/send-offer/pending-retailer 200 - 21.015 ms

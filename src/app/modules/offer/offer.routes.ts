@@ -22,29 +22,29 @@ router.post("/create", auth(USER_ROLES.Retailer), sendOfferController.createOffe
 /*
 Pending
 */
-router.patch("/:id", auth(USER_ROLES.Wholesaler), sendOfferController.updateOffer)
+router.patch("/:id", auth(USER_ROLES.Wholesaler, USER_ROLES.Admin, USER_ROLES.Retailer, USER_ROLES.SUPER_ADMIN), sendOfferController.updateOffer)
 // send response from retailer to wholesaler
-router.patch("/retailer/:id", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler), sendOfferController.confirmOrderFromRetailer)
+router.patch("/retailer/:id", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler, USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN), sendOfferController.confirmOrderFromRetailer)
 // get all pending product from retailer
-router.get('/pending-retailer', auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler), sendOfferController.getPendingOffersFromRetailer)
+router.get('/pending-retailer', auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler, USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN), sendOfferController.getPendingOffersFromRetailer)
 // get single pending offers from retailer
-router.get("/pending/:id", auth(USER_ROLES.Retailer), sendOfferController.getSinglePendingOfferFromRetailer);
+router.get("/pending/:id", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler, USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN), sendOfferController.getSinglePendingOfferFromRetailer);
 //  delete single pending offers from retailer
-router.delete("/pending/:id", auth(USER_ROLES.Retailer), sendOfferController.deleteSinglePendingOfferFromRetailer);
+router.delete("/pending/:id", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler, USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN), sendOfferController.deleteSinglePendingOfferFromRetailer);
 
 
 /**
 Received 
 */
 // send response from wholesaler to retailer
-router.get("/received", auth(USER_ROLES.Retailer), sendOfferController.getAllReceiveOffers)
+router.get("/received", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler, USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN), sendOfferController.getAllReceiveOffers)
 
 // delete single Receive 
 
-router.delete("/received/:id", auth(USER_ROLES.Retailer), sendOfferController.deleteSingleReceiveOfferFromRetailer);
+router.delete("/received/:id", auth(USER_ROLES.Retailer, USER_ROLES.SUPER_ADMIN), sendOfferController.deleteSingleReceiveOfferFromRetailer);
 
 // get single one
-router.get("/received/:id", auth(USER_ROLES.Retailer), sendOfferController.getSingleReceiveOfferFromRetailerIntoDB)
+router.get("/received/:id", auth(USER_ROLES.Retailer, USER_ROLES.SUPER_ADMIN), sendOfferController.getSingleReceiveOfferFromRetailerIntoDB)
 
 
 
@@ -53,13 +53,13 @@ router.get("/received/:id", auth(USER_ROLES.Retailer), sendOfferController.getSi
 Confirm
 */
 
-router.get("/confirm", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler), sendOfferController.getAllConfirmOffers)
+router.get("/confirm", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler, USER_ROLES.SUPER_ADMIN), sendOfferController.getAllConfirmOffers)
 
 // get single one
-router.get("/confirm/:id", auth(USER_ROLES.Retailer), sendOfferController.getSingleConfirmOffer)
+router.get("/confirm/:id", auth(USER_ROLES.Retailer, USER_ROLES.SUPER_ADMIN), sendOfferController.getSingleConfirmOffer)
 
 //  delete single confirm offers from retailer
 
-router.delete("/confirm/:id", auth(USER_ROLES.Retailer), sendOfferController.deleteSingleConfirmOffer);
+router.delete("/confirm/:id", auth(USER_ROLES.Retailer, USER_ROLES.SUPER_ADMIN), sendOfferController.deleteSingleConfirmOffer);
 
 export const offerRoutes = router;

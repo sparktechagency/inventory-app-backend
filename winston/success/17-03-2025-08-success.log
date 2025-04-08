@@ -1,0 +1,34 @@
+Mon Mar 17 2025 8:8:26 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Mar 17 2025 8:8:26 [SERVER-NAME] info: [33m♻️  Application listening on port:5001[39m
+Mon Mar 17 2025 8:32:59 [SERVER-NAME] info: 10.0.70.137 - POST /api/v1/user 200 - 195.334 ms
+Mon Mar 17 2025 8:34:50 [SERVER-NAME] info: 10.0.70.30 - POST /api/v1/user 200 - 189.968 ms
+Mon Mar 17 2025 8:35:32 [SERVER-NAME] info: 10.0.70.30 - PATCH /api/v1/user/update-store/67d78a4a028d8ee995abb70b 200 - 10.002 ms
+Mon Mar 17 2025 8:37:49 [SERVER-NAME] info: 10.0.70.30 - POST /api/v1/user 200 - 167.967 ms
+Mon Mar 17 2025 8:38:12 [SERVER-NAME] info: 10.0.70.30 - PATCH /api/v1/user/update-store/67d78afc028d8ee995abb711 200 - 4.798 ms
+Mon Mar 17 2025 8:40:38 [SERVER-NAME] info: 10.0.70.137 - POST /api/v1/user 200 - 177.104 ms
+Mon Mar 17 2025 8:40:55 [SERVER-NAME] info: 10.0.70.137 - PATCH /api/v1/user/update-store/67d78ba6028d8ee995abb717 200 - 4.510 ms
+Mon Mar 17 2025 8:43:35 [SERVER-NAME] info: SIGTERM IS RECEIVE
+Mon Mar 17 2025 8:44:52 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Mar 17 2025 8:44:52 [SERVER-NAME] info: [33m♻️  Application listening on port:5001[39m
+Mon Mar 17 2025 8:44:55 [SERVER-NAME] info: 10.0.70.137 - POST /api/v1/user 200 - 190.215 ms
+Mon Mar 17 2025 8:45:4 [SERVER-NAME] info: 10.0.70.137 - PATCH /api/v1/user/update-store/67d78ca70d4da2fadbd42e36 200 - 12.888 ms
+Mon Mar 17 2025 8:45:30 [SERVER-NAME] info: 10.0.70.137 - POST /api/v1/user/verify-otp 200 - 5.132 ms
+Mon Mar 17 2025 8:46:2 [SERVER-NAME] info: 10.0.70.30 - POST /api/v1/user 200 - 166.533 ms
+Mon Mar 17 2025 8:46:22 [SERVER-NAME] info: 10.0.70.30 - PATCH /api/v1/user/update-store/67d78cea0d4da2fadbd42e3e 200 - 3.836 ms
+Mon Mar 17 2025 8:47:31 [SERVER-NAME] info: 10.0.70.30 - POST /api/v1/user/verify-otp 200 - 3.943 ms
+Mon Mar 17 2025 8:47:57 [SERVER-NAME] info: 10.0.70.30 - POST /api/v1/user 200 - 189.159 ms
+Mon Mar 17 2025 8:48:9 [SERVER-NAME] info: 10.0.70.30 - PATCH /api/v1/user/update-store/67d78d5c0d4da2fadbd42e46 200 - 5.219 ms
+Mon Mar 17 2025 8:50:58 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Mar 17 2025 8:50:58 [SERVER-NAME] info: [33m♻️  Application listening on port:5001[39m
+Mon Mar 17 2025 8:51:20 [SERVER-NAME] info: 10.0.70.137 - POST /api/v1/user 200 - 207.471 ms
+Mon Mar 17 2025 8:51:30 [SERVER-NAME] info: 10.0.70.137 - PATCH /api/v1/user/update-store/67d78e2820b790947abbed96 200 - 13.750 ms
+Mon Mar 17 2025 8:55:14 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Mar 17 2025 8:55:14 [SERVER-NAME] info: [33m♻️  Application listening on port:5001[39m
+Mon Mar 17 2025 8:55:36 [SERVER-NAME] info: 10.0.70.137 - POST /api/v1/user 200 - 191.371 ms
+Mon Mar 17 2025 8:55:43 [SERVER-NAME] info: 10.0.70.137 - PATCH /api/v1/user/update-store/67d78f2858f830c28dfa90a0 200 - 12.671 ms
+Mon Mar 17 2025 8:55:46 [SERVER-NAME] info: Mail send successfully
+Mon Mar 17 2025 8:57:20 [SERVER-NAME] info: 10.0.70.30 - POST /api/v1/user 200 - 172.035 ms
+Mon Mar 17 2025 8:57:37 [SERVER-NAME] info: 10.0.70.30 - PATCH /api/v1/user/update-store/67d78f9058f830c28dfa90a6 200 - 4.095 ms
+Mon Mar 17 2025 8:57:40 [SERVER-NAME] info: Mail send successfully
+Mon Mar 17 2025 8:58:23 [SERVER-NAME] info: 10.0.70.30 - POST /api/v1/user/verify-otp 200 - 4.725 ms
+Mon Mar 17 2025 8:58:59 [SERVER-NAME] info: 10.0.70.30 - POST /api/v1/auth/login 200 - 164.038 ms

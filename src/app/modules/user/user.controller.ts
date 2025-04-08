@@ -9,7 +9,7 @@ import ApiError from '../../../errors/ApiError';
 import { IUser } from './user.interface';
 
 const createUser = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     const { ...userData } = req.body;
     const result = await UserService.createUserToDB(userData);
 

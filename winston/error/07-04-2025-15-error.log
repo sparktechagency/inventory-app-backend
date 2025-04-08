@@ -1,0 +1,6 @@
+Mon Apr 07 2025 15:25:52 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 500 - 6075.252 ms
+Mon Apr 07 2025 15:50:44 [SERVER-NAME] error: 10.0.70.188 - PATCH /api/v1/admin/users/67d8f06700e5ba89b809332b 401 - 29.529 ms
+Mon Apr 07 2025 15:51:17 [SERVER-NAME] error: 10.0.70.188 - PATCH /api/v1/admin/users/67d8f06700e5ba89b809332b 500 - 34.466 ms
+Mon Apr 07 2025 15:51:47 [SERVER-NAME] error: 10.0.70.188 - PATCH /api/v1/admin/users/67d8f06700e5ba89b809332b 500 - 18.579 ms
+Mon Apr 07 2025 15:57:7 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 400 - 1.593 ms
+Mon Apr 07 2025 15:59:49 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 500 - 307.956 ms

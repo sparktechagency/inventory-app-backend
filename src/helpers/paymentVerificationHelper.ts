@@ -8,9 +8,9 @@ import { StatusCodes } from "http-status-codes";
 const FLW_SECRET_KEY = config.FLUTTER_WAVE.SECRETKEY;
 const FLW_API_URL = "https://api.flutterwave.com/v3/transactions";
 
-export const verifyPaymentTransaction = async (transaction_id: string) => {
+export const verifyPaymentTransaction = async (transaction_id: string, userEmail: string) => {
     try {
-        // Step 1: Verify the payment using transaction_id
+        // Make the request to verify the payment
         const response = await axios.get(`${FLW_API_URL}/${transaction_id}/verify`, {
             headers: {
                 Authorization: `Bearer ${FLW_SECRET_KEY}`,
@@ -18,23 +18,34 @@ export const verifyPaymentTransaction = async (transaction_id: string) => {
             },
         });
 
-
+        // Ensure the response is successful and the payment status is "successful"
         if (response.data.status === "success" && response.data.data.status === "successful") {
             const paymentData = response.data.data;
 
-            // Step 2: Store verification details in the database
-            await paymentVerificationModel.create({
-                userEmail: paymentData.customer.email,
-                transactionId: paymentData.id,
-                amount: paymentData.amount,
-                currency: paymentData.currency,
-                status: "successful",
-            });
+            const existingPayment = await paymentVerificationModel.findOne({ transactionId: paymentData?.tx_ref });
+            if (existingPayment) {
+                console.log("Payment already verified for this transactionId. Skipping insertion.");
+            } else {
+                const payload = {
+                    email: userEmail,
+                    transactionId: paymentData?.tx_ref,
+                    amount: paymentData?.amount,
+                    currency: paymentData?.currency,
+                    status: "successful"
+                };
 
-            // Step 3: Update subscription status in flutterWaveModel
-            await flutterWaveModel.findOneAndUpdate(
-                { transactionId: paymentData.tx_ref }, // Use tx_ref to update
-                { status: "successful", updatedAt: new Date() }
+                await paymentVerificationModel.create(payload);
+            }
+
+            const updateData = {
+                status: "successful",
+                updatedAt: new Date(),
+            };
+
+            const result = await flutterWaveModel.findOneAndUpdate(
+                { transactionId: paymentData.tx_ref },
+                { $set: updateData },
+                { upsert: true, new: true }
             );
 
             return {
@@ -48,9 +59,10 @@ export const verifyPaymentTransaction = async (transaction_id: string) => {
                 verifiedAt: new Date(),
             };
         } else {
-            return { message: "Payment verification failed!", status: "failed" };
+            throw new ApiError(StatusCodes.BAD_REQUEST, "Payment verification failed! Payment status is not successful.");
         }
-    } catch (error) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, "Payment verification failed!");
+
+    } catch (error: any) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, `Payment verification failed! Error: ${error.message}`);
     }
 };

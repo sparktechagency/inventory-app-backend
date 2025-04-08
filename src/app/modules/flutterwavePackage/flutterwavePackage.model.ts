@@ -8,7 +8,8 @@ const flutterWaveSchema = new Schema<IFlutterWave>(
         amount: { type: Number, required: true },
         status: { type: String, required: true },
         tx_ref: { type: String },
-        redirect_url: { type: String }
+        redirect_url: { type: String },
+        startTime: { type: Date }
     },
     {
         timestamps: true,

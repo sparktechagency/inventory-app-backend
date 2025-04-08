@@ -1,5 +1,5 @@
 export interface IPaymentVerification {
-    userEmail: string;
+    email: string;
     transactionId: string;
     amount: number;
     currency: string;

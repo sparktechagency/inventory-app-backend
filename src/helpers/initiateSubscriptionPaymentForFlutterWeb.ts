@@ -16,15 +16,15 @@ export const initiateSubscriptionPayment = async (userEmail: string, amount: num
         }
 
         const tx_ref = `tx_${Date.now()}`;
-        const redirect_url = ".0payment-success";
-
+        const redirect_url = "payment-success";
         const response = await axios.post(
             FLW_API_URL,
             {
                 tx_ref,
                 amount,
-                currency: "USD",
+                currency: "NGN",
                 redirect_url,
+                payment_options: "card, banktransfer, ussd, barter, mobilemoney",
                 customer: { email: userEmail },
                 customizations: {
                     title: "Monthly Subscription",
@@ -39,14 +39,18 @@ export const initiateSubscriptionPayment = async (userEmail: string, amount: num
             }
         );
 
-        // Use helper function to store the subscription in DB
+
+
+        // Store subscription in the database
         const subscription = await flutterWaveService.createSubscriptionPackage(
             userEmail,
             tx_ref,
             amount,
             "pending",
-            response.data.data.link
+            response.data.data.link,
+            new Date()
         );
+
 
         return {
             message: "Payment initiated successfully!",

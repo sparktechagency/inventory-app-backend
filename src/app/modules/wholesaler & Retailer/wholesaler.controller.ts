@@ -6,9 +6,9 @@ import sendResponse from "../../../shared/sendResponse";
 import { Request, Response } from "express";
 
 const getAllWholeSalers = catchAsync(async (req: Request, res: Response) => {
-    const { search, email, name }: any = req.query;
+    const { search, email, name, phone }: any = req.query;
 
-    const result = await wholesalerServices.getAllWholeSaler({ search, email, name });
+    const result = await wholesalerServices.getAllWholeSaler({ search, email, name, phone });
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
@@ -57,9 +57,8 @@ const updateSingleWholesaler = catchAsync(async (req: Request, res: Response) =>
 
 //collection of retailer
 const getAllRetailers = catchAsync(async (req: Request, res: Response) => {
-    const search = req.query.search as string;
 
-    const result = await wholesalerServices.getAllRetailers(search);
+    const result = await wholesalerServices.getAllRetailers();
 
     if (!result || result.length === 0) {
         throw new ApiError(StatusCodes.NOT_FOUND, 'No retailers found!');
@@ -72,7 +71,31 @@ const getAllRetailers = catchAsync(async (req: Request, res: Response) => {
         message: "Retailers retrieved successfully",
         data: result,
     });
-})
+});
+
+const getRetailersByMonth = catchAsync(async (req: Request, res: Response) => {
+    const result = await wholesalerServices.getRetailersByMonth();
+
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Retailers Statistics Retrieved Successfully",
+        data: result,
+    });
+});
+
+const getWholesalerByMonth = catchAsync(async (req: Request, res: Response) => {
+    const result = await wholesalerServices.getWholesalerByMonth();
+
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Wholesalers Statistics Retrieved Successfully",
+        data: result,
+    });
+});
+
+
 
 
 
@@ -110,6 +133,16 @@ const deleteSingleRetailer = catchAsync(async (req: Request, res: Response) => {
     });
 })
 
+const getDashboardStatistics = catchAsync(async (req: Request, res: Response) => {
+    const result = await wholesalerServices.getDashboardStatistics();
+    sendResponse(res, {
+        statusCode: StatusCodes.OK,
+        success: true,
+        message: "Dashboard Statistics Retrieved Successfully",
+        data: result,
+    });
+})
+
 // 
 export const wholesalerController = {
     // * all wholesaler controller
@@ -118,9 +151,11 @@ export const wholesalerController = {
     // deleteSingleWholesaler,
     updateSingleWholesaler,
 
-
     // * all retailer controller
     getAllRetailers,
     updateSingleRetailer,
-    deleteSingleRetailer
+    deleteSingleRetailer,
+    getRetailersByMonth,
+    getWholesalerByMonth,
+    getDashboardStatistics
 }

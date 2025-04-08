@@ -4,11 +4,11 @@ import { BUSINESS_CATEGORY, USER_ROLES } from '../../../enums/user';
 export type IUser = {
   name: string;
   email?: string & { unique: true, sparse: true, lowercase: true };
-  phone?: string & { unique: true, sparse: true };
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
   role: USER_ROLES;
   isSubscribed: boolean;
+  phone: string;
   image?: string;
   status: 'active' | 'delete';
   verified: boolean;
@@ -22,6 +22,7 @@ export type IUser = {
     businessCategory: BUSINESS_CATEGORY;
     location: string;
   };
+  offersUpdatedCount?: number
 };
 
 // export type UserModal = {

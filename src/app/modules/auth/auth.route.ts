@@ -1,5 +1,5 @@
+import { USER_ROLES } from './../../../enums/user';
 import express from 'express';
-import { USER_ROLES } from '../../../enums/user';
 import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import { AuthController } from './auth.controller';
@@ -32,7 +32,7 @@ router.post(
 
 router.post(
   '/change-password',
-  auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler, USER_ROLES.Admin),
+  auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler, USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN),
   validateRequest(AuthValidation.createChangePasswordZodSchema),
   AuthController.changePassword
 );

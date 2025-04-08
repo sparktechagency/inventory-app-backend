@@ -1,0 +1,4 @@
+Thu Jan 23 2025 10:6:13 [SERVER-NAME] error: [31m🤢 Failed to connect Database[39m
+Thu Jan 23 2025 10:29:27 [SERVER-NAME] error: 10.0.70.188 - POST /user 404 - 29.479 ms
+Thu Jan 23 2025 10:29:53 [SERVER-NAME] error: Email Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-2f7e6a5de95sm2952010a91.1 - gsmtp

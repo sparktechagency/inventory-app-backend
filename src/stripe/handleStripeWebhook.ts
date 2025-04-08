@@ -48,5 +48,5 @@ export const handleStripeWebhook = async (req: Request, res: Response) => {
         throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, `An error occurred while handling a webhook event: ${error}`);
     }
 
-    res.sendStatus(200); // Send acknowledgment to Stripe
+    res.sendStatus(200);
 };

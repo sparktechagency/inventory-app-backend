@@ -10,11 +10,11 @@ const router = express.Router();
 router
   .route('/profile')
   .get(
-    auth(USER_ROLES.Wholesaler, USER_ROLES.Admin, USER_ROLES.Retailer),
+    auth(USER_ROLES.Wholesaler, USER_ROLES.Admin, USER_ROLES.Retailer, USER_ROLES.SUPER_ADMIN),
     UserController.getUserProfile)
   .patch(
-    auth(USER_ROLES.Admin, USER_ROLES.Retailer, USER_ROLES.Wholesaler),
-    fileUploadHandler(),
+    auth(USER_ROLES.Admin, USER_ROLES.Retailer, USER_ROLES.Wholesaler, USER_ROLES.SUPER_ADMIN),
+    fileUploadHandler() as any,
     (req: Request, res: Response, next: NextFunction) => {
       if (req.body.data) {
         req.body = UserValidation.updateUserZodSchema.parse(

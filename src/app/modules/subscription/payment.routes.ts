@@ -7,7 +7,7 @@ import { SubscriptionController } from "./payment.controller";
 
 const router = express.Router();
 router.get("/",
-    // auth(USER_ROLES.Admin),
+    auth(USER_ROLES.SUPER_ADMIN),
     SubscriptionController.subscriptions
 )
 

@@ -3,15 +3,18 @@ import ApiError from "../../../errors/ApiError";
 import { User } from "../user/user.model";
 import { USER_ROLES } from "../../../enums/user";
 import { IUser } from "../user/user.interface";
+import { flutterWaveModel } from "../flutterwavePackage/flutterwavePackage.model";
+import { paymentVerificationModel } from "../multiPaymentMethod/multiPaymentMethod.model";
 
 // get all wholesaler from db
-const getAllWholeSaler = async ({ search, email, name }: { search?: string, email?: string, name?: string }) => {
+const getAllWholeSaler = async ({ search, email, name, phone }: { search?: string, email?: string, name?: string, phone?: string }) => {
     const filter: any = { role: "Wholesaler" };
 
     if (search) {
         filter.$or = [
             { name: { $regex: search, $options: "i" } },
-            { email: { $regex: search, $options: "i" } }
+            { email: { $regex: search, $options: "i" } },
+            { phone: { $regex: search, $options: "i" } }
         ];
     }
 
@@ -22,6 +25,11 @@ const getAllWholeSaler = async ({ search, email, name }: { search?: string, emai
     if (name) {
         filter.name = { $regex: name, $options: "i" };
     }
+
+    if (phone) {
+        filter.phone = { $regex: phone, $options: "i" };
+    }
+
 
 
     return await User.find(filter);
@@ -42,23 +50,73 @@ const getWholeSalerById = async (id: string) => {
 };
 
 // get all retailers from db
-const getAllRetailers = async (search?: string) => {
-    let query: any = { role: USER_ROLES.Retailer };
-    if (search) {
-        query.$or = [
-            { name: { $regex: search, $options: "i" } },
-            { email: { $regex: search, $options: "i" } },
-            { businessName: { $regex: search, $options: "i" } }
-        ]
-    }
-
-    const retailers = await User.find(query);
+// wholesalerServices.js
+const getAllRetailers = async () => {
+    const retailers = await User.find({
+        role: "Retailer",
+        verified: true
+    });
     if (!retailers || retailers.length === 0) {
-        throw new ApiError(StatusCodes.NOT_FOUND, 'No retailers found!');
+        throw new ApiError(StatusCodes.NOT_FOUND, 'No retailers found!!');
     }
 
     return retailers;
-}
+};
+
+// get retailers by month
+const getRetailersByMonth = async () => {
+    const months = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    const currentYear = new Date().getFullYear();
+    const results = await Promise.all(
+        months.map(async (month, index) => {
+            const startDate = new Date(currentYear, index, 1);
+            const endDate = new Date(currentYear, index + 1, 0);
+
+            const total = await User.countDocuments({
+                role: "Retailer",
+                verified: true,
+                createdAt: { $gte: startDate, $lte: endDate }
+            });
+
+            return { month, total };
+        })
+    );
+
+    return results;
+};
+
+// get wholesaler by month
+const getWholesalerByMonth = async () => {
+    const months = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    const currentYear = new Date().getFullYear();
+
+    // Use the correct role for wholesalers
+    const results = await Promise.all(
+        months.map(async (month, index) => {
+            const startDate = new Date(currentYear, index, 1);
+            const endDate = new Date(currentYear, index + 1, 0);
+
+            const total = await User.countDocuments({
+                role: "Wholesaler",
+                verified: true,
+                createdAt: { $gte: startDate, $lte: endDate }
+            });
+
+            return { month, total };
+        })
+    );
+    return results;
+};
+
+
+
 // update Wholesaler details
 const updateWholesalerIntoDB = async (id: string, payload: Partial<IUser>): Promise<IUser | null> => {
     const updatedWholesaler = await User.findByIdAndUpdate(id, payload, {
@@ -97,6 +155,43 @@ const deleteRetailerFromDB = async (id: string) => {
 }
 
 
+const getDashboardStatistics = async () => {
+    const [totalWholesalers, totalRetailers, totalUniqueSubscribers, totalEarnings] = await Promise.all([
+        User.countDocuments({ role: "Wholesaler", verified: true }),
+        User.countDocuments({ role: "Retailer", verified: true }),
+
+        // Log the raw data before aggregation
+        (async () => {
+            const rawPayments = await paymentVerificationModel.find({ status: "successful" });
+            console.log("Raw Payments Data:", rawPayments);  // Log raw payment data
+            return paymentVerificationModel.aggregate([
+                { $match: { status: "successful" } },
+                { $group: { _id: "$email" } }
+            ]);
+        })(),
+
+        // Total Earnings Calculation
+        flutterWaveModel.aggregate([
+            { $group: { _id: null, total: { $sum: "$amount" } } }
+        ])
+    ]);
+
+    // Log the result of the aggregation for unique subscribers
+    console.log("Total Unique Subscribers Aggregation Result:", totalUniqueSubscribers);
+
+    return {
+        totalWholesalers,
+        totalRetailers,
+        totalSubscribers: totalUniqueSubscribers.length,  // Directly use the length of the aggregation result
+        totalEarnings: totalEarnings.length > 0 ? totalEarnings[0].total : 0
+    };
+};
+
+
+
+
+
+
 export const wholesalerServices = {
     //* for wholesaler service
     getAllWholeSaler,
@@ -106,5 +201,8 @@ export const wholesalerServices = {
     //*  for retailer service
     getAllRetailers,
     updateRetailerIntoDB,
-    deleteRetailerFromDB
+    deleteRetailerFromDB,
+    getRetailersByMonth,
+    getWholesalerByMonth,
+    getDashboardStatistics
 }

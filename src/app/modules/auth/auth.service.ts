@@ -75,7 +75,8 @@ const loginUserFromDB = async (payload: ILoginData) => {
   return {
     createToken,
     role: isExistUser.role,
-    userId: isExistUser._id
+    userId: isExistUser._id,
+    email: isExistUser.email
   };
 };
 

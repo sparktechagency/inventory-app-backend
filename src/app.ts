@@ -15,7 +15,13 @@ app.use(Morgan.errorHandler);
 
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook)
 //body parser
-app.use(cors());
+app.use(cors(
+  {
+    origin: 'https://ea7b-103-174-189-193.ngrok-free.app',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH'],
+  }
+));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

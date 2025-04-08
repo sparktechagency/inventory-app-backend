@@ -42,7 +42,7 @@ const createOfferController = catchAsync(async (req: Request, res: Response) => 
 const updateOffer = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;  // Extract offer ID from URL parameters
     const { productUpdates, status } = req.body;  // Extract product updates and status from the request body
-    const io = (global as any).io;  // Access the global io instance for notifications
+    const io = (global as any).io;
 
     // Check if Socket.IO is initialized
     if (!io) {
@@ -52,7 +52,6 @@ const updateOffer = catchAsync(async (req: Request, res: Response) => {
     // Call the service to update the offer and its products
     const result = await sendOfferService.updateOfferIntoDB(req.user, id, productUpdates, status, io);
 
-    console.log("Controller Response Data:", result.updatedOffer); // Debug log for the updated offer
 
     // Return a structured response with updated offer data
     sendResponse(res, {
@@ -62,8 +61,11 @@ const updateOffer = catchAsync(async (req: Request, res: Response) => {
         data: result.updatedOffer ? {
             status: result.updatedOffer.status,
             productUpdates: result.updatedOffer.product?.map(p => ({
+                // @ts-ignore
                 productId: p.productId?.toString(),
+                // @ts-ignore
                 availability: p.availability,
+                // @ts-ignore
                 price: p.price
             }))
         } : {}  // Prevent sending empty data if no updated offer

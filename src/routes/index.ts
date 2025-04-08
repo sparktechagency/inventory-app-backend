@@ -10,6 +10,8 @@ import { PackageRoutes } from '../app/modules/PaymentPaystack/PaymentPaystack.ro
 import { TransactionRoutes } from '../app/modules/Transaction/ITransaction.routes';
 import { NotificationRoutes } from '../app/modules/notification/notification.route';
 import { flutterWaveRouter } from '../app/modules/flutterwavePackage/flutterwavePackage.route';
+import { AdminRoutes } from '../app/modules/admin/admin.routes';
+import { multiPaymentMethodRoutes } from '../app/modules/multiPaymentMethod/multiPaymentMethod.routes';
 const router = express.Router();
 
 const apiRoutes = [
@@ -17,6 +19,7 @@ const apiRoutes = [
     path: '/user',
     route: UserRoutes,
   },
+
   {
     path: '/auth',
     route: AuthRoutes,
@@ -52,6 +55,14 @@ const apiRoutes = [
   {
     path: "/flutter-wave-package",
     route: flutterWaveRouter
+  },
+  {
+    path: "/admin",
+    route: AdminRoutes
+  },
+  {
+    path: "/",
+    route: multiPaymentMethodRoutes
   }
 
 

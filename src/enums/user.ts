@@ -2,6 +2,7 @@ export enum USER_ROLES {
   Admin = 'Admin',
   Retailer = 'Retailer',
   Wholesaler = 'Wholesaler',
+  SUPER_ADMIN = 'SUPER_ADMIN',
 }
 
 export enum BUSINESS_CATEGORY {

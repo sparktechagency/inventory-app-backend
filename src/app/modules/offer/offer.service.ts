@@ -25,12 +25,14 @@ const createOffers = async (payloads: IOrder[], io: Server) => {
     const createdOrders = [];
 
     for (const payload of payloads) {
+        // @ts-ignore
         if (!payload.wholeSeller || !payload.retailer || !Array.isArray(payload.products) || payload.products.length === 0) {
             console.error("Missing required fields in payload:", payload);
             throw new ApiError(StatusCodes.BAD_REQUEST, "Wholesaler, Retailer, and at least one Product ID are required");
         }
 
         // Transform products into the required format (with productId, availability, price)
+        // @ts-ignore
         const formattedProducts = payload?.products?.map(productId => ({
             productId, // The ID of the product
             availability: payload.availability || false, // Default to false if not provided
@@ -41,7 +43,7 @@ const createOffers = async (payloads: IOrder[], io: Server) => {
         const order = await OfferModel.create({
             retailer: payload.retailer,
             wholeSeller: payload.wholeSeller,
-            product: formattedProducts,  // Pass the structured products array
+            product: formattedProducts,
             status: payload.status,
             price: payload.price,
             Delivery: payload.Delivery,
@@ -81,9 +83,9 @@ const updateOfferIntoDB = async (
     offerId: string,
     productUpdates: { productId: string; availability?: boolean; price?: number }[],
     status?: string,
+    // @ts-ignore
     io: Server
 ) => {
-    console.log("Received productUpdates:", productUpdates);
 
     if (!Array.isArray(productUpdates)) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "productUpdates must be an array");
@@ -93,14 +95,14 @@ const updateOfferIntoDB = async (
         throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid Offer ID or Product ID format");
     }
 
-    const userData = await User.findById(user.id).select("isSubscribed").lean();
+    const userData = await User.findById(user.id).select("isSubscribed offersUpdatedCount role").lean();
     if (!userData) {
         throw new ApiError(StatusCodes.UNAUTHORIZED, "User not found");
     }
 
-    const isSubscribed = userData.isSubscribed;
-    const isExistLimit = await OfferModel.countDocuments({ wholeSeller: user.id, status: "Received" });
+    const { isSubscribed, offersUpdatedCount, role } = userData;  // Accessing correct user data
 
+    const isExistLimit = await OfferModel.countDocuments({ wholeSeller: user.id, status: "Received" });
     if (!isSubscribed && isExistLimit >= 10) {
         throw new ApiError(
             StatusCodes.BAD_REQUEST,
@@ -139,13 +141,22 @@ const updateOfferIntoDB = async (
 
     // Fetch the updated offer with populated product details
     const updatedOffer = await OfferModel.findById(offerId)
-        .populate("product.productId") // Populate the product details (name, price, etc.)
+        .populate("product.productId")
         .lean();
-
-    console.log("Updated Offer:", updatedOffer); // Debug log for the updated offer
 
     if (!updatedOffer) {
         throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found after update.");
+    }
+
+    // Only apply this logic for Wholesalers
+    if (role === USER_ROLES.Wholesaler) {
+        if (offersUpdatedCount && offersUpdatedCount >= 10) {
+            throw new ApiError(StatusCodes.BAD_REQUEST, "You have already send 10 offers. Please subscribe to update more.");
+        } else {
+            await User.findByIdAndUpdate(user.id, {
+                $inc: { offersUpdatedCount: 1 },
+            });
+        }
     }
 
     // Prepare notification data
@@ -173,6 +184,7 @@ const updateOfferIntoDB = async (
 
 
 
+
 const updateOfferFromRetailer = async (
     offerId: string,
     payload: { productQuantities?: { productId: string, quantity: number }[]; status?: STATUS },
@@ -191,7 +203,6 @@ const updateOfferFromRetailer = async (
             throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
         }
 
-        console.log("Existing Offer Product Data:", existingOffer.product);  // Log the existing product data
 
         if (!existingOffer.product || existingOffer.product.length === 0) {
             throw new ApiError(StatusCodes.NOT_FOUND, "No products found in this offer.");
@@ -204,31 +215,34 @@ const updateOfferFromRetailer = async (
                 const productObjectId = new mongoose.Types.ObjectId(prodQty.productId); // Use `new` to create an ObjectId
 
                 // Find the product in the offer by comparing ObjectId
+                // @ts-ignore
                 const product = existingOffer.product.find(p => p.productId.equals(productObjectId)); // Use `.equals()` to compare ObjectId
 
                 if (!product) {
                     throw new ApiError(StatusCodes.NOT_FOUND, `Product with ID ${prodQty.productId} not found in the offer.`);
                 }
 
-                console.log(`Found product: ${product.productId.name}`);
 
                 // Check if quantity is available
+                // @ts-ignore
                 if (prodQty.quantity > product.productId.quantity) {
                     throw new ApiError(
                         StatusCodes.BAD_REQUEST,
+                        // @ts-ignore
                         `Insufficient stock for ${product.productId.name}. Available: ${product.productId.quantity}`
                     );
                 }
 
                 // Deduct stock only when status is 'confirm'
                 if (payload.status === STATUS.confirm) {
-                    console.log(`Updating stock for product: ${product.productId.name}, deducting ${prodQty.quantity}`);
+                    // @ts-ignore
                     product.productId.quantity -= prodQty.quantity;
                 }
             }
 
             // Save updated product stocks
-            await Promise.all(existingOffer.product.map(prod => prod.productId?.save()));  // Save each product
+            // @ts-ignore
+            await Promise.all(existingOffer.product.map(prod => prod.productId?.save()));
         }
 
         // Step 3: Update offer status if provided
@@ -252,7 +266,7 @@ const updateOfferFromRetailer = async (
         return { updatedOffer: existingOffer };
     } catch (error) {
         console.error("Error updating order:", error);
-        throw new ApiError(StatusCodes.BAD_REQUEST, `Error updating order: ${error.message}`);
+        throw new ApiError(StatusCodes.BAD_REQUEST, `Error updating order: ${error}`);
     }
 };
 
@@ -343,20 +357,18 @@ const deleteSinglePendingOfferFromRetailer = async (retailerId: string, offerId:
 const getAllReceiveOffers = async (user: JwtPayload) => {
     const offers = await OfferModel.find({
         retailer: user.id,
-        status: STATUS.received,
+        status: "Receieved",
     })
-        .populate("retailer")  // Populate retailer details
-        .populate("wholeSeller")  // Populate wholesaler details
+        .populate("retailer")
+        .populate("wholeSeller")
         .populate({
-            path: "product.productId",  // Populate the productId field within the product array
-            model: "Product",           // Specify the model to populate from
+            path: "product.productId",
+            model: "Product",
         })
         .lean();
-
     if (offers.length === 0) {
         throw new ApiError(StatusCodes.NOT_FOUND, "No received offers found");
     }
-
     return offers;
 };
 

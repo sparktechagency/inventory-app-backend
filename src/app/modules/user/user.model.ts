@@ -19,11 +19,6 @@ const userSchema = new Schema<IUser, UserModal>(
       sparse: true,  // Multiple null values allowed
       lowercase: true
     },
-    phone: {
-      type: String,
-      unique: true,
-      sparse: true  // Multiple null values allowed
-    },
     password: {
       type: String,
       required: true,
@@ -32,7 +27,13 @@ const userSchema = new Schema<IUser, UserModal>(
     },
     confirmPassword: {
       type: String,
-      required: true,
+      required: false,
+    },
+    phone: {
+      type: String,
+      required: false,
+      unique: true,
+
     },
 
     image: {
@@ -72,6 +73,10 @@ const userSchema = new Schema<IUser, UserModal>(
       isResetPassword: { type: Boolean, default: false },
       oneTimeCode: { type: Number, default: null },  // This will be null initially
       expireAt: { type: Date, default: null },  // This will also be null initially
+    },
+    offersUpdatedCount: {
+      type: Number,
+      default: 0,
     }
 
   },

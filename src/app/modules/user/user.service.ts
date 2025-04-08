@@ -14,11 +14,11 @@ import { formatPhoneNumber } from '../../../util/formatPhoneNumber';
 
 
 const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
-  if (!payload.email && !payload.phone) {
+  if (!payload.email) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Either email or phone is required.');
   }
 
-  const existingUser = await User.isExistUserByEmailOrPhone(payload.email || payload.phone || '');
+  const existingUser = await User.isExistUserByEmailOrPhone(payload.email);
   if (existingUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'User already exists with this email or phone.');
   }
@@ -96,33 +96,11 @@ const updateStoreData = async (
     throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
   }
 
-  let otpDeliveryMethod: string;
+  let otpDeliveryMethod: string = 'email';
 
-  // Check if user has phone number, send OTP via phone (AWS SNS) or email
-  if (user.phone) {
-    otpDeliveryMethod = 'phone';
-
-    // Send OTP via AWS SNS (Phone)
-    const formattedNumber = formatPhoneNumber(user.phone); // Ensure the number is correctly formatted
-    const otpMessage = `Your OTP is ${otp}`;
-
-    try {
-      const command = new PublishCommand({
-        Message: otpMessage,
-        PhoneNumber: formattedNumber,
-      });
-
-      // Send the message
-      const res = await snsClient.send(command);
-    } catch (snsError) {
-      console.error("AWS SNS API Error:", snsError);
-      throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to send OTP to phone number.");
-    }
-
-  } else if (user.email) {
-    otpDeliveryMethod = 'email';
-
-    // Send OTP via email
+  // Send OTP via email
+  if (user.email) {
+    // Prepare values for email
     const values = {
       name: user.name,
       otp: otp,
@@ -131,19 +109,20 @@ const updateStoreData = async (
 
     const otpTemplate = emailTemplate.createAccount(values);
     try {
+      // Send the OTP email
       emailHelper.sendEmail(otpTemplate);
     } catch (emailError) {
       console.error("Email sending error:", emailError);
       throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to send OTP via email.");
     }
   } else {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'No valid contact method (phone or email) found.');
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'No valid contact method (email) found.');
   }
 
   // Save OTP in DB
   const authentication = {
     oneTimeCode: otp,
-    expireAt: new Date(Date.now() + 3 * 60000), // 3 minutes expiry
+    expireAt: new Date(Date.now() + 3 * 60000),
   };
 
   const result = await User.findByIdAndUpdate(
@@ -163,6 +142,7 @@ const updateStoreData = async (
 
   return result;
 };
+
 
 const verifyOtp = async (identifier: string, otp: number): Promise<boolean> => {
   // Check if the identifier is email or phone

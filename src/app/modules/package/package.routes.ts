@@ -12,8 +12,8 @@ route.post("/packages", auth(USER_ROLES.Wholesaler), validateRequest(packageVali
 
 
 // get all packages
-route.get("/packages", auth(USER_ROLES.Admin), packageController.getAllPackages);
-route.get("/packages/:id", auth(USER_ROLES.Admin), packageController.getSinglePackage);
+route.get("/packages", auth(USER_ROLES.Admin, USER_ROLES.Wholesaler, USER_ROLES.Retailer, USER_ROLES.SUPER_ADMIN), packageController.getAllPackages);
+route.get("/packages/:id", auth(USER_ROLES.Admin, USER_ROLES.Wholesaler, USER_ROLES.Retailer, USER_ROLES.SUPER_ADMIN), packageController.getSinglePackage);
 
 
 // export the route

@@ -5,14 +5,13 @@ const createUserZodSchema = z.object({
   body: z.object({
     name: z.string({ required_error: "Name is required" }),
     email: z.string().email().optional(),
-    phone: z.string().optional(),
     password: z.string().min(4, { message: "Password must be at least 4 characters long" }),
     confirmPassword: z.string().min(4, { message: "Confirm password must be at least 4 characters long" }),
     role: z.enum(Object.values(USER_ROLES) as [USER_ROLES, ...USER_ROLES[]]),
     verified: z.boolean().optional(),
     image: z.string().optional(),
     status: z.enum(['active', 'delete']).optional(),
-  }).refine((data) => data.email || data.phone, {
+  }).refine((data) => data.email, {
     message: "Either email or phone is required",
     path: ["email", "phone"],
   }),
