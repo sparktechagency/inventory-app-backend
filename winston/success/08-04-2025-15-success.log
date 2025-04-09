@@ -239,3 +239,6 @@ Tue Apr 08 2025 15:50:9 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/retail
 Tue Apr 08 2025 15:50:9 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/retailers?page=1&limit=12&name=&email=&businessName=&phone= 304 - 4.771 ms
 Tue Apr 08 2025 15:50:12 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/wholesalers?page=1&limit=12&name=&email=&businessName=&phone= 204 - 0.174 ms
 Tue Apr 08 2025 15:50:12 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/wholesalers?page=1&limit=12&name=&email=&businessName=&phone= 304 - 14.885 ms
+Tue Apr 08 2025 15:58:57 [SERVER-NAME] info: 10.0.70.188 - PATCH /api/v1/user/profile 200 - 3431.159 ms
+Tue Apr 08 2025 15:59:6 [SERVER-NAME] info: 10.0.70.188 - OPTIONS /api/v1/user/profile 204 - 0.151 ms
+Tue Apr 08 2025 15:59:6 [SERVER-NAME] info: 10.0.70.188 - GET /api/v1/user/profile 200 - 4.051 ms

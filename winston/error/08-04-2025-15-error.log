@@ -41,3 +41,5 @@ Tue Apr 08 2025 15:42:24 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-
 Tue Apr 08 2025 15:48:30 [SERVER-NAME] error: 10.0.70.188 - PATCH /api/v1/admin/users/67f375d4d28385db30fb6a4f 500 - 6.802 ms
 Tue Apr 08 2025 15:48:50 [SERVER-NAME] error: 10.0.70.188 - PATCH /api/v1/admin/users/67f375d4d28385db30fb6a4f 401 - 2.417 ms
 Tue Apr 08 2025 15:48:57 [SERVER-NAME] error: 10.0.70.188 - PATCH /api/v1/admin/users/67f375d4d28385db30fb6a4f 401 - 3.355 ms
+Tue Apr 08 2025 15:58:14 [SERVER-NAME] error: 10.0.70.188 - PATCH /api/v1/user/profile 500 - 7053.352 ms
+Tue Apr 08 2025 15:58:24 [SERVER-NAME] error: 10.0.70.188 - PATCH /api/v1/user/profile 500 - 3792.902 ms
