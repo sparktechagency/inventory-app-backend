@@ -1,6 +1,0 @@
-Tue Apr 08 2025 10:33:32 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/successful-payments 401 - 8.437 ms
-Tue Apr 08 2025 10:36:56 [SERVER-NAME] error: 10.0.70.188 - DELETE /api/v1/wholesalers/67f3794449d74b60d69848b3 404 - 0.888 ms
-Tue Apr 08 2025 10:37:14 [SERVER-NAME] error: 10.0.70.188 - DELETE /api/v1/admin/users/67f34b25485ade0cb22ab4c5 401 - 2.750 ms
-Tue Apr 08 2025 10:39:40 [SERVER-NAME] error: 10.0.70.188 - DELETE /api/v1/wholesalers/67f3794449d74b60d69848b3 404 - 0.881 ms
-Tue Apr 08 2025 10:39:53 [SERVER-NAME] error: 10.0.70.188 - DELETE /api/v1/wholesalers/67f3794449d74b60d69848b3 404 - 0.463 ms
-Tue Apr 08 2025 10:58:38 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5005
