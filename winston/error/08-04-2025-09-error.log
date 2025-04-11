@@ -1,6 +1,0 @@
-Tue Apr 08 2025 9:13:30 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/retailers/monthly 401 - 9.870 ms
-Tue Apr 08 2025 9:13:30 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/wholesalers/monthly 401 - 3.765 ms
-Tue Apr 08 2025 9:13:30 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/transactions 401 - 3.834 ms
-Tue Apr 08 2025 9:13:30 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/dashboard-statistics 401 - 1.565 ms
-Tue Apr 08 2025 9:14:7 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/auth/login 400 - 248.966 ms
-Tue Apr 08 2025 9:21:29 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/auth/login 400 - 201.063 ms

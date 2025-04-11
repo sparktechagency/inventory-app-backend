@@ -184,7 +184,6 @@ export const handleSubscriptionCreated = async (data: Stripe.Subscription) => {
         sendNotifications(notifications)
 
     } catch (error) {
-        console.log("Error handling subscription creation:", error);
         throw error;
     }
 }

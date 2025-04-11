@@ -1,0 +1,20 @@
+Tue Apr 08 2025 17:6:10 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 500 - 2622.598 ms
+Tue Apr 08 2025 17:40:59 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 500 - 93.256 ms
+Tue Apr 08 2025 17:41:14 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 500 - 63.903 ms
+Tue Apr 08 2025 17:41:28 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 500 - 64.572 ms
+Tue Apr 08 2025 17:47:24 [SERVER-NAME] error: [31m🤢 Failed to connect Database[39m
+Tue Apr 08 2025 17:49:35 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 17:49:40 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 500 - 82.182 ms
+Tue Apr 08 2025 17:50:45 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 17:50:46 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 17:56:29 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 17:57:8 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 500 - 152.944 ms
+Tue Apr 08 2025 17:57:24 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 500 - 66.220 ms
+Tue Apr 08 2025 17:57:39 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 17:57:53 [SERVER-NAME] error: UnhandleException Detected listen EADDRINUSE: address already in use 10.0.70.188:5006
+Tue Apr 08 2025 17:58:43 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 500 - 95.126 ms
+Tue Apr 08 2025 17:58:55 [SERVER-NAME] error: 10.0.70.188 - POST /api/v1/admin/users 500 - 86.654 ms
+Tue Apr 08 2025 17:59:2 [SERVER-NAME] error: [31m🤢 Failed to connect Database[39m
+Tue Apr 08 2025 17:59:23 [SERVER-NAME] error: [31m🤢 Failed to connect Database[39m
+Tue Apr 08 2025 17:59:24 [SERVER-NAME] error: [31m🤢 Failed to connect Database[39m
+Tue Apr 08 2025 17:59:45 [SERVER-NAME] error: [31m🤢 Failed to connect Database[39m

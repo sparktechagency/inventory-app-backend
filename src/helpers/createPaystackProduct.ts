@@ -21,10 +21,8 @@ export const createPaystackProduct = async (name: string, description: string, p
                 }
             }
         );
-        console.log("Paystack Product Created:", res.data);
         return res.data
     } catch (error) {
-        console.error("Paystack API Error Response:", error.response ? error.response.data : error.message);
         throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create Paystack Product")
     }
 }

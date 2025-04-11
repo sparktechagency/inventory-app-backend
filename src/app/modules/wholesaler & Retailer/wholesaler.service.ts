@@ -272,7 +272,6 @@ const getDashboardStatistics = async () => {
       const rawPayments = await paymentVerificationModel.find({
         status: "successful",
       });
-      console.log("Raw Payments Data:", rawPayments); // Log raw payment data
       return paymentVerificationModel.aggregate([
         { $match: { status: "successful" } },
         { $group: { _id: "$email" } },
@@ -286,10 +285,7 @@ const getDashboardStatistics = async () => {
   ]);
 
   // Log the result of the aggregation for unique subscribers
-  console.log(
-    "Total Unique Subscribers Aggregation Result:",
-    totalUniqueSubscribers
-  );
+
 
   return {
     totalWholesalers,

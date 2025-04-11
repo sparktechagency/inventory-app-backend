@@ -24,7 +24,6 @@ export const verifyPaymentTransaction = async (transaction_id: string, userEmail
 
             const existingPayment = await paymentVerificationModel.findOne({ transactionId: paymentData?.tx_ref });
             if (existingPayment) {
-                console.log("Payment already verified for this transactionId. Skipping insertion.");
             } else {
                 const payload = {
                     email: userEmail,

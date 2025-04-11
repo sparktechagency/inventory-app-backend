@@ -13,10 +13,7 @@ route.post("/users",
     fileUploadHandler() as any,
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            // Handle file upload only if it's present, otherwise proceed with form data
             const payload = req.body;
-
-            // Only handle file upload if a file is present in req.files
             // @ts-ignore
             if (req.files && req.files['image']) {
                 const image = getSingleFilePath(req.files, 'image' as any);

@@ -6,8 +6,7 @@ import { StatusCodes } from "http-status-codes";
 const createUser = catchAsync(async (req: Request, res: Response) => {
     const { Password, confirmPassword, image, isVerified, ...userData } = req.body;
 
-    const verified = true; 
-
+    const verified = true;
     // Check if password and confirmPassword exist
     if (!Password || !confirmPassword) {
         return res.status(400).json({
@@ -24,13 +23,29 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
         });
     }
 
-    // Proceed to create the user with password and other fields
-    const user = await adminService.createUserIntoDB({
-        ...userData,
-        password: Password, 
-        image: image || null, 
-        verified
-    });
+    // Parse storeInformation if it’s a string
+    if (userData.storeInformation) {
+        if (typeof userData.storeInformation === 'string') {
+            try {
+                userData.storeInformation = JSON.parse(userData.storeInformation);
+            } catch (error) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid format for store information"
+                });
+            }
+        } else {
+        }
+    } else {
+        console.log('storeInformation is not provided in the request');
+    }
+
+    // Log the final payload being sent to the service
+    const payload = { ...userData, password: Password, image: image || null, verified };
+    console.log('Final payload to service:', payload);
+
+    // Proceed to create the user
+    const user = await adminService.createUserIntoDB(payload);
 
     res.status(201).json({
         success: true,

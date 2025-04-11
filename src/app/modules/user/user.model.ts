@@ -64,10 +64,10 @@ const userSchema = new Schema<IUser, UserModal>(
       businessName: { type: String },
       businessCategory: { type: String, enum: Object.values(BUSINESS_CATEGORY) },
       location: { type: String },
-      verified: {
-        type: Boolean,
-        default: false,
-      },
+      // verified: {
+      //   type: Boolean,
+      //   default: false,
+      // },
     },
     authentication: {
       isResetPassword: { type: Boolean, default: false },
