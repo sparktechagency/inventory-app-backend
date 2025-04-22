@@ -6,24 +6,9 @@
     "auditLog": "F:\\BDCalling\\Expense list\\winston\\error\\.0b11a0ea6e2133189d0721e02c84808e788b3492-audit.json",
     "files": [
         {
-            "date": 1744168465462,
-            "name": "F:\\BDCalling\\Expense list\\winston\\error\\09-04-2025-09-error.log",
-            "hash": "a7a88c102d332b3ec36b021d2e5dac61ac4b4d62a72bf8d3845e9e2c57e3a145"
-        },
-        {
-            "date": 1744171311721,
-            "name": "F:\\BDCalling\\Expense list\\winston\\error\\09-04-2025-10-error.log",
-            "hash": "b716dafb4f21f1e9f0f2a4de743f5998a84d8efca0e219c6ae1cdc3d3b8e7e45"
-        },
-        {
-            "date": 1744198416999,
-            "name": "F:\\BDCalling\\Expense list\\winston\\error\\09-04-2025-17-error.log",
-            "hash": "7244718bf6eae252a93c652c1b3d4d642b71987636907f56f216a3928a364a1e"
-        },
-        {
-            "date": 1744200199117,
-            "name": "F:\\BDCalling\\Expense list\\winston\\error\\09-04-2025-18-error.log",
-            "hash": "16c8ab19490588cb1d17865cc21c000e259a540df5bfdd5e36081a38c6cb382d"
+            "date": 1744379540805,
+            "name": "F:\\BDCalling\\Expense list\\winston\\error\\11-04-2025-19-error.log",
+            "hash": "49be6a535e5f4cd126714a95cf696032e1eb93e8f03a66778d330199be291fe9"
         }
     ],
     "hashType": "sha256"

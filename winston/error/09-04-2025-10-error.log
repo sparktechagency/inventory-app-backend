@@ -1,2 +1,0 @@
-Wed Apr 09 2025 10:1:51 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?email=jowelahmed.sparktech 404 - 8.642 ms
-Wed Apr 09 2025 10:2:11 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?page=1&limit=12&name=lo&email=&businessName=&phone= 404 - 5.332 ms

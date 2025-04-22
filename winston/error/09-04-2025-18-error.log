@@ -1,8 +1,0 @@
-Wed Apr 09 2025 18:3:19 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?page=1&limit=12&name=&email=&businessName=&phone= 404 - 5.426 ms
-Wed Apr 09 2025 18:3:41 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?page=1&limit=12&name=&email=&businessName=&phone= 404 - 7.387 ms
-Wed Apr 09 2025 18:3:46 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?page=1&limit=12&name=&email=&businessName=&phone= 404 - 3.482 ms
-Wed Apr 09 2025 18:3:52 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?page=1&limit=12&name=&email=&businessName=&phone= 404 - 4.080 ms
-Wed Apr 09 2025 18:4:34 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?page=1&limit=12&name=&email=&businessName=&phone= 404 - 4.168 ms
-Wed Apr 09 2025 18:15:13 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?page=1&limit=12&name=&email=&businessName=&phone= 404 - 4.053 ms
-Wed Apr 09 2025 18:16:35 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?page=1&limit=12&name=&email=&businessName=&phone= 404 - 4.342 ms
-Wed Apr 09 2025 18:21:17 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/flutter-wave-package/total-user-subscription?page=1&limit=12&name=&email=&businessName=&phone= 404 - 4.884 ms
