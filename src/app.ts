@@ -17,7 +17,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), handl
 //body parser
 app.use(cors(
   {
-    origin: 'https://ea7b-103-174-189-193.ngrok-free.app',
+    origin: 'http://75.119.138.163:4173',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH'],
   }

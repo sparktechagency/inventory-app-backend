@@ -1,0 +1,3 @@
+Wed Jun 18 2025 21:0:15 [SERVER-NAME] error: 10.0.70.105 - POST /api/v1/user/verify-otp 400 - 6.955 ms
+Wed Jun 18 2025 21:41:46 [SERVER-NAME] error: 10.0.70.105 - POST /api/v1/auth/login 400 - 94.289 ms
+Wed Jun 18 2025 21:43:58 [SERVER-NAME] error: 10.0.70.105 - POST /api/v1/auth/login 400 - 3.399 ms

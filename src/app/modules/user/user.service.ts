@@ -135,7 +135,6 @@ const updateStoreData = async (
     },
     { new: true }
   );
-
   if (!result) {
     throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
   }
