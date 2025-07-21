@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 1
+    },
+    "auditLog": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\.7c049a24fc197b77f4ad5d8ad42e7c3bdd02da2b-audit.json",
+    "files": [
+        {
+            "date": 1753069320407,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\21-07-2025-09-success.log",
+            "hash": "13fb1cf10ccedef5b83e6987d866122cf85e3ef441f5daf9275d2f7fef6d882e"
+        },
+        {
+            "date": 1753070505941,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\21-07-2025-10-success.log",
+            "hash": "3d6085065af06af59a1ebd9aa4c756df8ffd98d6d06346ff2caf5984bdd79734"
+        }
+    ],
+    "hashType": "sha256"
+}

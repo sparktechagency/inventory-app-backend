@@ -1,7 +1,7 @@
-import nodemailer from 'nodemailer';
-import config from '../config';
-import { errorLogger, logger } from '../shared/logger';
-import { ISendEmail } from '../types/email';
+import nodemailer from "nodemailer";
+import config from "../config";
+import { errorLogger, logger } from "../shared/logger";
+import { ISendEmail } from "../types/email";
 
 const transporter = nodemailer.createTransport({
   host: config.email.host,
@@ -16,15 +16,15 @@ const transporter = nodemailer.createTransport({
 const sendEmail = async (values: ISendEmail) => {
   try {
     const info = await transporter.sendMail({
-      from: `"Simply Good Food" ${config.email.from}`,
+      from: `"Inventory" ${config.email.from}`,
       to: values.to,
       subject: values.subject,
       html: values.html,
     });
 
-    logger.info('Mail send successfully', info.accepted);
+    logger.info("Mail send successfully", info.accepted);
   } catch (error) {
-    errorLogger.error('Email', error);
+    errorLogger.error("Email", error);
   }
 };
 

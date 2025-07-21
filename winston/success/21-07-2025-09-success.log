@@ -1,0 +1,76 @@
+Mon Jul 21 2025 9:42:1 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:42:1 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:43:0 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:43:0 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:43:43 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:43:43 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:47:18 [SERVER-NAME] info: 10.10.7.46 - POST /api/v1/user 200 - 245.606 ms
+Mon Jul 21 2025 9:47:32 [SERVER-NAME] info: 10.10.7.46 - PATCH /api/v1/user/update-store/687db8464385f19c0cbe63cc 200 - 18.772 ms
+Mon Jul 21 2025 9:47:39 [SERVER-NAME] info: Mail send successfully
+Mon Jul 21 2025 9:47:56 [SERVER-NAME] info: 10.10.7.46 - POST /api/v1/user/verify-otp 200 - 6.153 ms
+Mon Jul 21 2025 9:48:14 [SERVER-NAME] info: 10.10.7.46 - POST /api/v1/auth/login 200 - 223.514 ms
+Mon Jul 21 2025 9:48:44 [SERVER-NAME] info: 10.10.7.46 - POST /api/v1/auth/forget-password 200 - 6.523 ms
+Mon Jul 21 2025 9:48:50 [SERVER-NAME] info: Mail send successfully
+Mon Jul 21 2025 9:49:5 [SERVER-NAME] info: 10.10.7.46 - POST /api/v1/user/verify-otp 200 - 3.336 ms
+Mon Jul 21 2025 9:50:35 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:50:35 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:53:38 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:53:38 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:53:40 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:53:40 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:53:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:53:41 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:53:43 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:53:43 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:55:14 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:55:14 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:55:28 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:55:28 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:55:31 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:55:31 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:55:33 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:55:33 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:55:36 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:55:36 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:55:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:55:41 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:55:43 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:55:43 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:55:54 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:55:54 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:55:55 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:55:55 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:55:57 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:55:57 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:56:7 [SERVER-NAME] info: 10.10.7.46 - POST /api/v1/auth/forget-password 200 - 29.964 ms
+Mon Jul 21 2025 9:56:12 [SERVER-NAME] info: Mail send successfully
+Mon Jul 21 2025 9:56:17 [SERVER-NAME] info: 10.10.7.46 - POST /api/v1/auth/forget-password 200 - 4.979 ms
+Mon Jul 21 2025 9:56:24 [SERVER-NAME] info: Mail send successfully
+Mon Jul 21 2025 9:56:41 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:56:41 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:56:52 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:56:52 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:56:53 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:57:12 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:57:12 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:57:18 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:57:18 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:58:0 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:58:0 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:58:2 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:58:2 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:58:5 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:58:5 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:58:9 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:58:9 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:58:19 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:58:19 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:58:21 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:58:21 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:58:24 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:58:24 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:58:26 [SERVER-NAME] info: [32m🚀 Database connected successfully[39m
+Mon Jul 21 2025 9:58:26 [SERVER-NAME] info: [33m♻️  Application listening on port:5006[39m
+Mon Jul 21 2025 9:58:36 [SERVER-NAME] info: 10.10.7.46 - POST /api/v1/auth/forget-password 200 - 24.515 ms
+Mon Jul 21 2025 9:58:42 [SERVER-NAME] info: Mail send successfully
+Mon Jul 21 2025 9:58:53 [SERVER-NAME] info: 10.10.7.46 - POST /api/v1/user/verify-otp 200 - 27.268 ms

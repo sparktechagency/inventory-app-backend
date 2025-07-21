@@ -61,7 +61,7 @@ const updateProfile = catchAsync(
 const verifyOtp = catchAsync(async (req: Request, res: Response) => {
   const { email, otp } = req.body;
 
-  const result = await UserService.verifyOtp(email, otp);
+  const result = await UserService.verifyEmailToDB({ email, oneTimeCode: otp });
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
