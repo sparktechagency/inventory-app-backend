@@ -15,26 +15,7 @@ router
   .patch(
     auth(USER_ROLES.Admin, USER_ROLES.Retailer, USER_ROLES.Wholesaler, USER_ROLES.SUPER_ADMIN),
     fileUploadHandler() as any,
-    (req: Request, res: Response, next: NextFunction) => {
-      try {
-        if (req.body.data) {
-          const parsedBody = JSON.parse(req.body.data);
-          if (typeof parsedBody.storeInformation === 'string') {
-            try {
-              parsedBody.storeInformation = JSON.parse(parsedBody.storeInformation);
-            } catch (err) {
-              return res.status(400).json({ message: 'Invalid JSON format for storeInformation' });
-            }
-          }
-
-          req.body = UserValidation.updateUserZodSchema.parse(parsedBody);
-        }
-
-        return UserController.updateProfile(req, res, next);
-      } catch (err) {
-        next(err);
-      }
-    }
+    UserController.updateProfile
   );
 
 router

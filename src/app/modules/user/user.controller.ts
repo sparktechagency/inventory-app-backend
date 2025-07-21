@@ -4,9 +4,8 @@ import catchAsync from '../../../shared/catchAsync';
 import { getSingleFilePath } from '../../../shared/getFilePath';
 import sendResponse from '../../../shared/sendResponse';
 import { UserService } from './user.service';
-import { JwtPayload } from 'jsonwebtoken';
+import { UserValidation } from './user.validation';
 import ApiError from '../../../errors/ApiError';
-import { IUser } from './user.interface';
 
 const createUser = catchAsync(
   async (req: Request, res: Response) => {
@@ -39,22 +38,44 @@ const getUserProfile = catchAsync(async (req: Request, res: Response) => {
 const updateProfile = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
-    let image = getSingleFilePath(req.files, 'image');
+    const image = getSingleFilePath(req.files, 'image');
 
-    const data = {
-      image,
+    let parsedData = {};
+    if (req.body.data) {
+      try {
+        parsedData = JSON.parse(req.body.data);
+
+        if (typeof parsedData.storeInformation === 'string') {
+          parsedData.storeInformation = JSON.parse(parsedData.storeInformation);
+        }
+        if (typeof parsedData.authentication === 'string') {
+          parsedData.authentication = JSON.parse(parsedData.authentication);
+        }
+
+        // Validate using Zod (or your preferred validator)
+        req.body = UserValidation.updateUserZodSchema.parse(parsedData);
+      } catch (error) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, 'Invalid JSON in request body');
+      }
+    }
+
+    const finalData = {
       ...req.body,
+      ...(image && { image }),
     };
-    const result = await UserService.updateProfileToDB(user, data);
 
-    sendResponse(res, {
+    console.log('🧪 Final Data to update:', finalData);
+
+    const result = await UserService.updateProfileToDB(user, finalData);
+
+    res.status(StatusCodes.OK).json({
       success: true,
-      statusCode: StatusCodes.OK,
       message: 'Profile updated successfully',
       data: result,
     });
   }
 );
+
 
 
 // otp verification in controller

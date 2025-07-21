@@ -60,24 +60,26 @@ const getUserProfileFromDB = async (
 
 const updateProfileToDB = async (
   user: JwtPayload,
-  payload: Partial<IUser>
-): Promise<Partial<IUser | null>> => {
+  payload: Partial<any>
+): Promise<any> => {
   const { id } = user;
-  const isExistUser = await User.isExistUserById(id);
-  if (!isExistUser) {
+  const existingUser = await User.findById(id);
+
+  if (!existingUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }
 
-  //unlink file here
-  if (payload.image) {
-    unlinkFile(isExistUser.image);
+  // Unlink old image if new image present
+  if (payload.image && existingUser.image) {
+    unlinkFile(existingUser.image);
   }
 
-  const updateDoc = await User.findOneAndUpdate({ _id: id }, payload, {
+  // Update and return updated user as plain object (lean)
+  const updatedUser = await User.findByIdAndUpdate(id, payload, {
     new: true,
-  });
+  }).lean();
 
-  return updateDoc;
+  return updatedUser;
 };
 
 const snsClient = new SNSClient({
@@ -96,10 +98,8 @@ const updateStoreData = async (
     location: string;
   }
 ): Promise<IUser | null> => {
-  // Generate OTP
   const otp = generateOTP();
 
-  // Get user info
   const user = await User.findById(userId);
   if (!user) {
     throw new ApiError(StatusCodes.NOT_FOUND, "User not found");
