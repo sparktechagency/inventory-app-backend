@@ -60,6 +60,13 @@ router.get("/confirm/:id", auth(USER_ROLES.Retailer, USER_ROLES.SUPER_ADMIN), se
 
 //  delete single confirm offers from retailer
 
+
+// recent update code for retailer update code
+router.patch("/update-product/:id", auth(USER_ROLES.Retailer,  USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN), sendOfferController.updateOfferFromRetailer);
+
+
+
+
 router.delete("/confirm/:id", auth(USER_ROLES.Retailer, USER_ROLES.SUPER_ADMIN), sendOfferController.deleteSingleConfirmOffer);
 
 export const offerRoutes = router;

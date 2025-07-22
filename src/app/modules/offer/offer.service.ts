@@ -213,6 +213,28 @@ const updateOfferIntoDB = async (
   };
 };
 
+// update offer from retailer
+const updateOfferFromRetailerIntoDB = async (
+  id: string,
+  user: JwtPayload,
+  payload: any
+) => {
+  const userId = user.id;
+
+  const result = await OfferModel.findByIdAndUpdate(
+    id,
+    { ...payload, retailer: userId },
+    { new: true }
+  );
+
+  if (!result) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
+  }
+
+  console.log("Offer updated successfully:", result);
+  return result;
+};
+
 const updateOfferFromRetailer = async (
   offerId: string,
   payload: {
@@ -401,7 +423,7 @@ const deleteSinglePendingOfferFromRetailer = async (
 const getAllReceiveOffers = async (user: JwtPayload) => {
   const offers = await OfferModel.find({
     retailer: user.id,
-    status: "Receieved",
+    status: "Received",
   })
     .populate("retailer")
     .populate("wholeSeller")
@@ -410,6 +432,7 @@ const getAllReceiveOffers = async (user: JwtPayload) => {
       model: "Product",
     })
     .lean();
+  console.log("Received offers:", offers);
   if (offers.length === 0) {
     throw new ApiError(StatusCodes.NOT_FOUND, "No received offers found");
   }
@@ -533,4 +556,7 @@ export const sendOfferService = {
   getAllConfirmOffers,
   getSingleConfirmOffer,
   deleteConfirmOffers,
+
+  // last time update function
+  updateOfferFromRetailerIntoDB,
 };
