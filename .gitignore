@@ -1,2 +1,7 @@
 node_modules
 .env
+# Log files
+*.log
+logs/
+combined.log
+error.log

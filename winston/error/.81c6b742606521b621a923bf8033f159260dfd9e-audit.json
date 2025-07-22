@@ -6,14 +6,14 @@
     "auditLog": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\.81c6b742606521b621a923bf8033f159260dfd9e-audit.json",
     "files": [
         {
-            "date": 1753069320411,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\21-07-2025-09-error.log",
-            "hash": "df9c150cbea37e8e58e0b32e61534eed30359bc355e9ed7dbf5f079de75f7586"
+            "date": 1753154990909,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\22-07-2025-09-error.log",
+            "hash": "9dfdf62aaeee24014b68b0e6cdf309355771270a000725ca3cbd065ae8b6616f"
         },
         {
-            "date": 1753070441133,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\21-07-2025-10-error.log",
-            "hash": "1b5e8c22a4f850e7af54c42de15ae9b2eaadbd80ec29e439e36686b0130f8c17"
+            "date": 1753157555957,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\22-07-2025-10-error.log",
+            "hash": "19293fed1e506359f026fc6ff10b6775eb435308d56139dfd9bdd0c3a17c5e44"
         }
     ],
     "hashType": "sha256"
