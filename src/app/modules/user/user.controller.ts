@@ -59,8 +59,9 @@ const updateProfile = catchAsync(
     // Now update DB
     const result = await UserService.updateProfileToDB(req.user, parsedData);
 
-    return res.status(StatusCodes.OK).json({
+    sendResponse(res, {
       success: true,
+      statusCode: StatusCodes.OK,
       message: 'Profile updated successfully',
       data: result,
     });

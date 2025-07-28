@@ -58,30 +58,29 @@ const getUserProfileFromDB = async (
   return isExistUser;
 };
 
-const updateProfileToDB = async (
-  user: JwtPayload,
-  payload: Partial<any>
-): Promise<any> => {
+const updateProfileToDB = async (user: JwtPayload, payload: any) => {
   const { id } = user;
   const existingUser = await User.findById(id);
+  if (!existingUser) throw new ApiError(400, "User doesn't exist!");
 
-  if (!existingUser) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  // Handle image unlink if needed
+  if (payload.image) {
+    unlinkFile(existingUser?.image);
   }
 
-  // Unlink old image if new image present
-  if (payload.image && existingUser.image) {
-    unlinkFile(existingUser.image);
+  // Important: Deep merge storeInformation if present
+  if (payload.storeInformation) {
+    payload.storeInformation = {
+      ...existingUser?.storeInformation,
+      ...payload.storeInformation,
+    };
   }
 
-  // Update and return updated user as plain object (lean)
-  const updatedUser = await User.findByIdAndUpdate(id, payload, {
-    new: true,
-  }).lean();
+  // Use $set operator for partial update
+  const updatedUser = await User.findByIdAndUpdate(id, { $set: payload }, { new: true }).lean();
 
   return updatedUser;
 };
-
 const snsClient = new SNSClient({
   region: process.env.AWS_REGION as string,
   credentials: {
