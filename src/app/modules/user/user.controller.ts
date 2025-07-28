@@ -35,39 +35,23 @@ const getUserProfile = catchAsync(async (req: Request, res: Response) => {
 });
 
 //update profile
-const updateProfile = catchAsync(
-  async (req, res, next) => {
-    let parsedData = {};
-    if (req.body.data) {
-      try {
-        parsedData = JSON.parse(req.body.data);
+const updateProfile = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user;
+  const image = getSingleFilePath(req.files, 'image');
 
-        if (typeof parsedData.storeInformation === 'string') {
-          parsedData.storeInformation = JSON.parse(parsedData.storeInformation);
-        }
-      } catch (error) {
-        return next(new ApiError(StatusCodes.BAD_REQUEST, 'Invalid JSON'));
-      }
-    }
+  const data = {
+    image,
+    ...req.body,
+  };
+  const result = await UserService.updateProfileToDB(user!, data);
 
-    // Merge image if uploaded
-    const image = getSingleFilePath(req.files, 'image');
-    if (image) {
-      parsedData.image = image;
-    }
-
-    // Now update DB
-    const result = await UserService.updateProfileToDB(req.user, parsedData);
-
-    sendResponse(res, {
-      success: true,
-      statusCode: StatusCodes.OK,
-      message: 'Profile updated successfully',
-      data: result,
-    });
-  }
-);
-
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Profile updated successfully',
+    data: result,
+  });
+});
 
 // otp verification in controller
 const verifyOtp = catchAsync(async (req: Request, res: Response) => {
