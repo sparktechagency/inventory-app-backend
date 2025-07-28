@@ -37,8 +37,6 @@ const getUserProfile = catchAsync(async (req: Request, res: Response) => {
 //update profile
 const updateProfile = catchAsync(
   async (req, res, next) => {
-    console.log('req.body.data:', req.body.data);  // <== debug here
-
     let parsedData = {};
     if (req.body.data) {
       try {
@@ -51,8 +49,6 @@ const updateProfile = catchAsync(
         return next(new ApiError(StatusCodes.BAD_REQUEST, 'Invalid JSON'));
       }
     }
-
-    console.log('Parsed data:', parsedData);
 
     // Merge image if uploaded
     const image = getSingleFilePath(req.files, 'image');
