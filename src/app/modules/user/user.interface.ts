@@ -25,6 +25,7 @@ export type IUser = {
   offersUpdatedCount?: number
 };
 
+
 // export type UserModal = {
 //   isExistUserById(id: string): any;
 //   isExistUserByEmail(email: string): any;
