@@ -36,9 +36,8 @@ const getUserProfile = catchAsync(async (req: Request, res: Response) => {
 
 //update profile
 const updateProfile = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user;
-    const image = getSingleFilePath(req.files, 'image');
+  async (req, res, next) => {
+    console.log('req.body.data:', req.body.data);  // <== debug here
 
     let parsedData = {};
     if (req.body.data) {
@@ -48,34 +47,29 @@ const updateProfile = catchAsync(
         if (typeof parsedData.storeInformation === 'string') {
           parsedData.storeInformation = JSON.parse(parsedData.storeInformation);
         }
-        if (typeof parsedData.authentication === 'string') {
-          parsedData.authentication = JSON.parse(parsedData.authentication);
-        }
-
-        // Validate using Zod (or your preferred validator)
-        req.body = UserValidation.updateUserZodSchema.parse(parsedData);
       } catch (error) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, 'Invalid JSON in request body');
+        return next(new ApiError(StatusCodes.BAD_REQUEST, 'Invalid JSON'));
       }
     }
 
-    const finalData = {
-      ...req.body,
-      ...(image && { image }),
-    };
+    console.log('Parsed data:', parsedData);
 
-    console.log('🧪 Final Data to update:', finalData);
+    // Merge image if uploaded
+    const image = getSingleFilePath(req.files, 'image');
+    if (image) {
+      parsedData.image = image;
+    }
 
-    const result = await UserService.updateProfileToDB(user, finalData);
+    // Now update DB
+    const result = await UserService.updateProfileToDB(req.user, parsedData);
 
-    res.status(StatusCodes.OK).json({
+    return res.status(StatusCodes.OK).json({
       success: true,
       message: 'Profile updated successfully',
       data: result,
     });
   }
 );
-
 
 
 // otp verification in controller
