@@ -31,9 +31,8 @@ const createOfferController = catchAsync(
       sendResponse(res, {
         statusCode: StatusCodes.CREATED,
         success: true,
-        message: `Successfully created ${result.orders.length} order${
-          result.orders.length > 1 ? "s" : ""
-        } and sent notifications`,
+        message: `Successfully created ${result.orders.length} order${result.orders.length > 1 ? "s" : ""
+          } and sent notifications`,
         data: result.orders,
       });
     } catch (error) {
@@ -76,16 +75,16 @@ const updateOffer = catchAsync(async (req: Request, res: Response) => {
     message: "Offer updated and notification sent successfully",
     data: result.updatedOffer
       ? {
-          status: result.updatedOffer.status,
-          productUpdates: result.updatedOffer.product?.map((p) => ({
-            // @ts-ignore
-            productId: p.productId?.toString(),
-            // @ts-ignore
-            availability: p.availability,
-            // @ts-ignore
-            price: p.price,
-          })),
-        }
+        status: result.updatedOffer.status,
+        productUpdates: result.updatedOffer.product?.map((p) => ({
+          // @ts-ignore
+          productId: p.productId?.toString(),
+          // @ts-ignore
+          availability: p.availability,
+          // @ts-ignore
+          price: p.price,
+        })),
+      }
       : {}, // Prevent sending empty data if no updated offer
   });
 });

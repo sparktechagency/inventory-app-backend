@@ -1,4 +1,4 @@
-import { OfferModel } from "./offer.model";
+
 import { StatusCodes } from "http-status-codes";
 import ApiError from "../../../errors/ApiError";
 import { IOrder } from "./offer.interface";
@@ -422,8 +422,8 @@ const deleteSinglePendingOfferFromRetailer = async (
 //  for receive offer from wholesaler
 const getAllReceiveOffers = async (user: JwtPayload) => {
   const offers = await OfferModel.find({
-    retailer: user.id,
-    status: "Received",
+    // retailer: user.id,
+    // status: "Received",
   })
     .populate("retailer")
     .populate("wholeSeller")

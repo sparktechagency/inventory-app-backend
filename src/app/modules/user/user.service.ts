@@ -68,14 +68,29 @@ const updateProfileToDB = async (
     throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }
 
-  // Unlink file here
-  if (payload.image) {
-    unlinkFile(isExistUser.image);
+  // Parse the stringified JSON for storeInformation if needed
+  if (payload["storeInformation[location]"]) {
+    // Update the location field in storeInformation
+    const updatedStoreInfo = {
+      ...isExistUser.storeInformation,  // Keep existing fields
+      location: payload["storeInformation[location]"]  // Update location
+    };
+
+    // Include the updated storeInformation in the payload
+    payload.storeInformation = updatedStoreInfo;
   }
 
-  const updateDoc = await User.findOneAndUpdate({ _id: id }, payload, {
-    new: true,
-  });
+  // If a new image is provided, unlink the old one
+  if (payload.image && isExistUser.image) {
+    unlinkFile(isExistUser.image);  // Unlink previous image if new one is provided
+  }
+
+
+  const updateDoc = await User.findOneAndUpdate(
+    { _id: id },
+    { $set: payload },
+    { new: true }
+  );
 
   return updateDoc;
 };

@@ -12,6 +12,8 @@ import { NotificationRoutes } from '../app/modules/notification/notification.rou
 import { flutterWaveRouter } from '../app/modules/flutterwavePackage/flutterwavePackage.route';
 import { AdminRoutes } from '../app/modules/admin/admin.routes';
 import { multiPaymentMethodRoutes } from '../app/modules/multiPaymentMethod/multiPaymentMethod.routes';
+import { sendOfferRoutes } from '../app/modules/sendOrder/sendOffer.route';
+import { productSendRoutes } from '../app/modules/productSend/productSend.routes';
 const router = express.Router();
 
 const apiRoutes = [
@@ -63,6 +65,16 @@ const apiRoutes = [
   {
     path: "/",
     route: multiPaymentMethodRoutes
+  },
+  // new version
+  // create order
+  {
+    path: "/new-order",
+    route: sendOfferRoutes
+  },
+  {
+    path: "/products",
+    route: productSendRoutes
   }
 
 
