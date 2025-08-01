@@ -14,6 +14,7 @@ import { AdminRoutes } from '../app/modules/admin/admin.routes';
 import { multiPaymentMethodRoutes } from '../app/modules/multiPaymentMethod/multiPaymentMethod.routes';
 import { sendOfferRoutes } from '../app/modules/sendOrder/sendOffer.route';
 import { productSendRoutes } from '../app/modules/productSend/productSend.routes';
+import { replayFromWholesalerRoutes } from '../app/modules/replayFromWholesaler/replayFromWholesaler.routes';
 const router = express.Router();
 
 const apiRoutes = [
@@ -75,6 +76,10 @@ const apiRoutes = [
   {
     path: "/products",
     route: productSendRoutes
+  },
+  {
+    path: "/replay",
+    route: replayFromWholesalerRoutes
   }
 
 

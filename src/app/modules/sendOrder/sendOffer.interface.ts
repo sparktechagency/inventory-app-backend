@@ -8,6 +8,4 @@ export interface ISendOffer {
     additionalInfo?: string
     retailer: Types.ObjectId | undefined
     status: boolean
-    availability?: boolean
-    price?: number
 }

@@ -3,10 +3,12 @@ import { IReplayFromWholesaler } from "./replayFromWholesaler.interface";
 
 const replayFromWholesalerSchema = new Schema<IReplayFromWholesaler>(
     {
-        product: { type: [Types.ObjectId], ref: "sendOffer", required: true },
+        product: { type: Types.ObjectId, ref: "sendOffer", required: true },
         status: { type: String, enum: ["confirm", "received"], default: "received" },
         retailer: { type: Types.ObjectId, ref: "User", required: true },
-        wholesaler: { type: Types.ObjectId, ref: "User", required: true }
+        wholesaler: { type: Types.ObjectId, ref: "User", required: true },
+        price: { type: Number, required: true },
+        availability: { type: Boolean, required: true }
     },
     {
         timestamps: true,

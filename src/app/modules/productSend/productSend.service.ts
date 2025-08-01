@@ -46,7 +46,7 @@ const getAllProductSendToWholeSalerFromDB = async (
         .paginate()
         .fields()
         .populate(['product', 'retailer', 'wholesaler'], {
-            product: 'productName unit quantity additionalInfo',
+            product: 'productName unit quantity additionalInfo price',
             retailer: 'name email',
             wholesaler: 'name email',
         });
@@ -60,9 +60,9 @@ const getAllProductSendToWholeSalerFromDB = async (
     };
 };
 
-const updateProductSendDetailIntoDB = async (id: string, user: JwtPayload) => {
+const updateProductSendDetailIntoDB = async (id: string, user: JwtPayload, productData: any) => {
     const details = await ProductSendModel.findById(id);
-
+    const updateStatusRequest = await ProductSendModel.findByIdAndUpdate(id, { status: "received" });
     if (!details) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
     }
@@ -70,14 +70,26 @@ const updateProductSendDetailIntoDB = async (id: string, user: JwtPayload) => {
     if (!details.product || details.product.length === 0) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "No products found in the order");
     }
+    const createdEntries = [];
 
-    const allProduct = details.product.map((product) =>
-        product._id ? product._id.toString() : product.toString()
-    );
+    for (const item of productData) {
+        if (!item.product || !item.price || item.availability === undefined) {
+            throw new ApiError(StatusCodes.BAD_REQUEST, "Missing product, price or availability");
+        }
 
-    console.log("allProduct", allProduct)
+        const created = await ReplayFromWholesalerModel.create({
+            product: item.product,
+            retailer: details.retailer,
+            wholesaler: user.id,
+            price: item.price,
+            availability: item.availability,
+            status: "received"
+        });
 
-    return details;
+        createdEntries.push(created);
+    }
+
+    return createdEntries;
 };
 
 export const productSendService = {

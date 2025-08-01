@@ -40,7 +40,7 @@ const getAllProductToWholesaler = catchAsync(
 
 const updateProductSendDetail = catchAsync(async (req: Request, res: Response) => {
     const user = req.user
-    const result = await productSendService.updateProductSendDetailIntoDB(req.params.id, user);
+    const result = await productSendService.updateProductSendDetailIntoDB(req.params.id, user, req.body);
     sendResponse(res, {
         success: true,
         statusCode: StatusCodes.OK,

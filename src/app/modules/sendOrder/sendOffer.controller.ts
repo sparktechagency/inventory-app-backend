@@ -26,7 +26,8 @@ const getAllNewOrders = catchAsync(async (req: Request, res: Response) => {
         success: true,
         statusCode: StatusCodes.OK,
         message: 'Orders fetched successfully',
-        data: result,
+        pagination: result.meta,
+        data: result.result,
     });
 })
 
