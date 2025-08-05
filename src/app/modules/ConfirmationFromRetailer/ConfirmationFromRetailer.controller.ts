@@ -1,0 +1,36 @@
+
+import sendResponse from "../../../shared/sendResponse";
+import { confirmationFromRetailerService } from "./ConfirmationFromRetailer.service";
+import { Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
+
+// update pending product as retailer
+const updatePendingProductAsRetailer = async (req: Request, res: Response) => {
+    const result = await confirmationFromRetailerService.updatePendingProductAsRetailerFromDB(req.params.id, req.body, req.user!);
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: "Successfully updated pending product as retailer",
+        data: result,
+    });
+}
+
+
+
+
+
+const testController = async (req: Request, res: Response) => {
+    const result = await confirmationFromRetailerService.testFromDB(req.user);
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: "Successfully fetched received offers",
+        data: result,
+    });
+}
+
+
+export const confirmationFromRetailerController = {
+    testController,
+    updatePendingProductAsRetailer
+}

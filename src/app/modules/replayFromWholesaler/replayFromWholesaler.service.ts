@@ -3,13 +3,16 @@ import { ReplayFromWholesalerModel } from "./replayFromWholesaler.model";
 import QueryBuilder from "../../builder/QueryBuilder";
 import { StatusCodes } from "http-status-codes";
 import ApiError from "../../../errors/ApiError";
+import { SendOfferModelForRetailer } from "../sendOrder/sendOffer.model";
 
-//TODO: received request from wholesaler request product
 const getAllReceivedRequestFromWholesalerFromDB = async (user: JwtPayload, query: Record<string, any>) => {
     const queryBuilder = new QueryBuilder(
         ReplayFromWholesalerModel.find({ status: "received", retailer: user.id }).populate({
             select: "name email image createdAt updatedAt",
             path: "wholesaler"
+        }).populate({
+            select: "productName unit quantity additionalInfo createdAt updatedAt",
+            path: "product"
         }),
         query
     );
@@ -44,7 +47,6 @@ const getAllReceivedRequestFromWholesalerFromDB = async (user: JwtPayload, query
     };
 }
 
-// TODO: confirm request from wholesaler request product as a retailer
 const updateRequestFromWholesalerAsRetailerForConfirm = async (user: JwtPayload, id: string) => {
     const result = await ReplayFromWholesalerModel.findByIdAndUpdate({ retailer: user.id, status: "received", _id: id }, { status: "confirm" }, { new: true });
     if (!result) {
@@ -55,9 +57,22 @@ const updateRequestFromWholesalerAsRetailerForConfirm = async (user: JwtPayload,
 
 
 
+const updateSingleProductAsRetailer = async (user: JwtPayload, id: string) => {
+    const result = await SendOfferModelForRetailer.findByIdAndUpdate({ retailer: user.id, _id: id }, { new: true })
+    if (!result) {
+        throw new ApiError(StatusCodes.NOT_FOUND, "No product found");
+    }
+    return result
+}
+
+
+
+
+
 
 
 export const replayFromWholesalerService = {
     getAllReceivedRequestFromWholesalerFromDB,
-    updateRequestFromWholesalerAsRetailerForConfirm
+    updateRequestFromWholesalerAsRetailerForConfirm,
+    updateSingleProductAsRetailer
 }

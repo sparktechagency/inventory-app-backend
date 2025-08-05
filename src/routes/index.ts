@@ -15,6 +15,7 @@ import { multiPaymentMethodRoutes } from '../app/modules/multiPaymentMethod/mult
 import { sendOfferRoutes } from '../app/modules/sendOrder/sendOffer.route';
 import { productSendRoutes } from '../app/modules/productSend/productSend.routes';
 import { replayFromWholesalerRoutes } from '../app/modules/replayFromWholesaler/replayFromWholesaler.routes';
+import { confirmationFromRetailerRoutes } from '../app/modules/ConfirmationFromRetailer/ConfirmationFromRetailer.routes';
 const router = express.Router();
 
 const apiRoutes = [
@@ -80,6 +81,10 @@ const apiRoutes = [
   {
     path: "/replay",
     route: replayFromWholesalerRoutes
+  },
+  {
+    path: "/confirmation",
+    route: confirmationFromRetailerRoutes
   }
 
 
