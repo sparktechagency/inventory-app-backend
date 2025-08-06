@@ -16,7 +16,6 @@ const createNewOrderIntoDB = async (user: JwtPayload, payload: ISendOffer) => {
 
 // get all 
 const getAllNewOrdersFromDB = async (user: JwtPayload) => {
-
     const queryBuilder = new QueryBuilder(SendOfferModelForRetailer.find({ retailer: user.id, status: false }), {})
         .search(['productName'])
         .filter()
@@ -33,10 +32,17 @@ const getAllNewOrdersFromDB = async (user: JwtPayload) => {
     };
 }
 
-
+const updateSingleProductIntoDB = async (id: string, user: JwtPayload, payload: any) => {
+    const result = await SendOfferModelForRetailer.findByIdAndUpdate({ _id: id, retailer: user.id }, payload, { new: true });
+    if (!result) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
+    }
+    return result;
+}
 
 
 export const sendOfferService = {
     createNewOrderIntoDB,
-    getAllNewOrdersFromDB
+    getAllNewOrdersFromDB,
+    updateSingleProductIntoDB
 }

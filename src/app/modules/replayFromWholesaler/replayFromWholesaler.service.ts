@@ -4,6 +4,8 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import { StatusCodes } from "http-status-codes";
 import ApiError from "../../../errors/ApiError";
 import { SendOfferModelForRetailer } from "../sendOrder/sendOffer.model";
+import { User } from "../user/user.model";
+import { sendNotifications } from "../../../helpers/notificationsHelper";
 
 const getAllReceivedRequestFromWholesalerFromDB = async (user: JwtPayload, query: Record<string, any>) => {
     const queryBuilder = new QueryBuilder(
@@ -52,6 +54,14 @@ const updateRequestFromWholesalerAsRetailerForConfirm = async (user: JwtPayload,
     if (!result) {
         throw new ApiError(StatusCodes.NOT_FOUND, "No received request found");
     }
+    const findThisUser = await User.findById(user.id)
+    const notificationPayload = {
+        sender: user.id,
+        receiver: result.wholesaler,
+        message: `${findThisUser?.name} has confirmed the order ${result._id}`,
+    };
+
+    await sendNotifications(notificationPayload);
     return result;
 }
 

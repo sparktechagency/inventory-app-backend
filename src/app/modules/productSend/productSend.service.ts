@@ -4,17 +4,36 @@ import { IProductSend } from "./productSend.interface"
 import { ProductSendModel } from "./productSend.model"
 import { StatusCodes } from "http-status-codes"
 import QueryBuilder from "../../builder/QueryBuilder"
-import { Types } from "mongoose"
-import { ProductModel } from "../Order/order.model"
-import { ReplayFromWholesalerModel } from "../replayFromWholesaler/replayFromWholesaler.model"
 import { SendOfferModelForRetailer } from "../sendOrder/sendOffer.model"
+import { ReplayFromWholesalerModel } from "../replayFromWholesaler/replayFromWholesaler.model"
+import { sendNotifications } from "../../../helpers/notificationsHelper"
+import { User } from "../user/user.model"
 
 const sendProductToWholesalerIntoDB = async (user: JwtPayload, payload: IProductSend) => {
     const result = await ProductSendModel.create({ ...payload, retailer: user.id })
+    const productIds = payload.product
+
     if (!result) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to send product to wholesaler")
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to send product to wholesaler");
     }
-    return result
+
+    const ids = Array.isArray(productIds) ? productIds : [productIds];
+
+    for (const id of ids) {
+        await SendOfferModelForRetailer.findByIdAndUpdate(id, { status: true });
+    }
+    const findThisUser = await User.findById(user.id)
+    for (const wholesalerId of payload?.wholesaler!) {
+        const notificationPayload = {
+            sender: user.id,
+            receiver: wholesalerId,
+            message: `A new product has been sent to wholesaler by ${findThisUser?.name} and order id is ${result._id}`,
+        };
+
+        await sendNotifications(notificationPayload);
+    }
+
+    return result;
 }
 
 
@@ -88,12 +107,24 @@ const updateProductSendDetailIntoDB = async (id: string, user: JwtPayload, produ
 
         createdEntries.push(created);
     }
+    const findThisUser = await User.findById(user.id)
+    const notificationPayload = {
+        sender: user.id,
+        receiver: details.retailer,
+        message: `${findThisUser?.name} has confirmed the order id ${id}`,
+    };
+
+    await sendNotifications(notificationPayload);
 
     return createdEntries;
 };
 
+
+
+
+
 export const productSendService = {
     sendProductToWholesalerIntoDB,
     getAllProductSendToWholeSalerFromDB,
-    updateProductSendDetailIntoDB
+    updateProductSendDetailIntoDB,
 }

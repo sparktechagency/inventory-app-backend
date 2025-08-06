@@ -3,8 +3,8 @@ import { INotification } from './notification.interface';
 
 const notificationSchema = new Schema<INotification>(
   {
-    userId: { type: String, required: true },
-    title: { type: String, required: true },
+    sender: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+    receiver: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
     message: { type: String, required: true },
     isRead: { type: Boolean, default: false },
   },

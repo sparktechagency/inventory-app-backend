@@ -1,7 +1,8 @@
+import { Types } from "mongoose";
 
 export interface INotification {
-  userId: string;
-  title: string;
+  sender: Types.ObjectId;
+  receiver: Types.ObjectId;
   message: string;
   isRead: boolean;
   createdAt?: Date;

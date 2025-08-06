@@ -6,7 +6,7 @@ import { StatusCodes } from "http-status-codes";
 
 // update pending product as retailer
 const updatePendingProductAsRetailer = async (req: Request, res: Response) => {
-    const result = await confirmationFromRetailerService.updatePendingProductAsRetailerFromDB(req.params.id, req.body, req.user!);
+    const result = await confirmationFromRetailerService.updatePendingProductAsRetailerFromDB(req.user);
     sendResponse(res, {
         success: true,
         statusCode: StatusCodes.OK,
@@ -16,6 +16,17 @@ const updatePendingProductAsRetailer = async (req: Request, res: Response) => {
 }
 
 
+
+const getAllConfrimRequestFromRetailer = async (req: Request, res: Response) => {
+    const result = await confirmationFromRetailerService.getAllConfrimRequestFromRetailerIntoDB(req.user, req.query);
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: "Successfully fetched received offers",
+        pagination: result.meta,
+        data: result.result,
+    });
+}
 
 
 
@@ -32,5 +43,6 @@ const testController = async (req: Request, res: Response) => {
 
 export const confirmationFromRetailerController = {
     testController,
-    updatePendingProductAsRetailer
+    updatePendingProductAsRetailer,
+    getAllConfrimRequestFromRetailer
 }

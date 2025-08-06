@@ -3,7 +3,6 @@ import sendResponse from "../../../shared/sendResponse";
 import { StatusCodes } from "http-status-codes";
 import { productSendService } from "./productSend.service";
 import { Request, Response } from "express";
-import { Types } from "mongoose";
 
 const sendProductToWholesaler = catchAsync(async (req: Request, res: Response) => {
     const user = req.user
@@ -50,8 +49,10 @@ const updateProductSendDetail = catchAsync(async (req: Request, res: Response) =
 })
 
 
+
+
 export const productSendControllerFromRetailer = {
     sendProductToWholesaler,
     getAllProductToWholesaler,
-    updateProductSendDetail
+    updateProductSendDetail,
 }

@@ -2,36 +2,42 @@ import { JwtPayload } from "jsonwebtoken";
 import { ReplayFromWholesalerModel } from "../replayFromWholesaler/replayFromWholesaler.model";
 import { StatusCodes } from "http-status-codes";
 import ApiError from "../../../errors/ApiError";
-import { SendOfferModelForRetailer } from "../sendOrder/sendOffer.model";
+import QueryBuilder from "../../builder/QueryBuilder";
+import { User } from "../user/user.model";
+import { sendNotifications } from "../../../helpers/notificationsHelper";
 
-const updatePendingProductAsRetailerFromDB = async (id: string, payload: { quantity: number }, user: JwtPayload) => {
-    const ids = typeof id === "string" ? id.split(",") : id;
-    // console.log(ids);
-    // Check quantity validity
-    // if (typeof payload.quantity !== "number" || payload.quantity <= 0) {
-    //     throw new ApiError(StatusCodes.BAD_REQUEST, "Invalid quantity value");
-    // }
-
-    const offers = await ReplayFromWholesalerModel.find({
-        _id: { $in: ids },
-        retailer: user._id,
-        status: "received",
-    }).select("product");
-    console.log(offers);
-
-
-    const productIds = offers.map((offer) => offer.product);
-    const updateResult = await SendOfferModelForRetailer.updateMany(
-        { _id: { $in: productIds } },
-        {
-            $set: {
-                quantity: payload.quantity,
-                updatedAt: new Date(),
-            },
-        }
+const updatePendingProductAsRetailerFromDB = async (user: JwtPayload) => {
+    const result = await ReplayFromWholesalerModel.updateMany(
+        { retailer: user.id, status: "received" },
+        { $set: { status: "confirm" } }
     );
+    if (!result) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product")
+    }
+    const updatedProducts = await ReplayFromWholesalerModel.find({
+        retailer: user.id,
+        status: "confirm",
+    })
+    const findThisUser = await User.findById(user.id)
+    const wholesalerIds = updatedProducts.map((item) => item.wholesaler?.toString())
+    const notificationPayload = {
+        sender: user.id,
+        receiver: wholesalerIds[0],
+        message: `${findThisUser?.name} has confirmed the order id please check`,
+    };
+    await sendNotifications(notificationPayload);
+    return updatedProducts
+}
 
-    return updateResult;
+
+const getAllConfrimRequestFromRetailerIntoDB = async (user: JwtPayload, query: Record<string, any>) => {
+    const queryBuilder = new QueryBuilder(ReplayFromWholesalerModel.find({ wholesaler: user.id, status: "confirm" }), query)
+    const result = await queryBuilder.modelQuery;
+    const meta = await queryBuilder.getPaginationInfo();
+    return {
+        meta,
+        result,
+    }
 }
 
 
@@ -45,5 +51,6 @@ const testFromDB = async (user: JwtPayload) => {
 
 export const confirmationFromRetailerService = {
     updatePendingProductAsRetailerFromDB,
+    getAllConfrimRequestFromRetailerIntoDB,
     testFromDB
 }
