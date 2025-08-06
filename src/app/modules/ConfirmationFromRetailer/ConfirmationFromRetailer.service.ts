@@ -32,13 +32,127 @@ const updatePendingProductAsRetailerFromDB = async (user: JwtPayload) => {
 
 const getAllConfrimRequestFromRetailerIntoDB = async (user: JwtPayload, query: Record<string, any>) => {
     const queryBuilder = new QueryBuilder(ReplayFromWholesalerModel.find({ wholesaler: user.id, status: "confirm" }), query)
+    queryBuilder
+        .populate(['retailer'], { retailer: 'name phone storeInformation.location' })
+        .populate(['wholesaler'], { wholesaler: 'name phone storeInformation.location' })
+        .populate(['product'], { product: 'productName unit quantity additionalInfo' });
+
     const result = await queryBuilder.modelQuery;
     const meta = await queryBuilder.getPaginationInfo();
+    const productsMap = new Map();
+    const retailersMap = new Map();
+    const wholesalersMap = new Map();
+    result.forEach((item: any) => {
+        if (item.product) {
+            productsMap.set(item.product._id.toString(), {
+                _id: item.product._id,
+                productName: item.product.productName,
+                unit: item.product.unit,
+                quantity: item.product.quantity,
+                additionalInfo: item.product.additionalInfo,
+                status: item.product.status,
+                createdAt: item.product.createdAt,
+                updatedAt: item.product.updatedAt,
+            });
+        }
+
+        if (item.retailer) {
+            retailersMap.set(item.retailer._id.toString(), {
+                _id: item.retailer._id,
+                name: item.retailer.name,
+                phone: item.retailer.phone,
+                location: item.retailer.storeInformation?.location || '',
+            });
+        }
+
+        if (item.wholesaler) {
+            wholesalersMap.set(item.wholesaler._id.toString(), {
+                _id: item.wholesaler._id,
+                name: item.wholesaler.name,
+                phone: item.wholesaler.phone,
+                location: item.wholesaler.storeInformation?.location || '',
+            });
+        }
+    });
+    const data = {
+        products: Array.from(productsMap.values()),
+        retailers: Array.from(retailersMap.values()),
+        wholesalers: Array.from(wholesalersMap.values()),
+    }
+
     return {
         meta,
-        result,
+        data,
     }
 }
+
+
+const getAllConfirmRequerstFromRetailerIntoDBForRetailer = async (
+    user: JwtPayload,
+    query: Record<string, any>
+) => {
+    const queryBuilder = new QueryBuilder(
+        ReplayFromWholesalerModel.find({ retailer: user.id, status: "confirm" }),
+        query
+    );
+
+    queryBuilder
+        .populate(['retailer'], { retailer: 'name phone storeInformation.location' })
+        .populate(['wholesaler'], { wholesaler: 'name phone storeInformation.location' })
+        .populate(['product'], { product: 'productName unit quantity additionalInfo' });
+
+    const rawResults = await queryBuilder.modelQuery;
+    const meta = await queryBuilder.getPaginationInfo();
+
+    // Extract unique product, retailer, wholesaler
+    const productsMap = new Map();
+    const retailersMap = new Map();
+    const wholesalersMap = new Map();
+
+    rawResults.forEach((item: any) => {
+        if (item.product) {
+            productsMap.set(item.product._id.toString(), {
+                _id: item.product._id,
+                productName: item.product.productName,
+                unit: item.product.unit,
+                quantity: item.product.quantity,
+                additionalInfo: item.product.additionalInfo,
+                status: item.product.status,
+                createdAt: item.product.createdAt,
+                updatedAt: item.product.updatedAt,
+            });
+        }
+
+        if (item.retailer) {
+            retailersMap.set(item.retailer._id.toString(), {
+                _id: item.retailer._id,
+                name: item.retailer.name,
+                phone: item.retailer.phone,
+                location: item.retailer.storeInformation?.location || '',
+            });
+        }
+
+        if (item.wholesaler) {
+            wholesalersMap.set(item.wholesaler._id.toString(), {
+                _id: item.wholesaler._id,
+                name: item.wholesaler.name,
+                phone: item.wholesaler.phone,
+                location: item.wholesaler.storeInformation?.location || '',
+            });
+        }
+    });
+    const data = {
+        products: Array.from(productsMap.values()),
+        retailers: Array.from(retailersMap.values()),
+        wholesalers: Array.from(wholesalersMap.values()),
+    }
+
+    return {
+        meta,
+        data,
+    };
+};
+
 
 
 
@@ -52,5 +166,6 @@ const testFromDB = async (user: JwtPayload) => {
 export const confirmationFromRetailerService = {
     updatePendingProductAsRetailerFromDB,
     getAllConfrimRequestFromRetailerIntoDB,
+    getAllConfirmRequerstFromRetailerIntoDBForRetailer,
     testFromDB
 }

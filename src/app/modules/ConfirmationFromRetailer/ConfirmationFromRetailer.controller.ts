@@ -24,10 +24,21 @@ const getAllConfrimRequestFromRetailer = async (req: Request, res: Response) => 
         statusCode: StatusCodes.OK,
         message: "Successfully fetched received offers",
         pagination: result.meta,
-        data: result.result,
+        data: result.data,
     });
 }
 
+
+const getAllConfirmRequestFromRetailerForRetailer = async (req: Request, res: Response) => {
+    const result = await confirmationFromRetailerService.getAllConfirmRequerstFromRetailerIntoDBForRetailer(req.user, req.query);
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: "Successfully fetched received offers",
+        pagination: result.meta,
+        data: result.data,
+    });
+}
 
 
 const testController = async (req: Request, res: Response) => {
@@ -44,5 +55,6 @@ const testController = async (req: Request, res: Response) => {
 export const confirmationFromRetailerController = {
     testController,
     updatePendingProductAsRetailer,
-    getAllConfrimRequestFromRetailer
+    getAllConfrimRequestFromRetailer,
+    getAllConfirmRequestFromRetailerForRetailer
 }
