@@ -35,8 +35,7 @@ const getAllConfrimRequestFromRetailerIntoDB = async (user: JwtPayload, query: R
     queryBuilder
         .populate(['retailer'], { retailer: 'name phone storeInformation.location' })
         .populate(['wholesaler'], { wholesaler: 'name phone storeInformation.location' })
-        .populate(['product'], { product: 'productName unit quantity additionalInfo' });
-
+        .populate(['product'], { product: 'productName unit quantity additionalInfo status createdAt updatedAt' });
     const result = await queryBuilder.modelQuery;
     const meta = await queryBuilder.getPaginationInfo();
     const productsMap = new Map();
@@ -44,16 +43,24 @@ const getAllConfrimRequestFromRetailerIntoDB = async (user: JwtPayload, query: R
     const wholesalersMap = new Map();
     result.forEach((item: any) => {
         if (item.product) {
-            productsMap.set(item.product._id.toString(), {
-                _id: item.product._id,
-                productName: item.product.productName,
-                unit: item.product.unit,
-                quantity: item.product.quantity,
-                additionalInfo: item.product.additionalInfo,
-                status: item.product.status,
-                createdAt: item.product.createdAt,
-                updatedAt: item.product.updatedAt,
-            });
+            const productId = item.product._id.toString();
+
+            // Check if product is already added — if not, then add with price
+            if (!productsMap.has(productId)) {
+                productsMap.set(productId, {
+                    _id: item.product._id,
+                    productName: item.product.productName,
+                    unit: item.product.unit,
+                    quantity: item.product.quantity,
+                    additionalInfo: item.product.additionalInfo,
+                    status: item.product.status,
+
+                    // 🆕 Extra fields from ReplayFromWholesalerModel (i.e. order/request)
+                    price: item.price,
+                    createdAt: item.createdAt,
+                    updatedAt: item.updatedAt,
+                });
+            }
         }
 
         if (item.retailer) {
@@ -78,12 +85,12 @@ const getAllConfrimRequestFromRetailerIntoDB = async (user: JwtPayload, query: R
         products: Array.from(productsMap.values()),
         retailers: Array.from(retailersMap.values()),
         wholesalers: Array.from(wholesalersMap.values()),
-    }
+    };
 
     return {
         meta,
         data,
-    }
+    };
 }
 
 
@@ -99,9 +106,9 @@ const getAllConfirmRequerstFromRetailerIntoDBForRetailer = async (
     queryBuilder
         .populate(['retailer'], { retailer: 'name phone storeInformation.location' })
         .populate(['wholesaler'], { wholesaler: 'name phone storeInformation.location' })
-        .populate(['product'], { product: 'productName unit quantity additionalInfo' });
+        .populate(['product'], { product: 'productName unit quantity additionalInfo status createdAt updatedAt' });
 
-    const rawResults = await queryBuilder.modelQuery;
+    const result = await queryBuilder.modelQuery;
     const meta = await queryBuilder.getPaginationInfo();
 
     // Extract unique product, retailer, wholesaler
@@ -109,18 +116,26 @@ const getAllConfirmRequerstFromRetailerIntoDBForRetailer = async (
     const retailersMap = new Map();
     const wholesalersMap = new Map();
 
-    rawResults.forEach((item: any) => {
+    result.forEach((item: any) => {
         if (item.product) {
-            productsMap.set(item.product._id.toString(), {
-                _id: item.product._id,
-                productName: item.product.productName,
-                unit: item.product.unit,
-                quantity: item.product.quantity,
-                additionalInfo: item.product.additionalInfo,
-                status: item.product.status,
-                createdAt: item.product.createdAt,
-                updatedAt: item.product.updatedAt,
-            });
+            const productId = item.product._id.toString();
+
+            // Check if product is already added — if not, then add with price
+            if (!productsMap.has(productId)) {
+                productsMap.set(productId, {
+                    _id: item.product._id,
+                    productName: item.product.productName,
+                    unit: item.product.unit,
+                    quantity: item.product.quantity,
+                    additionalInfo: item.product.additionalInfo,
+                    status: item.product.status,
+
+                    // 🆕 Extra fields from ReplayFromWholesalerModel (i.e. order/request)
+                    price: item.price,
+                    createdAt: item.createdAt,
+                    updatedAt: item.updatedAt,
+                });
+            }
         }
 
         if (item.retailer) {
@@ -141,17 +156,19 @@ const getAllConfirmRequerstFromRetailerIntoDBForRetailer = async (
             });
         }
     });
+
     const data = {
         products: Array.from(productsMap.values()),
         retailers: Array.from(retailersMap.values()),
         wholesalers: Array.from(wholesalersMap.values()),
-    }
+    };
 
     return {
         meta,
         data,
     };
 };
+
 
 
 
