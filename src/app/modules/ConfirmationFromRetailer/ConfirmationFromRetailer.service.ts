@@ -175,7 +175,6 @@ const getAllConfirmRequerstFromRetailerIntoDBForRetailer = async (
 
 const testFromDB = async (user: JwtPayload) => {
     const result = await ReplayFromWholesalerModel.find({ retailer: user.id })
-    console.log(result)
     return result
 }
 

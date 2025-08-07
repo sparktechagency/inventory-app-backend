@@ -46,6 +46,10 @@ const userSchema = new Schema<IUser, UserModal>(
       enum: ['active', 'delete'],
       default: 'active',
     },
+    order: {
+      type: Number,
+      default: 10,
+    },
 
     isSubscribed: {
       type: Boolean,

@@ -42,7 +42,6 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 
     // Log the final payload being sent to the service
     const payload = { ...userData, password: Password, image: image || null, verified };
-    console.log('Final payload to service:', payload);
 
     // Proceed to create the user
     const user = await adminService.createUserIntoDB(payload);

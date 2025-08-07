@@ -8,6 +8,7 @@ import { SendOfferModelForRetailer } from "../sendOrder/sendOffer.model"
 import { ReplayFromWholesalerModel } from "../replayFromWholesaler/replayFromWholesaler.model"
 import { sendNotifications } from "../../../helpers/notificationsHelper"
 import { User } from "../user/user.model"
+import { USER_ROLES } from "../../../enums/user"
 
 const sendProductToWholesalerIntoDB = async (user: JwtPayload, payload: IProductSend) => {
     const result = await ProductSendModel.create({ ...payload, retailer: user.id })
@@ -89,6 +90,21 @@ const updateProductSendDetailIntoDB = async (id: string, user: JwtPayload, produ
     if (!details.product || details.product.length === 0) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "No products found in the order");
     }
+    const findThisUser = await User.findById(user.id)
+    if (findThisUser?.role !== USER_ROLES.Wholesaler) return;
+
+    const currentOrder = findThisUser.order ?? 0;
+
+    if (!findThisUser.isSubscribed && currentOrder <= 0) {
+        throw new ApiError(
+            StatusCodes.BAD_REQUEST,
+            "Free trial order count is over please subscribe to continue"
+        );
+    }
+
+    await User.findByIdAndUpdate(user.id, {
+        order: currentOrder - 1,
+    });
     const createdEntries = [];
 
     for (const item of productData) {
@@ -107,7 +123,7 @@ const updateProductSendDetailIntoDB = async (id: string, user: JwtPayload, produ
 
         createdEntries.push(created);
     }
-    const findThisUser = await User.findById(user.id)
+
     const notificationPayload = {
         sender: user.id,
         receiver: details.retailer,

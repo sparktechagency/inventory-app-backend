@@ -10,6 +10,7 @@ export type IUser = {
   isSubscribed: boolean;
   phone: string;
   image?: string;
+  order?: number;
   status: 'active' | 'delete';
   verified: boolean;
   authentication?: {

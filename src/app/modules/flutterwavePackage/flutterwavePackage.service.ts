@@ -37,6 +37,9 @@ const SubscriptionPackageVerify = async (
   userEmail: string
 ) => {
   const res = await verifyPaymentTransaction(transaction_id, userEmail);
+  // user find by user email
+  const user = await User.findOne({ email: userEmail });
+  await User.findByIdAndUpdate(user?._id, { isSubscribed: true });
   return res;
 };
 
@@ -95,7 +98,7 @@ const totalUserSubscription = async (name: string, email: string) => {
   if (email) {
     userQuery.email = email;
   }
-  const users = await User.find(userQuery); 
+  const users = await User.find(userQuery);
   if (users.length === 0) {
     throw new ApiError(StatusCodes.NOT_FOUND, "No matching users found");
   }
