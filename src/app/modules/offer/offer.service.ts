@@ -432,9 +432,6 @@ const getAllReceiveOffers = async (user: JwtPayload) => {
       model: "Product",
     })
     .lean();
-  if (offers.length === 0) {
-    throw new ApiError(StatusCodes.NOT_FOUND, "No received offers found");
-  }
   return offers;
 };
 

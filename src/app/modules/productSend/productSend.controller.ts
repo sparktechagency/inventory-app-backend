@@ -49,10 +49,80 @@ const updateProductSendDetail = catchAsync(async (req: Request, res: Response) =
 })
 
 
+const updateAllProductSendDetail = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user
+    const result = await productSendService.updateAllProductStatusPriceAndAvailabilityIntoDB(user, req.params.id, req.body);
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: 'Product updated successfully',
+        data: result,
+    });
+})
 
+const getAllReceivedProductFromWholesaler = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user
+    const result = await productSendService.getAllReceivedProductFromWholesalerDB(user!);
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: 'Get All Received Product from wholesaler',
+        data: result,
+    });
+})
+
+const updateProductReceivedToConfirmRequestFromRetailerToWholesaler = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user
+    const result = await productSendService.updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB(user, req.params.id, req.body);
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: 'Product updated successfully',
+        data: result,
+    });
+})
+
+const getAllConfirmProductFromRetailer = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user
+    const result = await productSendService.getAllConfirmProductFromRetailerDB(user!);
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: 'Get All Confirm Product from retailer',
+        data: result,
+    });
+})
+
+const getAllConfirmProductFromWholesaler = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user
+    const result = await productSendService.getAllConfirmProductFromWholesalerDB(user!);
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: 'Get All Confirm Product from wholesaler',
+        data: result,
+    });
+})
+
+const getAllReceivedProductFromRetailer = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user
+    const result = await productSendService.getAllReceivedProductFromRetailerDB(user!);
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: 'Get All Received Product from retailer',
+        data: result,
+    });
+})
 
 export const productSendControllerFromRetailer = {
     sendProductToWholesaler,
     getAllProductToWholesaler,
     updateProductSendDetail,
+    updateAllProductSendDetail,
+    getAllReceivedProductFromWholesaler,
+    updateProductReceivedToConfirmRequestFromRetailerToWholesaler,
+    getAllConfirmProductFromRetailer,
+    getAllConfirmProductFromWholesaler,
+    getAllReceivedProductFromRetailer
 }

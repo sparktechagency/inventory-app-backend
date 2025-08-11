@@ -1,3 +1,4 @@
+import QueryBuilder from '../../builder/QueryBuilder';
 import { INotification } from './notification.interface';
 import { NotificationModel } from './notification.model';
 
@@ -6,8 +7,16 @@ const createNotification = async (payload: INotification) => {
     return notification;
 };
 
-const getNotificationsByUserId = async (userId: string) => {
-    return await NotificationModel.find({ userId }).sort({ createdAt: -1 });
+const getNotificationsByUserId = async (userId: string, query: Record<string, any>) => {
+    const queryBuilder = new QueryBuilder(NotificationModel.find({ receiver: userId, isRead: false }).sort({ createdAt: -1 }), query);
+
+    const data = await queryBuilder.modelQuery;
+    const meta = await queryBuilder.getPaginationInfo();
+
+    return {
+        meta,
+        data,
+    };
 };
 
 const updateNotification = async (notificationId: string) => {

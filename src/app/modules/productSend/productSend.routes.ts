@@ -7,6 +7,22 @@ const router = Router()
 
 router.post("/send", auth(USER_ROLES.Retailer), productSendControllerFromRetailer.sendProductToWholesaler)
 router.get("/all/:type", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler), productSendControllerFromRetailer.getAllProductToWholesaler)
+
+// retailer received 
+router.get("/all/received", auth(USER_ROLES.Retailer), productSendControllerFromRetailer.getAllReceivedProductFromWholesaler)
+
+// retailer confirm
+router.get("/all/confirm", auth(USER_ROLES.Retailer), productSendControllerFromRetailer.getAllConfirmProductFromRetailer)
+
+// retailer received
+router.get("/all-product/received", auth(USER_ROLES.Wholesaler), productSendControllerFromRetailer.getAllReceivedProductFromRetailer)
+
+// wholesaler confirm
+router.get("/all-product/confirm", auth(USER_ROLES.Wholesaler), productSendControllerFromRetailer.getAllConfirmProductFromWholesaler)
+
 router.patch("/update/:id", auth(USER_ROLES.Wholesaler), productSendControllerFromRetailer.updateProductSendDetail)
+router.patch("/update-all/:id", auth(USER_ROLES.Wholesaler), productSendControllerFromRetailer.updateAllProductSendDetail)
+
+router.patch("/update-received/:id", auth(USER_ROLES.Retailer), productSendControllerFromRetailer.updateProductReceivedToConfirmRequestFromRetailerToWholesaler)
 
 export const productSendRoutes = router

@@ -5,7 +5,7 @@ import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
 
 const getNotificationsForUser = catchAsync(async (req: Request, res: Response) => {
-    const { userId } = req.params; // Admin fetches notifications for a user
+    const { userId } = req.params;
 
     if (!userId) {
         return res.status(400).json({
@@ -14,13 +14,14 @@ const getNotificationsForUser = catchAsync(async (req: Request, res: Response) =
         });
     }
 
-    const notifications = await NotificationServices.getNotificationsByUserId(userId);
+    const notifications = await NotificationServices.getNotificationsByUserId(userId, req.query);
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
         message: 'User notifications retrieved successfully',
-        data: notifications,
+        pagination: notifications.meta,
+        data: notifications.data,
     });
 });
 
@@ -36,13 +37,14 @@ const getNotifications = catchAsync(async (req: Request, res: Response) => {
         });
     }
 
-    const notifications = await NotificationServices.getNotificationsByUserId(userId);
+    const notifications = await NotificationServices.getNotificationsByUserId(userId, req.query);
 
     sendResponse(res, {
         statusCode: StatusCodes.OK,
         success: true,
         message: 'Notifications retrieved successfully',
-        data: notifications,
+        pagination: notifications.meta,
+        data: notifications.data,
     });
 });
 

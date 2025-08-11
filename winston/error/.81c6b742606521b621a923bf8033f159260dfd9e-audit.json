@@ -6,54 +6,29 @@
     "auditLog": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\.81c6b742606521b621a923bf8033f159260dfd9e-audit.json",
     "files": [
         {
-            "date": 1754454476966,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\06-08-2025-10-error.log",
-            "hash": "9d75177f82a6d4972ec65533e4a9fa6ade4c03085b036cec7dfdea72d12aa538"
+            "date": 1754880442034,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-08-error.log",
+            "hash": "faa4e558741647dc77a1f893e5874cc3549e1b1754c6a412f68235ddb963b312"
         },
         {
-            "date": 1754456410185,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\06-08-2025-11-error.log",
-            "hash": "98691f535dae5df0ac90903988a0d2039b5d13c4100d0a11e8b024ab4c9e9d64"
+            "date": 1754881342752,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-09-error.log",
+            "hash": "4ce8a2e4aa177ddb8190c1ce65cdd45cf15340536dcaa2056eea13f7d0bc5398"
         },
         {
-            "date": 1754460088961,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\06-08-2025-12-error.log",
-            "hash": "7e98a32e91822e76d5087dde1111afc1c14253386562cb45d771827bef1acbd5"
+            "date": 1754887918314,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-10-error.log",
+            "hash": "3d2a4169f4aee0bfdcccd82e83ad23d34a88b62c74013b0df8a48b3bad806ec2"
         },
         {
-            "date": 1754463663985,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\06-08-2025-13-error.log",
-            "hash": "2de08b25f7491f405cab9b5bcbf653bd944a5123884dc6c471f5971595587dc0"
+            "date": 1754888863381,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-11-error.log",
+            "hash": "e5485a94288c67fd9e548191c817f9a5a5921ff10b446064751e2a9da487d532"
         },
         {
-            "date": 1754468403487,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\06-08-2025-14-error.log",
-            "hash": "89bb0241fe4e3724ae074041b993f61a898e94fc937616862bf9678c36635de8"
-        },
-        {
-            "date": 1754471008789,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\06-08-2025-15-error.log",
-            "hash": "14190f1b64cf70f013ef46ae52271a8985f4288e504af1eb47dc893cb2087a2b"
-        },
-        {
-            "date": 1754474421705,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\06-08-2025-16-error.log",
-            "hash": "f39770de76b9915dee558bf42459382388c2348c70d5e784e443f930d1741a66"
-        },
-        {
-            "date": 1754478028191,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\06-08-2025-17-error.log",
-            "hash": "f514e1b4d10265377d210b0a0688cc5608f25c944fc5ab3809116847f077c562"
-        },
-        {
-            "date": 1754482388992,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\06-08-2025-18-error.log",
-            "hash": "9c60b7e4e812775651e8405fd578c2c816bfceacd8d9a625506f360b40719f06"
-        },
-        {
-            "date": 1754536011736,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\07-08-2025-09-error.log",
-            "hash": "0e06c680781b41c191f97d2ee801a1bf9194a3b71c513902c72c99bedd54ea3d"
+            "date": 1754892124827,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-12-error.log",
+            "hash": "6ae25c391fd92211738ca634701eca6ce472014c67eaf64a4a92b162a4b11e08"
         }
     ],
     "hashType": "sha256"
