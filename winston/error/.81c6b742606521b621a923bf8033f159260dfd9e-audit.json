@@ -6,41 +6,6 @@
     "auditLog": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\.81c6b742606521b621a923bf8033f159260dfd9e-audit.json",
     "files": [
         {
-            "date": 1754887918314,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-10-error.log",
-            "hash": "3d2a4169f4aee0bfdcccd82e83ad23d34a88b62c74013b0df8a48b3bad806ec2"
-        },
-        {
-            "date": 1754888863381,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-11-error.log",
-            "hash": "e5485a94288c67fd9e548191c817f9a5a5921ff10b446064751e2a9da487d532"
-        },
-        {
-            "date": 1754892124827,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-12-error.log",
-            "hash": "6ae25c391fd92211738ca634701eca6ce472014c67eaf64a4a92b162a4b11e08"
-        },
-        {
-            "date": 1754896727045,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-13-error.log",
-            "hash": "b3c895cb3774ce4719176d9e809ca36d5b4c7ad4361afbf416cd781989ab0089"
-        },
-        {
-            "date": 1754903608328,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-15-error.log",
-            "hash": "7d509fe0e2f90858d770a8f3860e9c4e2ae8ab5c2b43a41c7814eb972709e657"
-        },
-        {
-            "date": 1754906400991,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-16-error.log",
-            "hash": "e6fe8550a5b4c5449d4fcca93aaa2194e9e0d6e889cceee669b4feb2a6e8022a"
-        },
-        {
-            "date": 1754911699501,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\11-08-2025-17-error.log",
-            "hash": "076907e9b16d3738578e03dcb6646eb159e9da72063600c41d7035343f58d82b"
-        },
-        {
             "date": 1754970798717,
             "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\12-08-2025-09-error.log",
             "hash": "83751c461508dcfbadb7fe3c995d6bba1681a9d066d7c2d215bc253e46c8d7eb"
@@ -49,6 +14,16 @@
             "date": 1754971218933,
             "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\12-08-2025-10-error.log",
             "hash": "0e15c5e9b69623956065f5a6b5556b5148c5cbc19f92ef01b6a18cdabe9115da"
+        },
+        {
+            "date": 1754999167418,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\12-08-2025-17-error.log",
+            "hash": "47a2abcd189b7f4239017386f7a1ff03280a1d1ba4318b93f40f6218d7ecf534"
+        },
+        {
+            "date": 1755001817394,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\12-08-2025-18-error.log",
+            "hash": "9429b13f56e394944d427a03fdcc11ed31877e7dbc509469aa159fda9b7839fb"
         }
     ],
     "hashType": "sha256"

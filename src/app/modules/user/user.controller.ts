@@ -15,7 +15,7 @@ const createUser = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,
-      message: 'User created successfully. Please check your email for the verification code.',
+      message: 'Please fully fill up your information',
       data: result,
     });
   }
@@ -56,6 +56,7 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
 // otp verification in controller
 const verifyOtp = catchAsync(async (req: Request, res: Response) => {
   const { email, otp } = req.body;
+  console.log(email, otp);
 
   const result = await UserService.verifyEmailToDB({ email, oneTimeCode: otp });
   sendResponse(res, {
