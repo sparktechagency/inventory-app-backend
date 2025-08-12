@@ -67,8 +67,10 @@ const getAllProductSendToWholeSalerFromDB = async (
     .fields()
     .populate(["product", "retailer", "wholesaler"], {
       // product: 'productName unit quantity additionalInfo price availability',
-      retailer: "name email image storeInformation.businessName",
-      wholesaler: "name email image storeInformation.businessName",
+      retailer:
+        "name email image phone storeInformation.businessName storeInformation.location",
+      wholesaler:
+        "name email image phone storeInformation.businessName storeInformation.location",
     });
 
   const data = await queryBuilder.modelQuery;
@@ -239,12 +241,14 @@ const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
     })
     .populate({
       path: "retailer",
-      select: "name email image storeInformation.businessName",
+      select:
+        "name email phone image storeInformation.businessName storeInformation.location",
     })
     .populate({
       path: "wholesaler",
-      select: "name email image storeInformation.businessName",
-    }) 
+      select:
+        "name email image phone storeInformation.businessName storeInformation.location",
+    })
     .lean();
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
@@ -263,11 +267,13 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
     })
     .populate({
       path: "retailer",
-      select: "name email image storeInformation.businessName",
+      select:
+        "name email image phone storeInformation.businessName  storeInformation.location ",
     })
     .populate({
       path: "wholesaler",
-      select: "name email image storeInformation.businessName",
+      select:
+        "name email image phone storeInformation.businessName storeInformation.location ",
     })
     .lean();
   if (!details) {
@@ -287,17 +293,29 @@ const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
     })
     .populate({
       path: "retailer",
-      select: "name email image storeInformation.businessName",
+      select: "+phone +storeInformation",
     })
     .populate({
       path: "wholesaler",
-      select: "name email image storeInformation.businessName",
+      select: "+phone +storeInformation",
     })
     .lean();
+
+  // Add this debug log
+  //   console.log("Populated Details:", JSON.stringify(details, null, 2));
+
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
   return details;
+};
+
+const deleteProductFromDB = async (id: string) => {
+  const result = await ProductSendModel.findByIdAndDelete(id);
+  if (!result) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to delete product");
+  }
+  return result;
 };
 
 export const productSendService = {
@@ -310,4 +328,5 @@ export const productSendService = {
   getAllConfirmProductFromRetailerDB,
   getAllConfirmProductFromWholesalerDB,
   getAllReceivedProductFromRetailerDB,
+  deleteProductFromDB,
 };
