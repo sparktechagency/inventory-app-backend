@@ -22,7 +22,7 @@ const createAccount = (values: ICreateAccount) => {
 const resetPassword = (values: IResetPassword) => {
   const data = {
     to: values.email,
-    subject: 'Reset your password',
+    subject: 'Resend your verification code',
     html: `<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 50px; padding: 20px; color: #555;">
     <div style="width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
         <img src="https://res.cloudinary.com/dabd4udau/image/upload/v1751974354/pjx2nhdsv5j1alcbajvc.png" alt="Logo" style="display: block; margin: 0 auto 20px; width:150px" />
