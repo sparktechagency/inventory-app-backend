@@ -18,7 +18,7 @@ const createPackage = catchAsync(async (req: Request, res: Response) => {
         statusCode: 200,
         success: true,
         message: "Successfully created Package",
-        data: paymentData.data
+        data: paymentData?.data
     });
 });
 

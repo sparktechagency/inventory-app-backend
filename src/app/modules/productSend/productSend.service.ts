@@ -234,7 +234,7 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB =
 const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
   const details = await ProductSendModel.find({
     retailer: user.id,
-    status: "confirm",
+    status: { $in: ["confirm", "delivered"] },
   })
     .populate({
       path: "product",
@@ -310,6 +310,29 @@ const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
   return details;
 };
 
+// delivary status change
+const updateDelivaryStatusAsaWholesalerIntoDB = async (user: JwtPayload, id: string) => {
+  const statusUpdate = await ProductSendModel.findByIdAndUpdate(
+    id,
+    { status: "delivered" },
+    { new: true }
+  ).exec();
+  if (!statusUpdate) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product");
+  }
+  const findThisUser = await User.findById(user.id);
+  const notificationPayload = {
+    sender: user.id,
+    receiver: statusUpdate.retailer,
+    message: `${findThisUser?.name} has confirmed the order id ${id}`,
+  };
+
+  await sendNotifications(notificationPayload);
+
+  return statusUpdate;
+}
+
+
 const deleteProductFromDB = async (id: string) => {
   const result = await ProductSendModel.findByIdAndDelete(id);
   if (!result) {
@@ -329,4 +352,5 @@ export const productSendService = {
   getAllConfirmProductFromWholesalerDB,
   getAllReceivedProductFromRetailerDB,
   deleteProductFromDB,
+  updateDelivaryStatusAsaWholesalerIntoDB,
 };

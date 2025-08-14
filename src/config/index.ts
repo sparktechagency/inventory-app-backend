@@ -1,6 +1,6 @@
-import dotenv from 'dotenv';
-import path from 'path';
-dotenv.config({ path: path.join(process.cwd(), '.env') });
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.join(process.cwd(), ".env") });
 
 export default {
   ip_address: process.env.IP_ADDRESS,
@@ -23,7 +23,7 @@ export default {
   stripe: {
     stripeSecretKey: process.env.STRIPE_API_SECRET,
     webhookSecret: process.env.WEBHOOK_SECRET,
-    paymentSuccess: process.env.STRIPE_PAYMENT_SUCCESS_LINK
+    paymentSuccess: process.env.STRIPE_PAYMENT_SUCCESS_LINK,
   },
   // twilo
   twilio: {
@@ -34,19 +34,18 @@ export default {
   paystack: {
     secretKey: process.env.PAYSTACK_PAYMET_SECRECT_KEY,
     paymentSuccess: process.env.paymentSuccess,
-    PAYSTACK_BASE_URL: process.env.PAYSTACK_BASE_URL
+    PAYSTACK_BASE_URL: process.env.PAYSTACK_BASE_URL,
   },
   // flutter wave
   FLUTTER_WAVE: {
     SECRETKEY: process.env.SECRET_KEY,
-    PUBLISHKEY: process.env.PUBLICK_KEY
+    PUBLISHKEY: process.env.PUBLICK_KEY,
+    payment_url: process.env.payment_url,
   },
   // super admin
   SUPER_ADMIN: {
     EMAIL: process.env.SUPER_ADMIN_EMAIL,
     PASSWORD: process.env.SUPER_ADMIN_PASSWORD,
-    CONFIRM_PASSWORD: process.env.CONFIRM_PASSWORD
-  }
+    CONFIRM_PASSWORD: process.env.CONFIRM_PASSWORD,
+  },
 };
-
-

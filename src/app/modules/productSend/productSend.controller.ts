@@ -161,6 +161,23 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+const updateDelivaryStatusAsaWholesaler = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user;
+    const result = await productSendService.updateDelivaryStatusAsaWholesalerIntoDB(
+      user,
+      req.params.id
+    );
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Product updated successfully",
+      data: result,
+    });
+  }
+);
+
 export const productSendControllerFromRetailer = {
   sendProductToWholesaler,
   getAllProductToWholesaler,
@@ -172,4 +189,5 @@ export const productSendControllerFromRetailer = {
   getAllConfirmProductFromWholesaler,
   getAllReceivedProductFromRetailer,
   deleteProduct,
+  updateDelivaryStatusAsaWholesaler,
 };

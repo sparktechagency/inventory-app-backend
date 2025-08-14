@@ -12,4 +12,6 @@ router.get("/total-earnings", auth(USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN), fl
 router.get("/total-user-subscription", auth(USER_ROLES.Wholesaler, USER_ROLES.SUPER_ADMIN), flutterWaveController.totalUserSubscription)
 
 
+
+
 export const flutterWaveRouter = router

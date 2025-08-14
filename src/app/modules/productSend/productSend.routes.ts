@@ -25,7 +25,8 @@ router.patch("/update-all/:id", auth(USER_ROLES.Wholesaler), productSendControll
 
 router.patch("/update-received/:id", auth(USER_ROLES.Retailer), productSendControllerFromRetailer.updateProductReceivedToConfirmRequestFromRetailerToWholesaler)
 
+router.patch("/update-delivered/:id", auth(USER_ROLES.Wholesaler), productSendControllerFromRetailer.updateDelivaryStatusAsaWholesaler)
 
-router.delete("/:id", auth(USER_ROLES.Retailer), productSendControllerFromRetailer.deleteProduct)
+router.delete("/:id", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler), productSendControllerFromRetailer.deleteProduct)
 
 export const productSendRoutes = router
