@@ -7,7 +7,8 @@ router.post("/pay", flutterWaveController.createPackage)
 router.get("/verify", flutterWaveController.verifySubscriptionPayment);
 router.get("/transactions", auth(USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN), flutterWaveController.getAllTransactions);
 router.get("/total-earnings", auth(USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN), flutterWaveController.totalEarnings);
-
+// redirect url
+router.get("/payment-success", flutterWaveController.handlePaymentSuccess);
 
 router.get("/total-user-subscription", auth(USER_ROLES.Wholesaler, USER_ROLES.SUPER_ADMIN), flutterWaveController.totalUserSubscription)
 

@@ -16,7 +16,7 @@ const createNewOrderIntoDB = async (user: JwtPayload, payload: ISendOffer) => {
 
 // get all 
 const getAllNewOrdersFromDB = async (user: JwtPayload) => {
-    const queryBuilder = new QueryBuilder(SendOfferModelForRetailer.find({ retailer: user.id, status: false }), {})
+    const queryBuilder = new QueryBuilder(SendOfferModelForRetailer.find({ retailer: user.id }), {})
         .search(['productName'])
         .filter()
         .sort()

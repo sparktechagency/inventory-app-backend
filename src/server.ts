@@ -7,7 +7,7 @@ import { seedSuperAdmin } from './DB/seedAdmin';
 import { socketHelper } from './helpers/socketHelper';
 import { errorLogger, logger } from './shared/logger';
 import { deleteUnverifiedAccount } from './shared/deleteUnverifiedAccount';
-
+import deleteSubscriptionAfterOneMonth from './shared/deleteSubscriptionAfterOneMonth';
 //uncaught exception
 process.on('uncaughtException', error => {
   errorLogger.error('UnhandleException Detected', error);
@@ -22,9 +22,12 @@ async function main() {
 
     //Seed Super Admin after database connection is successful
     await seedSuperAdmin();
-    
+
     // delete un-verified users
     deleteUnverifiedAccount();
+
+    // delete subscription after one month
+    deleteSubscriptionAfterOneMonth();
     const port =
       typeof config.port === 'number' ? config.port : Number(config.port);
 

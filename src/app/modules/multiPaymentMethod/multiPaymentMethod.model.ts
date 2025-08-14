@@ -8,7 +8,7 @@ const PaymentVerificationSchema = new Schema<IPaymentVerification>(
         amount: { type: Number, required: true },
         currency: { type: String, required: true },
         status: { type: String, enum: ["successful", "failed"], required: true },
-        // verifiedAt: { type: Date, required: true, default: Date.now }, // Stores verification timestamp
+        // verifiedAt: { type: Date, required: true, default: Date.now },
     },
     { timestamps: true }
 );

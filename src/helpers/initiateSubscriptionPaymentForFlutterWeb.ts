@@ -4,6 +4,7 @@ import ApiError from "../errors/ApiError";
 import axios from "axios";
 import config from "../config";
 import { User } from "../app/modules/user/user.model";
+import { Payment } from "../app/modules/subscription/payment.model";
 
 const FLW_SECRET_KEY = config.FLUTTER_WAVE.SECRETKEY;
 const FLW_API_URL = "https://api.flutterwave.com/v3/payments";
@@ -13,8 +14,17 @@ export const initiateSubscriptionPayment = async (
   amount: number
 ) => {
   try {
-    const userExists = await User.findOne({ email: userEmail });
-    if (!userExists) {
+    const [userExist, userSubscription] = await Promise.all([
+      User.findOne({ email: userEmail }),
+      Payment.find({ user: userEmail, status: "successful" })
+    ])
+    if (userExist && userSubscription) {
+      throw new ApiError(
+        StatusCodes.BAD_REQUEST,
+        "User already has a successful subscription."
+      );
+    }
+    if (!userExist) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
         "User not found in the database."

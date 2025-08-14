@@ -6,7 +6,7 @@ import ApiError from "../../../errors/ApiError";
 import { StatusCodes } from "http-status-codes";
 import { initiateSubscriptionPayment } from "../../../helpers/initiateSubscriptionPaymentForFlutterWeb";
 import { verifyPaymentTransaction } from "../../../helpers/paymentVerificationHelper";
-
+import config from "../../../config";
 const createPackage = catchAsync(async (req: Request, res: Response) => {
     const { userEmail, amount } = req.body;
     if (!userEmail || !amount) {
@@ -41,6 +41,25 @@ const verifySubscriptionPayment = catchAsync(async (req: Request, res: Response)
     });
 });
 
+
+//
+const handlePaymentSuccess = catchAsync(async (req: Request, res: Response) => {
+    const { status, tx_ref, transaction_id } = req.query;
+
+    if (!status || !tx_ref || !transaction_id) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Missing required query parameters!");
+    }
+
+    if (status !== "successful") {
+        return res.status(StatusCodes.BAD_REQUEST).send("<h1>Payment failed!</h1>");
+    }
+
+    // Verify the payment
+    const verificationData = await flutterWaveService.SubscriptionPackageVerify(transaction_id.toString(), req.query.userEmail?.toString() || "");
+
+    // Redirect frontend user
+    res.redirect(`${config.FLUTTER_WAVE.payment_url}/subscription-success?tx_ref=${tx_ref}`);
+});
 
 
 
@@ -84,6 +103,7 @@ const totalUserSubscription = catchAsync(async (req: Request, res: Response) => 
 export const flutterWaveController = {
     createPackage,
     verifySubscriptionPayment,
+    handlePaymentSuccess,
     getAllTransactions,
     totalEarnings,
     totalUserSubscription
