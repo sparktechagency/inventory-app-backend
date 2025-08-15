@@ -186,6 +186,24 @@ const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
       status: true,
     });
   }
+  const findThisUser = await User.findById(user.id);
+
+  if (findThisUser?.isSubscribed) {
+    return;
+  }
+
+  if (!findThisUser) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "User not found");
+  }
+
+  if (findThisUser.isSubscribed === false && findThisUser.order! <= 0) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Order limit reached. Please subscribe.");
+  }
+
+  await User.findByIdAndUpdate(
+    user.id,
+    { order: findThisUser.order! - 1 }
+  );
 
   const notificationPayload = {
     sender: user.id,
@@ -286,7 +304,7 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
   const details = await ProductSendModel.find({
     wholesaler: user.id,
-    status: "confirm",
+    status: { $in: ["confirm", "delivered"] },
   })
     .populate({
       path: "product",
