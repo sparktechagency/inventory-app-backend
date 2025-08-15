@@ -9,73 +9,73 @@ import { paginationHelper } from "../../../helpers/paginationHelper";
 
 // get all wholesaler from db
 const getAllWholeSaler = async ({
-    search,
-    email,
-    name,
-    phone,
-    storeInformation,
-    paginationOptions,
-  }: {
-    search?: string;
-    email?: string;
-    name?: string;
-    phone?: string;
-    storeInformation?: any;
-    paginationOptions?: IPaginationOptions;
-  }) => {
-    const filter: any = { role: "Wholesaler" };
-  
-    if (search) {
-      filter.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
-        { phone: { $regex: search, $options: "i" } },
-        { "storeInformation.businessName": { $regex: search, $options: "i" } },
-      ];
-    }
-  
-    if (email) {
-      filter.email = { $regex: email, $options: "i" };
-    }
-  
-    if (name) {
-      filter.name = { $regex: name, $options: "i" };
-    }
-  
-    if (phone) {
-      filter.phone = { $regex: phone, $options: "i" };
-    }
-  
-    if (storeInformation?.businessName) {
-      filter["storeInformation.businessName"] = {
-        $regex: storeInformation.businessName,
-        $options: "i",
-      };
-    }
-  
-    const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(paginationOptions || {});
-    const sortCondition: any = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
-  
-    const result = await User.find(filter)
-      .sort(sortCondition)
-      .skip(skip)
-      .limit(limit);
-  
-    const total = await User.countDocuments(filter);
-  
-    return {
-      meta: {
-        page,
-        limit,
-        total,
-      },
-      data: result,
+  search,
+  email,
+  name,
+  phone,
+  storeInformation,
+  paginationOptions,
+}: {
+  search?: string;
+  email?: string;
+  name?: string;
+  phone?: string;
+  storeInformation?: any;
+  paginationOptions?: IPaginationOptions;
+}) => {
+  const filter: any = { role: "Wholesaler" };
+
+  if (search) {
+    filter.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { email: { $regex: search, $options: "i" } },
+      { phone: { $regex: search, $options: "i" } },
+      { "storeInformation.businessName": { $regex: search, $options: "i" } },
+    ];
+  }
+
+  if (email) {
+    filter.email = { $regex: email, $options: "i" };
+  }
+
+  if (name) {
+    filter.name = { $regex: name, $options: "i" };
+  }
+
+  if (phone) {
+    filter.phone = { $regex: phone, $options: "i" };
+  }
+
+  if (storeInformation?.businessName) {
+    filter["storeInformation.businessName"] = {
+      $regex: storeInformation.businessName,
+      $options: "i",
     };
+  }
+
+  const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(paginationOptions || {});
+  const sortCondition: any = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
+
+  const result = await User.find(filter)
+    .sort(sortCondition)
+    .skip(skip)
+    .limit(limit);
+
+  const total = await User.countDocuments(filter);
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
   };
-  
-  
-  
-  
+};
+
+
+
+
 
 // get single wholesaler from db
 const getWholeSalerById = async (id: string) => {
@@ -89,62 +89,62 @@ const getWholeSalerById = async (id: string) => {
 // get all retailers from db
 // wholesalerServices.js
 const getAllRetailers = async ({
-    search,
-    email,
-    name,
-    phone,
-    storeInformation,
-    paginationOptions,
-  }: {
-    search?: string;
-    email?: string;
-    name?: string;
-    phone?: string;
-    storeInformation?: any;
-    paginationOptions?: IPaginationOptions;
-  }) => {
-    const filter: any = { role: "Retailer", verified: true };
-  
-    if (search) {
-      filter.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
-        { phone: { $regex: search, $options: "i" } },
-        { "storeInformation.businessName": { $regex: search, $options: "i" } },
-      ];
-    }
-  
-    if (email) filter.email = { $regex: email, $options: "i" };
-    if (name) filter.name = { $regex: name, $options: "i" };
-    if (phone) filter.phone = { $regex: phone, $options: "i" };
-    if (storeInformation?.businessName) {
-      filter["storeInformation.businessName"] = {
-        $regex: storeInformation.businessName,
-        $options: "i",
-      };
-    }
-  
-    const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(paginationOptions || {});
-    const sortCondition: any = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
-  
-    const result = await User.find(filter)
-      .sort(sortCondition)
-      .skip(skip)
-      .limit(limit);
-  
-    const total = await User.countDocuments(filter);
-  
-    return {
-      meta: {
-        page,
-        limit,
-        total,
-      },
-      data: result,
+  search,
+  email,
+  name,
+  phone,
+  storeInformation,
+  paginationOptions,
+}: {
+  search?: string;
+  email?: string;
+  name?: string;
+  phone?: string;
+  storeInformation?: any;
+  paginationOptions?: IPaginationOptions;
+}) => {
+  const filter: any = { role: "Retailer", verified: true };
+
+  if (search) {
+    filter.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { email: { $regex: search, $options: "i" } },
+      { phone: { $regex: search, $options: "i" } },
+      { "storeInformation.businessName": { $regex: search, $options: "i" } },
+    ];
+  }
+
+  if (email) filter.email = { $regex: email, $options: "i" };
+  if (name) filter.name = { $regex: name, $options: "i" };
+  if (phone) filter.phone = { $regex: phone, $options: "i" };
+  if (storeInformation?.businessName) {
+    filter["storeInformation.businessName"] = {
+      $regex: storeInformation.businessName,
+      $options: "i",
     };
+  }
+
+  const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(paginationOptions || {});
+  const sortCondition: any = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
+
+  const result = await User.find(filter)
+    .sort(sortCondition)
+    .skip(skip)
+    .limit(limit);
+
+  const total = await User.countDocuments(filter);
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
   };
-  
-  
+};
+
+
 
 // get retailers by month
 const getRetailersByMonth = async () => {

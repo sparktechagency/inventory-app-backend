@@ -39,24 +39,6 @@ const loginUserFromDB = async (payload: ILoginData) => {
     );
   }
 
-  /* // If user is not verified and OTP is provided, verify OTP
-  if (!isExistUser.verified) {
-    // If OTP is not provided, throw an error
-    if (!otp) {
-      throw new ApiError(StatusCodes.BAD_REQUEST, 'Please verify your account using OTP.');
-    }
-
-    // Verify OTP
-    const otpVerified = await verifyOtp(isExistUser.email || isExistUser.phone, otp);
-    if (!otpVerified) {
-      throw new ApiError(StatusCodes.BAD_REQUEST, 'Invalid or expired OTP!');
-    }
-
-    // After successful OTP verification, mark the user as verified
-    isExistUser.verified = true;
-    await isExistUser.save();
-  } */
-
   // If the user is verified, check the password
   if (password) {
     // Check match password

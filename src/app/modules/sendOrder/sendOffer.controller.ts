@@ -47,8 +47,25 @@ const updateSingleProduct = catchAsync(async (req: Request, res: Response) => {
 })
 
 
+
+const deleteSingleOrMulifulOrder = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user;
+
+    const result = await sendOfferService.deleteSingleOrMulifulOrderIntoDB(req.params.id, user);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: 'Order deleted successfully',
+        data: result,
+    });
+});
+
+
+
 export const sendOfferController = {
     createNewOrder,
     getAllNewOrders,
-    updateSingleProduct
+    updateSingleProduct,
+    deleteSingleOrMulifulOrder
 }
