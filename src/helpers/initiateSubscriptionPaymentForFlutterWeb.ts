@@ -14,11 +14,9 @@ export const initiateSubscriptionPayment = async (
   amount: number
 ) => {
   try {
-    const [userExist, userSubscription] = await Promise.all([
-      User.findOne({ email: userEmail }),
-      Payment.find({ user: userEmail, status: "successful" })
-    ])
-    if (userExist && userSubscription) {
+    const userExist = await User.findOne({ email: userEmail })
+    const isSubscribed = await Payment.findOne({ user: userExist?._id, status: "successful" })
+    if (isSubscribed) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
         "User already has a successful subscription."
@@ -55,6 +53,8 @@ export const initiateSubscriptionPayment = async (
         },
       }
     );
+
+    // console.log(response)
 
     // Store subscription in the database
     const subscription = await flutterWaveService.createSubscriptionPackage(
