@@ -54,7 +54,7 @@ export const initiateSubscriptionPayment = async (
       userEmail,
       tx_ref,
       amount,
-      "successful",
+      "pending",
       response.data.data.link,
       new Date()
     );
@@ -67,7 +67,7 @@ export const initiateSubscriptionPayment = async (
         amount,
         email: userEmail,
         redirect_url: response.data.data.link,
-        status: "successful",
+        status: "pending",
         subscriptionId: subscription._id,
       },
     };
