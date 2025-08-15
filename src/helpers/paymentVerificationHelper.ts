@@ -4,6 +4,7 @@ import { flutterWaveModel } from "../app/modules/flutterwavePackage/flutterwaveP
 import config from "../config";
 import ApiError from "../errors/ApiError";
 import { StatusCodes } from "http-status-codes";
+import { User } from "../app/modules/user/user.model";
 
 const FLW_SECRET_KEY = config.FLUTTER_WAVE.SECRETKEY;
 const FLW_API_URL = "https://api.flutterwave.com/v3/transactions";
@@ -46,6 +47,8 @@ export const verifyPaymentTransaction = async (transaction_id: string, userEmail
                 { $set: updateData },
                 { upsert: true, new: true }
             );
+
+            const user = await User.findOneAndUpdate({ email: userEmail }, { isSubscribed: true }, { new: true });
 
             return {
                 message: "Payment verified successfully!",

@@ -9,7 +9,7 @@ const createSubscriptionPackage = async (
   userEmail: string,
   tx_ref: string,
   amount: number,
-  status: string,
+  status: "successful" | "failed",
   redirect_url: string,
   startTime: Date
 ) => {

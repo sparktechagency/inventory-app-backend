@@ -15,13 +15,6 @@ export const initiateSubscriptionPayment = async (
 ) => {
   try {
     const userExist = await User.findOne({ email: userEmail })
-    const isSubscribed = await Payment.findOne({ user: userExist?._id, status: "successful" })
-    if (isSubscribed) {
-      throw new ApiError(
-        StatusCodes.BAD_REQUEST,
-        "User already has a successful subscription."
-      );
-    }
     if (!userExist) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
@@ -61,7 +54,7 @@ export const initiateSubscriptionPayment = async (
       userEmail,
       tx_ref,
       amount,
-      "pending",
+      "successful",
       response.data.data.link,
       new Date()
     );
@@ -74,7 +67,7 @@ export const initiateSubscriptionPayment = async (
         amount,
         email: userEmail,
         redirect_url: response.data.data.link,
-        status: "pending",
+        status: "successful",
         subscriptionId: subscription._id,
       },
     };
