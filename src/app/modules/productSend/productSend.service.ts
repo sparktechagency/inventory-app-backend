@@ -91,6 +91,7 @@ const updateProductSendDetailIntoDB = async (
   const updateStatusRequest = await ProductSendModel.findByIdAndUpdate(id, {
     status: "received",
   });
+  
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
@@ -114,7 +115,7 @@ const updateProductSendDetailIntoDB = async (
   }
 
   await User.findByIdAndUpdate(user.id, {
-    order: currentOrder - 1,
+    order: currentOrder + 1,
   });
   const createdEntries = [];
 
@@ -176,9 +177,11 @@ const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
     { status: "received" },
     { new: true }
   ).exec();
+
   if (!statusUpdate) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product");
   }
+
   for (const prod of payload.product) {
     await SendOfferModelForRetailer.findByIdAndUpdate(prod._id, {
       price: prod.price,
@@ -186,24 +189,23 @@ const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
       status: true,
     });
   }
-  const findThisUser = await User.findById(user.id);
 
-  if (findThisUser?.isSubscribed) {
-    return;
-  }
+  const findThisUser = await User.findById(user.id);
 
   if (!findThisUser) {
     throw new ApiError(StatusCodes.NOT_FOUND, "User not found");
   }
 
-  if (findThisUser.isSubscribed === false && findThisUser.order! <= 0) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, "Order limit reached. Please subscribe.");
+  if (!findThisUser.isSubscribed) {
+    if (findThisUser.order! > 10) {
+      throw new ApiError(
+        StatusCodes.BAD_REQUEST,
+        "Order limit reached. Please subscribe."
+      );
+    }
+    // Increment order for non-subscribed user
+    await User.findByIdAndUpdate(user.id, { order: findThisUser.order! + 1 });
   }
-
-  await User.findByIdAndUpdate(
-    user.id,
-    { order: findThisUser.order! - 1 }
-  );
 
   const notificationPayload = {
     sender: user.id,
@@ -329,7 +331,10 @@ const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
 };
 
 // delivary status change
-const updateDelivaryStatusAsaWholesalerIntoDB = async (user: JwtPayload, id: string) => {
+const updateDelivaryStatusAsaWholesalerIntoDB = async (
+  user: JwtPayload,
+  id: string
+) => {
   const statusUpdate = await ProductSendModel.findByIdAndUpdate(
     id,
     { status: "delivered" },
@@ -348,8 +353,7 @@ const updateDelivaryStatusAsaWholesalerIntoDB = async (user: JwtPayload, id: str
   await sendNotifications(notificationPayload);
 
   return statusUpdate;
-}
-
+};
 
 const deleteProductFromDB = async (id: string) => {
   const result = await ProductSendModel.findByIdAndDelete(id);

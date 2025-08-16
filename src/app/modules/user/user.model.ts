@@ -1,10 +1,10 @@
-import { model, Schema } from 'mongoose';
-import bcrypt from 'bcrypt';
-import { StatusCodes } from 'http-status-codes';
-import config from '../../../config';
-import ApiError from '../../../errors/ApiError';
-import { IUser, UserModal } from './user.interface';
-import { BUSINESS_CATEGORY, USER_ROLES } from '../../../enums/user';
+import { model, Schema } from "mongoose";
+import bcrypt from "bcrypt";
+import { StatusCodes } from "http-status-codes";
+import config from "../../../config";
+import ApiError from "../../../errors/ApiError";
+import { IUser, UserModal } from "./user.interface";
+import { BUSINESS_CATEGORY, USER_ROLES } from "../../../enums/user";
 
 const userSchema = new Schema<IUser, UserModal>(
   {
@@ -16,8 +16,8 @@ const userSchema = new Schema<IUser, UserModal>(
       type: String,
 
       unique: true,
-      sparse: true,  // Multiple null values allowed
-      lowercase: true
+      sparse: true, // Multiple null values allowed
+      lowercase: true,
     },
     password: {
       type: String,
@@ -33,22 +33,21 @@ const userSchema = new Schema<IUser, UserModal>(
       type: String,
       required: false,
       unique: true,
-
     },
 
     image: {
       type: String,
 
-      default: 'https://i.ibb.co/z5YHLV9/profile.png',
+      default: "https://i.ibb.co/z5YHLV9/profile.png",
     },
     status: {
       type: String,
-      enum: ['active', 'delete'],
-      default: 'active',
+      enum: ["active", "delete"],
+      default: "active",
     },
     order: {
       type: Number,
-      default: 10,
+      default: 0,
     },
 
     isSubscribed: {
@@ -62,11 +61,14 @@ const userSchema = new Schema<IUser, UserModal>(
     role: {
       type: String,
       enum: Object.values(USER_ROLES),
-      required: true
+      required: true,
     },
     storeInformation: {
       businessName: { type: String },
-      businessCategory: { type: String, enum: Object.values(BUSINESS_CATEGORY) },
+      businessCategory: {
+        type: String,
+        enum: Object.values(BUSINESS_CATEGORY),
+      },
       location: { type: String },
       // verified: {
       //   type: Boolean,
@@ -75,29 +77,36 @@ const userSchema = new Schema<IUser, UserModal>(
     },
     authentication: {
       isResetPassword: { type: Boolean, default: false },
-      oneTimeCode: { type: Number, default: null },  // This will be null initially
-      expireAt: { type: Date, default: null },  // This will also be null initially
+      oneTimeCode: { type: Number, default: null }, // This will be null initially
+      expireAt: { type: Date, default: null }, // This will also be null initially
     },
     offersUpdatedCount: {
       type: Number,
       default: 0,
-    }
-
+    },
   },
   { timestamps: true }
 );
 
 // Check if a user exists by Email or Phone
-userSchema.statics.isExistUserByEmailOrPhone = async function (identifier: string): Promise<IUser | null> {
-  return await this.findOne({ $or: [{ email: identifier }, { phone: identifier }] });
+userSchema.statics.isExistUserByEmailOrPhone = async function (
+  identifier: string
+): Promise<IUser | null> {
+  return await this.findOne({
+    $or: [{ email: identifier }, { phone: identifier }],
+  });
 };
 // Check if a user exists by ID
-userSchema.statics.isExistUserById = async function (id: string): Promise<IUser | null> {
+userSchema.statics.isExistUserById = async function (
+  id: string
+): Promise<IUser | null> {
   return await this.findById(id);
 };
 
 // Check if a user exists by email
-userSchema.statics.isExistUserByEmail = async function (email: string): Promise<IUser | null> {
+userSchema.statics.isExistUserByEmail = async function (
+  email: string
+): Promise<IUser | null> {
   return await this.findOne({ email });
 };
 
@@ -110,18 +119,18 @@ userSchema.statics.isMatchPassword = async function (
 };
 
 // Middleware for pre-save logic
-userSchema.pre('save', async function (next) {
+userSchema.pre("save", async function (next) {
   // Cast `this.constructor` to the model type to access `findOne`
   const UserModel = this.constructor as unknown as UserModal;
 
-  if (this.isModified('email')) {
+  if (this.isModified("email")) {
     const isExist = await UserModel.findOne({ email: this.email });
     if (isExist) {
-      throw new ApiError(StatusCodes.BAD_REQUEST, 'Email already exists!');
+      throw new ApiError(StatusCodes.BAD_REQUEST, "Email already exists!");
     }
   }
 
-  if (this.isModified('password')) {
+  if (this.isModified("password")) {
     this.password = await bcrypt.hash(
       this.password,
       Number(config.bcrypt_salt_rounds)
@@ -131,13 +140,5 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-
-
-
-
-
-
-
-
 // Export the model
-export const User = model<IUser, UserModal>('User', userSchema);
+export const User = model<IUser, UserModal>("User", userSchema);
