@@ -19,12 +19,12 @@ import { User } from "../user/user.model";
 
 //login
 const loginUserFromDB = async (payload: ILoginData) => {
-  const { email, phone, password, otp } = payload;
-
   // Check if user exists with email or phone number (preferably one of them is provided)
   let isExistUser;
-  if (email) {
-    isExistUser = await User.findOne({ email }).select("+password");
+  if (payload.email) {
+    isExistUser = await User.findOne({ email: payload.email }).select(
+      "+password"
+    );
   }
 
   if (!isExistUser) {
@@ -40,9 +40,9 @@ const loginUserFromDB = async (payload: ILoginData) => {
   }
 
   // If the user is verified, check the password
-  if (password) {
+  if (payload.password) {
     // Check match password
-    if (!(await User.isMatchPassword(password, isExistUser.password))) {
+    if (!(await User.isMatchPassword(payload.password, isExistUser.password))) {
       throw new ApiError(StatusCodes.BAD_REQUEST, "Password is incorrect!");
     }
   }
