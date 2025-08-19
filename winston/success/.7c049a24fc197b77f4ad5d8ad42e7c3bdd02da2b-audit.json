@@ -6,21 +6,6 @@
     "auditLog": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\.7c049a24fc197b77f4ad5d8ad42e7c3bdd02da2b-audit.json",
     "files": [
         {
-            "date": 1755487632530,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\18-08-2025-09-success.log",
-            "hash": "9fbb2c1f0e774feb07084e74b8576fb12edd815809fb8e9e3f28b6bf33ffc15b"
-        },
-        {
-            "date": 1755489600467,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\18-08-2025-10-success.log",
-            "hash": "ce96508bf8893e7ce8f854696d6e17fceab26aeaffefb5657e5dfd236784459d"
-        },
-        {
-            "date": 1755493200119,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\18-08-2025-11-success.log",
-            "hash": "1e3c6a09a62a02619b153159a5ffde66d0562138ed0055891a99d93eca1a737c"
-        },
-        {
             "date": 1755496800439,
             "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\18-08-2025-12-success.log",
             "hash": "335cce8e7e36143547e611f0d76f366848bd7f97883979d1fba9a8ccac92e661"
@@ -54,6 +39,16 @@
             "date": 1755518400746,
             "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\18-08-2025-18-success.log",
             "hash": "7a5ca15ac41a61a99b44269b1362ae82c02d717c531f7389954987a25aa5b9cc"
+        },
+        {
+            "date": 1755578946185,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\19-08-2025-10-success.log",
+            "hash": "e6eec348987c42cb4e353acc867fb09301d986bafd0085d8730b1ae6981f697a"
+        },
+        {
+            "date": 1755579600256,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\19-08-2025-11-success.log",
+            "hash": "f59f42eb4430bcb2f1418ddf38934ffb5979f7a33bc183ed69af42efdd89acb6"
         }
     ],
     "hashType": "sha256"
