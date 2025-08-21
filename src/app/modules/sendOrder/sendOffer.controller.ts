@@ -62,10 +62,25 @@ const deleteSingleOrMulifulOrder = catchAsync(async (req: Request, res: Response
 });
 
 
+// all order history
+const productHistoryFromDB = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user
+    const result = await sendOfferService.productHistoryFromDB(user);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: StatusCodes.OK,
+        message: 'Orders fetched successfully',
+        pagination: result.meta,
+        data: result.result,
+    });
+})
+
 
 export const sendOfferController = {
     createNewOrder,
     getAllNewOrders,
     updateSingleProduct,
-    deleteSingleOrMulifulOrder
+    deleteSingleOrMulifulOrder,
+    productHistoryFromDB
 }

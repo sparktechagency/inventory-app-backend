@@ -14,6 +14,11 @@ const sendProductToWholesalerIntoDB = async (
   user: JwtPayload,
   payload: IProductSend[]
 ) => {
+  // product status update
+  await SendOfferModelForRetailer.updateMany(
+    { retailer: user.id },
+    { status: true }
+  );
   const formattedPayload = payload?.map((item) => ({
     ...item,
     retailer: user.id,
@@ -39,7 +44,7 @@ const sendProductToWholesalerIntoDB = async (
   return result;
 };
 
-// get all
+// get all just status true
 const getAllProductSendToWholeSalerFromDB = async (
   user: JwtPayload,
   type: "pending" | "confirm" | "received",
@@ -91,7 +96,7 @@ const updateProductSendDetailIntoDB = async (
   const updateStatusRequest = await ProductSendModel.findByIdAndUpdate(id, {
     status: "received",
   });
-  
+
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
@@ -362,6 +367,7 @@ const deleteProductFromDB = async (id: string) => {
   }
   return result;
 };
+
 
 export const productSendService = {
   sendProductToWholesalerIntoDB,

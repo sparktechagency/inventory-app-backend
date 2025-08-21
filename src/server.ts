@@ -8,6 +8,7 @@ import { socketHelper } from './helpers/socketHelper';
 import { errorLogger, logger } from './shared/logger';
 import { deleteUnverifiedAccount } from './shared/deleteUnverifiedAccount';
 import deleteSubscriptionAfterOneMonth from './shared/deleteSubscriptionAfterOneMonth';
+import deleteProductAfterOneMonth from './shared/deleteProductAfterOneMonthe';
 //uncaught exception
 process.on('uncaughtException', error => {
   errorLogger.error('UnhandleException Detected', error);
@@ -28,6 +29,8 @@ async function main() {
 
     // delete subscription after one month
     deleteSubscriptionAfterOneMonth();
+    // delete product after one month
+    deleteProductAfterOneMonth();
     const port =
       typeof config.port === 'number' ? config.port : Number(config.port);
 

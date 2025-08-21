@@ -14,7 +14,7 @@ const deleteSubscriptionAfterOneMonth = () => {
             const result = paymentVerificationModel.deleteMany({
                 createdAt: { $lte: thirtyMinutesAgo },
             });
-            logger.info(`💸 Deleted ${result?.deletedCount} old payment records`);
+            logger.info(`💸 Deleted ${result?.countDocuments} old payment records`);
         } catch (error) {
             logger.error("💣 Error deleting old payments:", error);
         }
