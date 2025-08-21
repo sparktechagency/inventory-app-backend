@@ -4,7 +4,6 @@ import catchAsync from "../../../shared/catchAsync";
 import { wholesalerServices } from "./wholesaler.service";
 import sendResponse from "../../../shared/sendResponse";
 import { Request, Response } from "express";
-import { IPaginationOptions } from "../../../types/pagination";
 
 const getAllWholeSalers = catchAsync(async (req: Request, res: Response) => {
     const { search, email, name, phone, businessName, page, limit, sortBy, sortOrder }: any = req.query;
