@@ -18,7 +18,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), handl
 app.use(cors(
   {
     origin: 'http://75.119.138.163:4173', //
-    origin: 'http://10.10.7.48:3004',
+    // origin: 'http://10.10.7.48:3004',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'PATCH'],
   }
