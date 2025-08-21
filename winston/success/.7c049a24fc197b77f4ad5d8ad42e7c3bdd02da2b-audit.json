@@ -6,11 +6,6 @@
     "auditLog": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\.7c049a24fc197b77f4ad5d8ad42e7c3bdd02da2b-audit.json",
     "files": [
         {
-            "date": 1755684000350,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\20-08-2025-16-success.log",
-            "hash": "f5c3ee0f50054c6063cf472aeec6c0ae5ed11117d6dce527d5c291020e001ea4"
-        },
-        {
             "date": 1755687600408,
             "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\20-08-2025-17-success.log",
             "hash": "a3115353e449c6c2046e8355c4e6af161f7a06cd208f1e2cfadca9a4bfd9b4fa"
@@ -119,6 +114,11 @@
             "date": 1755766800772,
             "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\21-08-2025-15-success.log",
             "hash": "27415b5ed283f5c7d8d3f5391cb47aba0dd950aaafe67b707ae9026a84aa1e82"
+        },
+        {
+            "date": 1755770692412,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\21-08-2025-16-success.log",
+            "hash": "46ccec11353d5951c8fbb4c21707f88d2ca9e36d21e25d9d6d6ab00447bdce8c"
         }
     ],
     "hashType": "sha256"

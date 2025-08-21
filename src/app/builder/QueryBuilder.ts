@@ -1,4 +1,4 @@
-import { FilterQuery, Query } from 'mongoose';
+import { FilterQuery, Query } from "mongoose";
 
 class QueryBuilder<T> {
   public modelQuery: Query<T[], T>;
@@ -14,11 +14,11 @@ class QueryBuilder<T> {
     if (this?.query?.searchTerm) {
       this.modelQuery = this.modelQuery.find({
         $or: searchableFields.map(
-          field =>
+          (field) =>
             ({
               [field]: {
                 $regex: this.query.searchTerm,
-                $options: 'i',
+                $options: "i",
               },
             } as FilterQuery<T>)
         ),
@@ -30,8 +30,17 @@ class QueryBuilder<T> {
   //filtering
   filter() {
     const queryObj = { ...this.query };
-    const excludeFields = ['searchTerm', 'sort', 'page', 'limit', 'fields'];
-    excludeFields.forEach(el => delete queryObj[el]);
+    const excludeFields = ["searchTerm", "sort", "page", "limit", "fields"];
+    excludeFields.forEach((el) => delete queryObj[el]);
+
+    // Phone fix
+    if (queryObj.phone && typeof queryObj.phone === "string") {
+      queryObj.phone = queryObj.phone.trim();
+      // add + if missing
+      if (!queryObj.phone.startsWith("+")) {
+        queryObj.phone = "+" + queryObj.phone;
+      }
+    }
 
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
     return this;
@@ -39,7 +48,7 @@ class QueryBuilder<T> {
 
   //sorting
   sort() {
-    let sort = (this?.query?.sort as string) || '-createdAt';
+    let sort = (this?.query?.sort as string) || "-createdAt";
     this.modelQuery = this.modelQuery.sort(sort);
 
     return this;
@@ -59,7 +68,7 @@ class QueryBuilder<T> {
   //fields filtering
   fields() {
     let fields =
-      (this?.query?.fields as string)?.split(',').join(' ') || '-__v';
+      (this?.query?.fields as string)?.split(",").join(" ") || "-__v";
     this.modelQuery = this.modelQuery.select(fields);
 
     return this;
@@ -68,7 +77,7 @@ class QueryBuilder<T> {
   //populating
   populate(populateFields: string[], selectFields: Record<string, unknown>) {
     this.modelQuery = this.modelQuery.populate(
-      populateFields.map(field => ({
+      populateFields.map((field) => ({
         path: field,
         select: selectFields[field],
       }))

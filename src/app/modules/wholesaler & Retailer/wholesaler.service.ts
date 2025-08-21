@@ -6,76 +6,29 @@ import { flutterWaveModel } from "../flutterwavePackage/flutterwavePackage.model
 import { paymentVerificationModel } from "../multiPaymentMethod/multiPaymentMethod.model";
 import { IPaginationOptions } from "../../../types/pagination";
 import { paginationHelper } from "../../../helpers/paginationHelper";
+import QueryBuilder from "../../builder/QueryBuilder";
+import { USER_ROLES } from "../../../enums/user";
 
 // get all wholesaler from db
-const getAllWholeSaler = async ({
-  search,
-  email,
-  name,
-  phone,
-  storeInformation,
-  paginationOptions,
-}: {
-  search?: string;
-  email?: string;
-  name?: string;
-  phone?: string;
-  storeInformation?: any;
-  paginationOptions?: IPaginationOptions;
-}) => {
-  const filter: any = { role: "Wholesaler" };
+const getAllWholeSaler = async (query: Record<string, any>) => {
+  const queryBuilder = new QueryBuilder(
+    User.find({ role: USER_ROLES.Wholesaler }),
+    query
+  )
+    .search(["name", "email", "phone", "storeInformation.businessName"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
-  if (search) {
-    filter.$or = [
-      { name: { $regex: search, $options: "i" } },
-      { email: { $regex: search, $options: "i" } },
-      { phone: { $regex: search, $options: "i" } },
-      { "storeInformation.businessName": { $regex: search, $options: "i" } },
-    ];
-  }
-
-  if (email) {
-    filter.email = { $regex: email, $options: "i" };
-  }
-
-  if (name) {
-    filter.name = { $regex: name, $options: "i" };
-  }
-
-  if (phone) {
-    filter.phone = { $regex: phone, $options: "i" };
-  }
-
-  if (storeInformation?.businessName) {
-    filter["storeInformation.businessName"] = {
-      $regex: storeInformation.businessName,
-      $options: "i",
-    };
-  }
-
-  const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(paginationOptions || {});
-  const sortCondition: any = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
-
-  const result = await User.find(filter)
-    .sort(sortCondition)
-    .skip(skip)
-    .limit(limit);
-
-  const total = await User.countDocuments(filter);
+  const data = await queryBuilder.modelQuery;
+  const meta = await queryBuilder.getPaginationInfo();
 
   return {
-    meta: {
-      page,
-      limit,
-      total,
-    },
-    data: result,
+    meta,
+    data,
   };
 };
-
-
-
-
 
 // get single wholesaler from db
 const getWholeSalerById = async (id: string) => {
@@ -124,8 +77,9 @@ const getAllRetailers = async ({
     };
   }
 
-  const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(paginationOptions || {});
-  const sortCondition: any = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(paginationOptions || {});
+  const sortCondition: any = { [sortBy]: sortOrder === "asc" ? 1 : -1 };
 
   const result = await User.find(filter)
     .sort(sortCondition)
@@ -143,8 +97,6 @@ const getAllRetailers = async ({
     data: result,
   };
 };
-
-
 
 // get retailers by month
 const getRetailersByMonth = async () => {
@@ -285,7 +237,6 @@ const getDashboardStatistics = async () => {
   ]);
 
   // Log the result of the aggregation for unique subscribers
-
 
   return {
     totalWholesalers,
