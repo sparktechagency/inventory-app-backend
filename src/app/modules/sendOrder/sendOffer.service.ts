@@ -17,10 +17,10 @@ const createNewOrderIntoDB = async (user: JwtPayload, payload: ISendOffer) => {
 };
 
 // get all
-const getAllNewOrdersFromDB = async (user: JwtPayload) => {
+const getAllNewOrdersFromDB = async (user: JwtPayload,query: Record<string, any>) => {
   const queryBuilder = new QueryBuilder(
     SendOfferModelForRetailer.find({ retailer: user.id, status: false }),
-    {}
+    query
   )
     .search(["productName"])
     .filter()
@@ -70,10 +70,10 @@ const deleteSingleOrMulifulOrderIntoDB = async (
 };
 
 // all order history
-const productHistoryFromDB = async (user: JwtPayload) => {
+const productHistoryFromDB = async (user: JwtPayload,query: Record<string, any>) => {
   const queryBuilder = new QueryBuilder(
-    SendOfferModelForRetailer.find({ retailer: user.id, status: true }),
-    {}
+    SendOfferModelForRetailer.find({ retailer: user.id, status: true },query),
+    query
   )
     .search(["productName"])
     .filter()

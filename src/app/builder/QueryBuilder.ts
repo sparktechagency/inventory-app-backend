@@ -37,6 +37,7 @@ class QueryBuilder<T> {
     if (queryObj.phone && typeof queryObj.phone === "string") {
       queryObj.phone = queryObj.phone.trim();
       // add + if missing
+      // @ts-ignore
       if (!queryObj.phone.startsWith("+")) {
         queryObj.phone = "+" + queryObj.phone;
       }

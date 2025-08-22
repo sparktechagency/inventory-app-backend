@@ -20,7 +20,7 @@ const createNewOrder = catchAsync(async (req: Request, res: Response) => {
 // get all new order
 const getAllNewOrders = catchAsync(async (req: Request, res: Response) => {
     const user = req.user
-    const result = await sendOfferService.getAllNewOrdersFromDB(user);
+    const result = await sendOfferService.getAllNewOrdersFromDB(user,req.query);
 
     sendResponse(res, {
         success: true,
@@ -65,7 +65,7 @@ const deleteSingleOrMulifulOrder = catchAsync(async (req: Request, res: Response
 // all order history
 const productHistoryFromDB = catchAsync(async (req: Request, res: Response) => {
     const user = req.user
-    const result = await sendOfferService.productHistoryFromDB(user);
+    const result = await sendOfferService.productHistoryFromDB(user,req.query);
 
     sendResponse(res, {
         success: true,
