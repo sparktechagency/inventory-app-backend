@@ -72,7 +72,7 @@ const deleteSingleOrMulifulOrderIntoDB = async (
 // all order history
 const productHistoryFromDB = async (user: JwtPayload,query: Record<string, any>) => {
   const queryBuilder = new QueryBuilder(
-    SendOfferModelForRetailer.find({ retailer: user.id, status: true },query),
+    SendOfferModelForRetailer.find({ retailer: user.id, status: true }),
     query
   )
     .search(["productName"])
