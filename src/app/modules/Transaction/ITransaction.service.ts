@@ -29,7 +29,7 @@ const TransactionIntoDB = async (reference: string) => {
         if (data.status === "success") {
             const transaction: ITransaction = {
                 reference: data.reference,
-                amount: data.amount / 100, // Convert from kobo to naira
+                amount: data.amount / 100, 
                 currency: data.currency,
                 status: data.status,
                 customerEmail: data.customer.email,

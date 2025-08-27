@@ -202,12 +202,13 @@ const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
   }
 
   if (!findThisUser.isSubscribed) {
-    if (findThisUser.order! > 50) {
-      throw new ApiError(
-        StatusCodes.BAD_REQUEST,
-        "Order limit reached. Please subscribe."
-      );
-    }
+    // TODO: need to update order count
+    // if (findThisUser.order! > 50) {
+    //   throw new ApiError(
+    //     StatusCodes.BAD_REQUEST,
+    //     "Order limit reached. Please subscribe."
+    //   );
+    // }
     // Increment order for non-subscribed user
     await User.findByIdAndUpdate(user.id, { order: findThisUser.order! + 1 });
   }

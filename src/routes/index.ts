@@ -3,7 +3,7 @@ import { AuthRoutes } from "../app/modules/auth/auth.route";
 import { UserRoutes } from "../app/modules/user/user.routes";
 import { productRoutes } from "../app/modules/Order/order.routes";
 import { wholeSalerRoutes } from "../app/modules/wholesaler & Retailer/wholesaler.routes";
-import { offerRoutes } from "../app/modules/offer/offer.routes";
+// import { offerRoutes } from "../app/modules/offer/offer.routes";
 // import { packageRoutes } from '../app/modules/package/package.routes';
 import { paymentRoutes } from "../app/modules/subscription/payment.routes";
 import { PackageRoutes } from "../app/modules/PaymentPaystack/PaymentPaystack.routes";
@@ -37,10 +37,10 @@ const apiRoutes = [
     path: "/",
     route: wholeSalerRoutes,
   },
-  {
-    path: "/send-offer",
-    route: offerRoutes,
-  },
+  // {
+  //   path: "/send-offer",
+  //   route: offerRoutes,
+  // },
   {
     path: "/notification",
     route: NotificationRoutes,

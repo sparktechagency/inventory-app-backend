@@ -9,6 +9,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { User } from "../user/user.model";
 import { USER_ROLES } from "../../../enums/user";
 import mongoose from "mongoose";
+import { OfferModel } from "./offer.model";
 // Service to create a new product (order)
 
 const createOffers = async (payloads: IOrder[], io: Server) => {
@@ -131,12 +132,12 @@ const updateOfferIntoDB = async (
     wholeSeller: user.id,
     status: "Received",
   });
-  if (!isSubscribed && isExistLimit >= 10) {
-    throw new ApiError(
-      StatusCodes.BAD_REQUEST,
-      "You cannot update more than 10 offers. Subscribe to update more offers."
-    );
-  }
+  // if (!isSubscribed && isExistLimit >= 10) {
+  //   throw new ApiError(
+  //     StatusCodes.BAD_REQUEST,
+  //     "You cannot update more than 10 offers. Subscribe to update more offers."
+  //   );
+  // }
 
   const updateObject: any = {};
   if (status) {
@@ -178,17 +179,17 @@ const updateOfferIntoDB = async (
 
   // Only apply this logic for Wholesalers
   if (role === USER_ROLES.Wholesaler) {
-    if (offersUpdatedCount && offersUpdatedCount >= 10) {
-      throw new ApiError(
-        StatusCodes.BAD_REQUEST,
-        "You have already send 10 offers. Please subscribe to update more."
-      );
-    } else {
-      await User.findByIdAndUpdate(user.id, {
-        $inc: { offersUpdatedCount: 1 },
-      });
-    }
-  }
+  //   if (offersUpdatedCount && offersUpdatedCount >= 10) {
+  //     throw new ApiError(
+  //       StatusCodes.BAD_REQUEST,
+  //       "You have already send 10 offers. Please subscribe to update more."
+  //     );
+  //   } else {
+  //     await User.findByIdAndUpdate(user.id, {
+  //       $inc: { offersUpdatedCount: 1 },
+  //     });
+  //   }
+  // }
 
   // Prepare notification data
   const notificationData = {
