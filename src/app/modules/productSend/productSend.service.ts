@@ -195,24 +195,6 @@ const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
     });
   }
 
-  const findThisUser = await User.findById(user.id);
-
-  if (!findThisUser) {
-    throw new ApiError(StatusCodes.NOT_FOUND, "User not found");
-  }
-
-  if (!findThisUser.isSubscribed) {
-    // TODO: need to update order count
-    // if (findThisUser.order! > 50) {
-    //   throw new ApiError(
-    //     StatusCodes.BAD_REQUEST,
-    //     "Order limit reached. Please subscribe."
-    //   );
-    // }
-    // Increment order for non-subscribed user
-    await User.findByIdAndUpdate(user.id, { order: findThisUser.order! + 1 });
-  }
-
   const notificationPayload = {
     sender: user.id,
     receiver: statusUpdate.retailer,
@@ -308,7 +290,6 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   return details;
 };
 
-
 // get all confirm base on wholesaler
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
   const details = await ProductSendModel.find({
@@ -351,6 +332,21 @@ const updateDelivaryStatusAsaWholesalerIntoDB = async (
     throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product");
   }
   const findThisUser = await User.findById(user.id);
+  if (!findThisUser) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "User not found");
+  }
+  if (!findThisUser.isSubscribed) {
+    if (findThisUser.order! > 50) {
+      throw new ApiError(
+        StatusCodes.BAD_REQUEST,
+        "Order limit reached. Please subscribe."
+      );
+    }
+    // Increment order for non-subscribed user
+    await User.findByIdAndUpdate(user.id, {
+      order: findThisUser.order! + 1,
+    });
+  }
   const notificationPayload = {
     sender: user.id,
     receiver: statusUpdate.retailer,
@@ -369,7 +365,6 @@ const deleteProductFromDB = async (id: string) => {
   }
   return result;
 };
-
 
 export const productSendService = {
   sendProductToWholesalerIntoDB,
