@@ -8,7 +8,7 @@ const createNotification = async (payload: INotification) => {
 };
 
 const getNotificationsByUserId = async (userId: string, query: Record<string, any>) => {
-    const queryBuilder = new QueryBuilder(NotificationModel.find({ receiver: userId, isRead: false }).sort({ createdAt: -1 }), query);
+    const queryBuilder = new QueryBuilder(NotificationModel.find({ receiver: userId }).sort({ createdAt: -1 }), query);
 
     const data = await queryBuilder.modelQuery;
     const meta = await queryBuilder.getPaginationInfo();
