@@ -23,6 +23,7 @@ const createProductIntoDB = async (
   }
 
   // Return single product if only one was created
+  // @ts-ignore
   return createdProducts.length === 1 ? createdProducts[0] : createdProducts;
 };
 
@@ -50,7 +51,6 @@ const deleteProductFromDB = async (id: string) => {
 
 // update product in db
 const updateProductInDB = async (id: string, payload: any) => {
-  console.log("payload", payload);
 
   const updatedProduct = await ProductModel.findByIdAndUpdate(id, payload, {
     new: true,

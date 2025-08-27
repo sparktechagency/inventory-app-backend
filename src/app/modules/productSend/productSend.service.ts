@@ -202,7 +202,7 @@ const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
   }
 
   if (!findThisUser.isSubscribed) {
-    if (findThisUser.order! > 10) {
+    if (findThisUser.order! > 50) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
         "Order limit reached. Please subscribe."
@@ -306,6 +306,7 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   }
   return details;
 };
+
 
 // get all confirm base on wholesaler
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
