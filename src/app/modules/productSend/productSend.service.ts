@@ -14,16 +14,18 @@ const sendProductToWholesalerIntoDB = async (
   user: JwtPayload,
   payload: IProductSend[]
 ) => {
-  // product status update
+  // collect all product IDs from payload
+  const productIds = payload.flatMap((item) => item.product);
+
+  // product status update only for given productIds
   await SendOfferModelForRetailer.updateMany(
-    { retailer: user.id },
+    { retailer: user.id, _id: { $in: productIds } },
     { status: true }
   );
   const formattedPayload = payload?.map((item) => ({
     ...item,
     retailer: user.id,
   }));
-
   const result = await ProductSendModel.create(formattedPayload);
   if (!result) {
     throw new ApiError(
