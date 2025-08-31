@@ -22,7 +22,7 @@ const sendProductToWholesaler = catchAsync(
 
 const getAllProductToWholesaler = catchAsync(
   async (req: Request, res: Response) => {
-    const type = req.params.type as "pending" | "confirm" | "received";
+    const type = req.params.type as "pending" | "confirmed" | "received";
     const user = req.user;
 
     const result = await productSendService.getAllProductSendToWholeSalerFromDB(
@@ -161,14 +161,14 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
 const updateDelivaryStatusAsaWholesaler = catchAsync(
   async (req: Request, res: Response) => {
     const user = req.user;
-    const result = await productSendService.updateDelivaryStatusAsaWholesalerIntoDB(
-      user,
-      req.params.id
-    );
+    const result =
+      await productSendService.updateDelivaryStatusAsaWholesalerIntoDB(
+        user,
+        req.params.id
+      );
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,

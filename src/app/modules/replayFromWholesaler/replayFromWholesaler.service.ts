@@ -50,7 +50,7 @@ const getAllReceivedRequestFromWholesalerFromDB = async (user: JwtPayload, query
 }
 
 const updateRequestFromWholesalerAsRetailerForConfirm = async (user: JwtPayload, id: string) => {
-    const result = await ReplayFromWholesalerModel.findByIdAndUpdate({ retailer: user.id, status: "received", _id: id }, { status: "confirm" }, { new: true });
+    const result = await ReplayFromWholesalerModel.findByIdAndUpdate({ retailer: user.id, status: "received", _id: id }, { status: "confirmed" }, { new: true });
     
     if (!result) {
         throw new ApiError(StatusCodes.NOT_FOUND, "No received request found");

@@ -9,14 +9,14 @@ import { sendNotifications } from "../../../helpers/notificationsHelper";
 const updatePendingProductAsRetailerFromDB = async (user: JwtPayload) => {
     const result = await ReplayFromWholesalerModel.updateMany(
         { retailer: user.id, status: "received" },
-        { $set: { status: "confirm" } }
+        { $set: { status: "confirmed" } }
     );
     if (!result) {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product")
     }
     const updatedProducts = await ReplayFromWholesalerModel.find({
         retailer: user.id,
-        status: "confirm",
+        status: "confirmed",
     })
     const findThisUser = await User.findById(user.id)
     const wholesalerIds = updatedProducts.map((item) => item.wholesaler?.toString())
@@ -31,7 +31,7 @@ const updatePendingProductAsRetailerFromDB = async (user: JwtPayload) => {
 
 
 const getAllConfrimRequestFromRetailerIntoDB = async (user: JwtPayload, query: Record<string, any>) => {
-    const queryBuilder = new QueryBuilder(ReplayFromWholesalerModel.find({ wholesaler: user.id, status: "confirm" }), query)
+    const queryBuilder = new QueryBuilder(ReplayFromWholesalerModel.find({ wholesaler: user.id, status: "confirmed" }), query)
     queryBuilder
         .populate(['retailer'], { retailer: 'name phone storeInformation.location' })
         .populate(['wholesaler'], { wholesaler: 'name phone storeInformation.location' })
@@ -99,7 +99,7 @@ const getAllConfirmRequerstFromRetailerIntoDBForRetailer = async (
     query: Record<string, any>
 ) => {
     const queryBuilder = new QueryBuilder(
-        ReplayFromWholesalerModel.find({ retailer: user.id, status: "confirm" }),
+        ReplayFromWholesalerModel.find({ retailer: user.id, status: "confirmed" }),
         query
     );
 

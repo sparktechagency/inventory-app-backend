@@ -17,7 +17,10 @@ const createNewOrderIntoDB = async (user: JwtPayload, payload: ISendOffer) => {
 };
 
 // get all
-const getAllNewOrdersFromDB = async (user: JwtPayload,query: Record<string, any>) => {
+const getAllNewOrdersFromDB = async (
+  user: JwtPayload,
+  query: Record<string, any>
+) => {
   const queryBuilder = new QueryBuilder(
     SendOfferModelForRetailer.find({ retailer: user.id, status: false }),
     query
@@ -70,7 +73,10 @@ const deleteSingleOrMulifulOrderIntoDB = async (
 };
 
 // all order history
-const productHistoryFromDB = async (user: JwtPayload,query: Record<string, any>) => {
+const productHistoryFromDB = async (
+  user: JwtPayload,
+  query: Record<string, any>
+) => {
   const queryBuilder = new QueryBuilder(
     SendOfferModelForRetailer.find({ retailer: user.id, status: true }),
     query
@@ -90,10 +96,23 @@ const productHistoryFromDB = async (user: JwtPayload,query: Record<string, any>)
   };
 };
 
+// update history which is do status false and remove price and availability
+const updateHistoryIntoDB = async (user: JwtPayload, id: string) => {
+  const result = await SendOfferModelForRetailer.findByIdAndUpdate(
+    { _id: id, retailer: user.id },
+    { status: false, price: 0, availability: false },
+    { new: true }
+  );
+  if (!result) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
+  }
+  return result;
+};
 export const sendOfferService = {
   createNewOrderIntoDB,
   getAllNewOrdersFromDB,
   updateSingleProductIntoDB,
   deleteSingleOrMulifulOrderIntoDB,
   productHistoryFromDB,
+  updateHistoryIntoDB,
 };

@@ -6,44 +6,9 @@
     "auditLog": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\.7c049a24fc197b77f4ad5d8ad42e7c3bdd02da2b-audit.json",
     "files": [
         {
-            "date": 1756278000175,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\27-08-2025-13-success.log",
-            "hash": "267a5ccb302724df58ea4f37b55237834765dc80973283054638096d5eb8de30"
-        },
-        {
-            "date": 1756281600556,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\27-08-2025-14-success.log",
-            "hash": "730dc42f70622b36815d40c04efcc0bbcf492a9333315daadbee2711eef8561f"
-        },
-        {
-            "date": 1756285200425,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\27-08-2025-15-success.log",
-            "hash": "2f3521b9b515d477fb3dfd579abf27b68650a1e425a67f1dce38fe740156f874"
-        },
-        {
-            "date": 1756288800526,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\27-08-2025-16-success.log",
-            "hash": "fa05ec04d8fcb7393c9b0f174d4420af486f6adfb501f9bdcbefc9498a970d08"
-        },
-        {
-            "date": 1756292400772,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\27-08-2025-17-success.log",
-            "hash": "0701656bebfccc0274e8239fa2a5023ecaf4c44a7bd8086fb70566b5bda39b85"
-        },
-        {
-            "date": 1756296000587,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\27-08-2025-18-success.log",
-            "hash": "3e1d53f641adf2d8191bc4f8a415d1b449253c7392fc0c2a3d42d3aa5e43768d"
-        },
-        {
-            "date": 1756360553236,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\28-08-2025-11-success.log",
-            "hash": "446188159c3d5c75ea01b9aeb7d5c077e1bfe2ddfcb165ceffa4c02b130f5728"
-        },
-        {
-            "date": 1756360800671,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\28-08-2025-12-success.log",
-            "hash": "cf777a8eda54d55462f42aec7c695372b5108172208622feea9af6dce59bb7d5"
+            "date": 1756614710323,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\success\\31-08-2025-10-success.log",
+            "hash": "d54bf4cec8ee9acd5e4f32795fb2670c928d095ab759f40bc7ad3d93acaf2ff5"
         }
     ],
     "hashType": "sha256"

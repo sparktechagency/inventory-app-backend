@@ -5,82 +5,100 @@ import { StatusCodes } from "http-status-codes";
 import { sendOfferService } from "./sendOffer.service";
 
 const createNewOrder = catchAsync(async (req: Request, res: Response) => {
-    const user = req.user
-    const result = await sendOfferService.createNewOrderIntoDB(user, req.body);
+  const user = req.user;
+  const result = await sendOfferService.createNewOrderIntoDB(user, req.body);
 
-    sendResponse(res, {
-        success: true,
-        statusCode: StatusCodes.OK,
-        message: 'Order created successfully',
-        data: result,
-    });
-})
-
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: "Order created successfully",
+    data: result,
+  });
+});
 
 // get all new order
 const getAllNewOrders = catchAsync(async (req: Request, res: Response) => {
-    const user = req.user
-    const result = await sendOfferService.getAllNewOrdersFromDB(user,req.query);
+  const user = req.user;
+  const result = await sendOfferService.getAllNewOrdersFromDB(user, req.query);
 
-    sendResponse(res, {
-        success: true,
-        statusCode: StatusCodes.OK,
-        message: 'Orders fetched successfully',
-        pagination: result.meta,
-        data: result.result,
-    });
-})
-
-
-
-
-const updateSingleProduct = catchAsync(async (req: Request, res: Response) => {
-    const user = req.user
-    const result = await sendOfferService.updateSingleProductIntoDB(req.params.id, user, req.body);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: StatusCodes.OK,
-        message: 'Product updated successfully',
-        data: result,
-    });
-})
-
-
-
-const deleteSingleOrMulifulOrder = catchAsync(async (req: Request, res: Response) => {
-    const user = req.user;
-
-    const result = await sendOfferService.deleteSingleOrMulifulOrderIntoDB(req.params.id, user);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: StatusCodes.OK,
-        message: 'Order deleted successfully',
-        data: result,
-    });
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: "Orders fetched successfully",
+    pagination: result.meta,
+    data: result.result,
+  });
 });
 
+const updateSingleProduct = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user;
+  const result = await sendOfferService.updateSingleProductIntoDB(
+    req.params.id,
+    user,
+    req.body
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: "Product updated successfully",
+    data: result,
+  });
+});
+
+const deleteSingleOrMulifulOrder = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user;
+
+    const result = await sendOfferService.deleteSingleOrMulifulOrderIntoDB(
+      req.params.id,
+      user
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Order deleted successfully",
+      data: result,
+    });
+  }
+);
 
 // all order history
 const productHistoryFromDB = catchAsync(async (req: Request, res: Response) => {
-    const user = req.user
-    const result = await sendOfferService.productHistoryFromDB(user,req.query);
+  const user = req.user;
+  const result = await sendOfferService.productHistoryFromDB(user, req.query);
 
-    sendResponse(res, {
-        success: true,
-        statusCode: StatusCodes.OK,
-        message: 'Orders fetched successfully',
-        pagination: result.meta,
-        data: result.result,
-    });
-})
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: "Orders fetched successfully",
+    pagination: result.meta,
+    data: result.result,
+  });
+});
 
+// update history which is do status false and remove price and availability
+const updateHistory = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user;
+  const result = await sendOfferService.updateHistoryIntoDB(
+    user,
+    req.params.id
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: "Product updated successfully",
+    data: result,
+  });
+});
 
 export const sendOfferController = {
-    createNewOrder,
-    getAllNewOrders,
-    updateSingleProduct,
-    deleteSingleOrMulifulOrder,
-    productHistoryFromDB
-}
+  createNewOrder,
+  getAllNewOrders,
+  updateSingleProduct,
+  deleteSingleOrMulifulOrder,
+  productHistoryFromDB,
+  updateHistory
+};

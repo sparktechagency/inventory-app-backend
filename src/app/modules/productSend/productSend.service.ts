@@ -49,7 +49,7 @@ const sendProductToWholesalerIntoDB = async (
 // get all just status true
 const getAllProductSendToWholeSalerFromDB = async (
   user: JwtPayload,
-  type: "pending" | "confirm" | "received",
+  type: "pending" | "confirmed" | "received",
   query: Record<string, any>
 ) => {
   const filter: Record<string, any> = { status: type };
@@ -213,7 +213,7 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB =
   async (user: JwtPayload, id: string, payload: any) => {
     const statusUpdate = await ProductSendModel.findByIdAndUpdate(
       id,
-      { status: "confirm" },
+      { status: "confirmed" },
       { new: true }
     ).exec();
     if (!statusUpdate) {
@@ -244,7 +244,7 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB =
 const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
   const details = await ProductSendModel.find({
     retailer: user.id,
-    status: { $in: ["confirm", "delivered"] },
+    status: { $in: ["confirmed", "delivered"] },
   })
     .populate({
       path: "product",
@@ -296,7 +296,7 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
   const details = await ProductSendModel.find({
     wholesaler: user.id,
-    status: { $in: ["confirm", "delivered"] },
+    status: { $in: ["confirmed", "delivered"] },
   })
     .populate({
       path: "product",

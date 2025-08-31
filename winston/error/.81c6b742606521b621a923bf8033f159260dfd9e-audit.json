@@ -6,34 +6,9 @@
     "auditLog": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\.81c6b742606521b621a923bf8033f159260dfd9e-audit.json",
     "files": [
         {
-            "date": 1756286697830,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\27-08-2025-15-error.log",
-            "hash": "914edfae58a3473eb29bb305056e75781ff081139ec96f8a1110ecb330243f2d"
-        },
-        {
-            "date": 1756290387420,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\27-08-2025-16-error.log",
-            "hash": "ecf589544677d38fde2c7ac50e58b15336635303fe21cf1d9b82cad7b7209498"
-        },
-        {
-            "date": 1756292437297,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\27-08-2025-17-error.log",
-            "hash": "7508de93bf83fadc78a681879488f6f8172408a8f6c2bdb7ec744480fa1cbedc"
-        },
-        {
-            "date": 1756297398289,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\27-08-2025-18-error.log",
-            "hash": "5e69a5b78ba7c2938002b8010f54ac27f4ae2b0cfd268cbc184c23bbef5d464f"
-        },
-        {
-            "date": 1756360553244,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\28-08-2025-11-error.log",
-            "hash": "521bf07739ea5cad35f1874fa5465d635a0c1bc18c67d32f92b7905cf7d0bde2"
-        },
-        {
-            "date": 1756361288835,
-            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\28-08-2025-12-error.log",
-            "hash": "3bd035623a5d2d0717e5b0a02a97144ae3f9ba9fa0b29e6af0baba3fd9599f1f"
+            "date": 1756614710328,
+            "name": "D:\\Bd Calling (Rakib Projects)\\inventory-app-backend\\winston\\error\\31-08-2025-10-error.log",
+            "hash": "36e9febfbf0432df4c442a882f24d4de86f051c2938be1312324d13da6624813"
         }
     ],
     "hashType": "sha256"
