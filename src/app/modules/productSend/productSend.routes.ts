@@ -13,7 +13,7 @@ router.get("/all/:type", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler), produ
 router.get("/all/received", auth(USER_ROLES.Retailer), productSendControllerFromRetailer.getAllReceivedProductFromWholesaler)
 
 // retailer confirm
-router.get("/all/confirm", auth(USER_ROLES.Retailer), productSendControllerFromRetailer.getAllConfirmProductFromRetailer)
+router.get("/all/confirmed", auth(USER_ROLES.Retailer), productSendControllerFromRetailer.getAllConfirmProductFromRetailer)
 
 // retailer received
 router.get("/all-product/received", auth(USER_ROLES.Wholesaler), productSendControllerFromRetailer.getAllReceivedProductFromRetailer)
