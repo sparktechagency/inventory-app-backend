@@ -17,6 +17,7 @@ import { productSendRoutes } from "../app/modules/productSend/productSend.routes
 import { replayFromWholesalerRoutes } from "../app/modules/replayFromWholesaler/replayFromWholesaler.routes";
 import { confirmationFromRetailerRoutes } from "../app/modules/ConfirmationFromRetailer/ConfirmationFromRetailer.routes";
 import { inviteLinkRoutes } from "../app/modules/inviteLink/inviteLink.routes";
+import { aboutUsContactUsTermsAndConditionsRoutes } from "../app/modules/about-us-contact-us-terms-and-conditions/about-us-contact-us-terms-and-conditions.routes";
 const router = express.Router();
 
 const apiRoutes = [
@@ -90,6 +91,10 @@ const apiRoutes = [
   {
     path: "/invite-link",
     route: inviteLinkRoutes,
+  },
+  {
+    path: "/about-us-contact-us-terms-and-conditions",
+    route: aboutUsContactUsTermsAndConditionsRoutes,
   },
 ];
 
