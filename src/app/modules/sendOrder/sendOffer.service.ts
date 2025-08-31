@@ -83,9 +83,9 @@ const productHistoryFromDB = async (
   )
     .search(["productName"])
     .filter()
-    .sort()
     .paginate()
     .fields();
+  queryBuilder.modelQuery = queryBuilder.modelQuery.sort("createdAt");
 
   const result = await queryBuilder.modelQuery;
   const meta = await queryBuilder.getPaginationInfo();
