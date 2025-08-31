@@ -13,11 +13,19 @@ const createAboutUsContactUsTermsAndConditionsIntoDB = async (
   payload: IAboutUsContactUsTermsAndConditions
 ) => {
   validateType(payload.types);
-  const result = await aboutUsContactUsTermsAndConditionsModel.create(payload);
+
+  const result = await aboutUsContactUsTermsAndConditionsModel.findOneAndUpdate(
+    { types: payload.types },
+    payload,
+    { new: true, upsert: true }
+  );
+
   return result;
 };
 
-const getAllAboutUsContactUsTermsAndConditionsFromDB = async (types: string) => {
+const getAllAboutUsContactUsTermsAndConditionsFromDB = async (
+  types: string
+) => {
   validateType(types);
   const result = await aboutUsContactUsTermsAndConditionsModel.find({
     types: types,
