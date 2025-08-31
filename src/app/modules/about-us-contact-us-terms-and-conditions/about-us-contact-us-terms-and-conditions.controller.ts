@@ -35,25 +35,25 @@ const getAllAboutUsContactUsTermsAndConditionsFromDBController = catchAsync(
 );
 
 const updateAboutUsContactUsTermsAndConditionsIntoDBController = catchAsync(
-    async (req: Request, res: Response) => {
-      const payload = {
-        ...req.body,
-        types: req.params.type,
-      };
-  
-      const result =
-        await aboutUsContactUsTermsAndConditionsService.updateAboutUsContactUsTermsAndConditionsIntoDB(
-          req.params.id,
-          payload
-        );
-      sendResponse(res, {
-        statusCode: StatusCodes.OK,
-        success: true,
-        message: "Updated successfully",
-        data: result,
-      });
-    }
-  );
+  async (req: Request, res: Response) => {
+    const payload = {
+      ...req.body,
+      types: req.params.type,
+    };
+
+    const result =
+      await aboutUsContactUsTermsAndConditionsService.updateAboutUsContactUsTermsAndConditionsIntoDB(
+        req.params.id,
+        payload
+      );
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Updated successfully",
+      data: result,
+    });
+  }
+);
 export const aboutUsContactUsTermsAndConditionsController = {
   createAboutUsContactUsTermsAndConditionsIntoDBController,
   getAllAboutUsContactUsTermsAndConditionsFromDBController,

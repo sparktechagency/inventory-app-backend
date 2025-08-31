@@ -2,19 +2,25 @@ import ApiError from "../../../errors/ApiError";
 import { IInviteLink } from "./inviteLink.interface";
 import { InviteLinkModel } from "./inviteLink.model";
 import { StatusCodes } from "http-status-codes";
-
 const createInviteLinkInToDB = async (payload: IInviteLink) => {
-  const result = await InviteLinkModel.create(payload);
+  // just create one time, if create another time it will replace the previous one
+  const result = await InviteLinkModel.findOneAndUpdate(
+    {}, // condition empty mane single record handle korbo
+    payload, // new data
+    { new: true, upsert: true } // replace if exists, otherwise create
+  );
+
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create invite link");
   }
+
   return result;
 };
 
-const getSingleInviteLinkFromDB = async (   ) => {
-  const result = await InviteLinkModel.findOne({});
+const getSingleInviteLinkFromDB = async () => {
+  const result = await InviteLinkModel.find({});
   if (!result) {
-    return []
+    return [];
   }
   return result;
 };
