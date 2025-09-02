@@ -10,13 +10,63 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import { USER_ROLES } from "../../../enums/user";
 
 // get all wholesaler from db
+// const getAllWholeSaler = async (query: Record<string, any>) => {
+//   const queryBuilder = new QueryBuilder(
+//     User.find({ role: USER_ROLES.Wholesaler }),
+//     query
+//   )
+//     .search(["name", "email", "phone", "storeInformation.businessName"])
+//     .filter()
+//     .sort()
+//     .paginate()
+//     .fields();
+
+//   const data = await queryBuilder.modelQuery;
+//   const meta = await queryBuilder.getPaginationInfo();
+
+//   return {
+//     meta,
+//     data,
+//   };
+// };
+
 const getAllWholeSaler = async (query: Record<string, any>) => {
+  const { searchTerm, ...filters } = query;
+
+  const searchConditions: any[] = [];
+
+  // if searchTerm exist → search across multiple fields
+  if (searchTerm) {
+    searchConditions.push({
+      $or: [
+        { name: { $regex: searchTerm, $options: "i" } },
+        { email: { $regex: searchTerm, $options: "i" } },
+        { phone: { $regex: searchTerm, $options: "i" } },
+        {
+          "storeInformation.businessName": {
+            $regex: searchTerm,
+            $options: "i",
+          },
+        },
+      ],
+    });
+  }
+
+  Object.keys(filters).forEach((field) => {
+    searchConditions.push({
+      [field]: { $regex: filters[field], $options: "i" },
+    });
+  });
+
+  // combine conditions
+  const finalQuery =
+    searchConditions.length > 0 ? { $and: searchConditions } : {};
+
+  // base query
   const queryBuilder = new QueryBuilder(
-    User.find({ role: USER_ROLES.Wholesaler }),
+    User.find({ role: USER_ROLES.Wholesaler }).find(finalQuery),
     query
   )
-    .search(["name", "email", "phone", "storeInformation.businessName"])
-    .filter()
     .sort()
     .paginate()
     .fields();
