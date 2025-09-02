@@ -42,7 +42,7 @@ const updateAboutUsContactUsTermsAndConditionsIntoDB = async (
     await aboutUsContactUsTermsAndConditionsModel.findByIdAndUpdate(
       id,
       payload,
-      { new: true }
+      { new: true, runValidators: true }
     );
   return result;
 };
