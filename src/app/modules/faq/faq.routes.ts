@@ -10,3 +10,4 @@ router.patch("/update/:id", auth(USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN), faqC
 router.delete("/delete/:id", auth(USER_ROLES.Admin, USER_ROLES.SUPER_ADMIN), faqController.deleteFaq)
 
 export const faqRoutes = router
+ 
