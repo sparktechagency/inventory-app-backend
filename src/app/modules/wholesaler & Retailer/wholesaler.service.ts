@@ -11,21 +11,39 @@ import { USER_ROLES } from "../../../enums/user";
 
 // get all wholesaler from db
 const getAllWholeSaler = async (query: Record<string, any>) => {
-  const { searchTerm, page = 1, limit = 10 } = query;
+  const { searchTerm, email, phone, businessName, page = 1, limit = 10 } = query;
 
   const match: Record<string, any> = {
     role: USER_ROLES.Wholesaler,
   };
 
-  // Search logic
+  // Real-time search
+  const orConditions: any[] = [];
+
   if (searchTerm) {
     const regex = new RegExp(searchTerm, "i");
-    match.$or = [
+    orConditions.push(
       { name: { $regex: regex } },
       { email: { $regex: regex } },
       { phone: { $regex: regex } },
-      { "storeInformation.businessName": { $regex: regex } },
-    ];
+      { "storeInformation.businessName": { $regex: regex } }
+    );
+  }
+
+  // Individual filters override or add
+  if (email) {
+    orConditions.push({ email: email });
+  }
+  if (phone) {
+    orConditions.push({ phone: phone });
+  }
+  if (businessName) {
+    const regex = new RegExp(businessName, "i");
+    orConditions.push({ "storeInformation.businessName": { $regex: regex } });
+  }
+
+  if (orConditions.length > 0) {
+    match.$or = orConditions;
   }
 
   const pageNum = Number(page);
@@ -36,25 +54,16 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
   const pipeline = [
     { $match: match },
     {
-      // Add a field for first letter of businessName
       $addFields: {
         firstLetter: {
           $toUpper: { $substrCP: ["$storeInformation.businessName", 0, 1] },
         },
       },
     },
-    {
-      // Sort by first letter alphabetically and then createdAt desc
-      $sort: { firstLetter: 1, createdAt: -1 },
-    },
+    { $sort: { firstLetter: 1, createdAt: -1 } },
     { $skip: skip },
     { $limit: limitNum },
-    {
-      $project: {
-        firstLetter: 0, // hide helper field
-        __v: 0,
-      },
-    },
+    { $project: { firstLetter: 0, __v: 0 } },
   ];
 
   const data = await User.aggregate(pipeline);
@@ -62,15 +71,11 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
   const totalPage = Math.ceil(total / limitNum);
 
   return {
-    meta: {
-      total,
-      page: pageNum,
-      limit: limitNum,
-      totalPage,
-    },
+    meta: { total, page: pageNum, limit: limitNum, totalPage },
     data,
   };
 };
+
 
 // get single wholesaler from db
 const getWholeSalerById = async (id: string) => {
