@@ -35,6 +35,7 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
 
   const searchConditions: any[] = [];
 
+  // 🟢 Search condition
   if (searchTerm) {
     searchConditions.push({
       $or: [
@@ -51,28 +52,32 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
     });
   }
 
+  // 🟢 Field filters
   Object.keys(filters).forEach((field) => {
     searchConditions.push({
       [field]: { $regex: filters[field], $options: "i" },
     });
   });
 
+  // 🟢 Final Mongo query
   const finalQuery =
     searchConditions.length > 0 ? { $and: searchConditions } : {};
 
-  // 🛠 Step 1: build query (NO paginate yet)
+  // 🛠 Step 1: Build query without pagination
   const queryBuilder = new QueryBuilder(
     User.find({ role: USER_ROLES.Wholesaler }).find(finalQuery),
     query
-  ).sort().fields();
+  )
+    .sort()
+    .fields();
 
-  // 🛠 Step 2: get meta BEFORE pagination
+  // 🛠 Step 2: Get meta BEFORE pagination
   const meta = await queryBuilder.getPaginationInfo();
 
-  // 🛠 Step 3: apply pagination AFTER meta calculation
+  // 🛠 Step 3: Apply pagination AFTER meta
   queryBuilder.paginate();
 
-  // 🛠 Step 4: execute final query
+  // 🛠 Step 4: Execute query
   const data = await queryBuilder.modelQuery;
 
   return {
@@ -80,6 +85,7 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
     data,
   };
 };
+
 
 
 // get single wholesaler from db
