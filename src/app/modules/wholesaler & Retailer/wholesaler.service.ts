@@ -33,10 +33,8 @@ import { USER_ROLES } from "../../../enums/user";
 const getAllWholeSaler = async (query: Record<string, any>) => {
   const { searchTerm, ...filters } = query;
 
-  // Base query → role is always Wholesaler
   const baseQuery = { role: USER_ROLES.Wholesaler };
 
-  // 🔹 Search query (using $or)
   let searchQuery = {};
   if (searchTerm) {
     searchQuery = {
@@ -54,27 +52,19 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
     };
   }
 
-  // 🔹 Filters query (each field with regex)
   const filterQuery = Object.keys(filters).reduce((acc, key) => {
     acc[key] = { $regex: filters[key], $options: "i" };
     return acc;
   }, {} as Record<string, any>);
 
-  // 🔹 Combine all queries safely
   const finalQuery = { ...baseQuery, ...filterQuery, ...searchQuery };
 
-  // 🔹 Step 1: Build QueryBuilder (no pagination yet)
   const queryBuilder = new QueryBuilder(User.find(finalQuery), query)
     .sort()
-    .fields();
+    .fields()
+    .paginate();
 
-  // 🔹 Step 2: Get pagination info BEFORE applying pagination
   const meta = await queryBuilder.getPaginationInfo();
-
-  // 🔹 Step 3: Apply pagination AFTER meta
-  queryBuilder.paginate();
-
-  // 🔹 Step 4: Execute final query
   const data = await queryBuilder.modelQuery;
 
   return { meta, data };
