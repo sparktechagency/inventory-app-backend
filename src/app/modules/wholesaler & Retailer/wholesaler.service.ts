@@ -30,11 +30,13 @@ import { USER_ROLES } from "../../../enums/user";
 //   };
 // };
 
-const getAllWholeSaler = async (query: Record<string, any>) => {
+
+export const getAllWholeSaler = async (query: Record<string, any>) => {
   const { searchTerm, ...filters } = query;
 
   const baseQuery = { role: USER_ROLES.Wholesaler };
 
+  // Search logic
   let searchQuery = {};
   if (searchTerm) {
     searchQuery = {
@@ -52,6 +54,7 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
     };
   }
 
+  // Filter logic
   const filterQuery = Object.keys(filters).reduce((acc, key) => {
     acc[key] = { $regex: filters[key], $options: "i" };
     return acc;
@@ -59,16 +62,21 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
 
   const finalQuery = { ...baseQuery, ...filterQuery, ...searchQuery };
 
+  // Initialize QueryBuilder
   const queryBuilder = new QueryBuilder(User.find(finalQuery), query)
     .sort()
-    .fields()
-    .paginate();
+    .fields();
 
+  // ✅ Get total count & pagination info BEFORE applying skip/limit
   const meta = await queryBuilder.getPaginationInfo();
+
+  // ✅ Apply pagination to fetch data
+  queryBuilder.paginate();
   const data = await queryBuilder.modelQuery;
 
   return { meta, data };
 };
+
 
 // get single wholesaler from db
 const getWholeSalerById = async (id: string) => {
