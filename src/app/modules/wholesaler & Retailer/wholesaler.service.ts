@@ -10,70 +10,22 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import { USER_ROLES } from "../../../enums/user";
 
 // get all wholesaler from db
-// const getAllWholeSaler = async (query: Record<string, any>) => {
-//   const queryBuilder = new QueryBuilder(
-//     User.find({ role: USER_ROLES.Wholesaler }),
-//     query
-//   )
-//     .search(["name", "email", "phone", "storeInformation.businessName"])
-//     .filter()
-//     .sort()
-//     .paginate()
-//     .fields();
-
-//   const data = await queryBuilder.modelQuery;
-//   const meta = await queryBuilder.getPaginationInfo();
-
-//   return {
-//     meta,
-//     data,
-//   };
-// };
-
 const getAllWholeSaler = async (query: Record<string, any>) => {
-  const { searchTerm, page = "1", limit = "10", ...filters } = query;
+  const queryBuilder = new QueryBuilder(
+    User.find({ role: USER_ROLES.Wholesaler }),
+    query
+  )
+    .search(["name", "email", "phone", "storeInformation.businessName"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
-  const pageNum = parseInt(page as string, 10);
-  const limitNum = parseInt(limit as string, 10);
-  const skip = (pageNum - 1) * limitNum;
-
-  // Base query
-  let mongoQuery: Record<string, any> = { role: USER_ROLES.Wholesaler };
-
-  // Search term
-  if (searchTerm) {
-    mongoQuery.$or = [
-      { name: { $regex: searchTerm, $options: "i" } },
-      { email: { $regex: searchTerm, $options: "i" } },
-      { phone: { $regex: searchTerm, $options: "i" } },
-      { "storeInformation.businessName": { $regex: searchTerm, $options: "i" } },
-    ];
-  }
-
-  // Additional filters
-  Object.keys(filters).forEach((key) => {
-    mongoQuery[key] = { $regex: filters[key], $options: "i" };
-  });
-
-  // Total count
-  const total = await User.countDocuments(mongoQuery);
-
-  // Fetch data with pagination
-  const data = await User.find(mongoQuery)
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limitNum)
-    .select("-__v"); // fields filtering
-
-  const totalPage = Math.ceil(total / limitNum);
+  const data = await queryBuilder.modelQuery;
+  const meta = await queryBuilder.getPaginationInfo();
 
   return {
-    meta: {
-      total,
-      limit: limitNum,
-      page: pageNum,
-      totalPage,
-    },
+    meta,
     data,
   };
 };
