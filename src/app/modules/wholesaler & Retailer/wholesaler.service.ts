@@ -6,8 +6,8 @@ import { flutterWaveModel } from "../flutterwavePackage/flutterwavePackage.model
 import { paymentVerificationModel } from "../multiPaymentMethod/multiPaymentMethod.model";
 import { IPaginationOptions } from "../../../types/pagination";
 import { paginationHelper } from "../../../helpers/paginationHelper";
-import QueryBuilder from "../../builder/QueryBuilder";
 import { USER_ROLES } from "../../../enums/user";
+import { PipelineStage } from "mongoose";
 
 // get all wholesaler from db
 const getAllWholeSaler = async (query: Record<string, any>) => {
@@ -66,7 +66,7 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
     { $project: { firstLetter: 0, __v: 0 } },
   ];
 
-  const data = await User.aggregate(pipeline);
+  const data = await User.aggregate(pipeline as PipelineStage[]);
   const total = await User.countDocuments(match);
   const totalPage = Math.ceil(total / limitNum);
 
