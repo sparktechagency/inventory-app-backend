@@ -31,51 +31,52 @@ import { USER_ROLES } from "../../../enums/user";
 // };
 
 const getAllWholeSaler = async (query: Record<string, any>) => {
-  const { searchTerm, ...filters } = query;
+  const { searchTerm, page = "1", limit = "10", ...filters } = query;
 
-  const baseQuery = { role: USER_ROLES.Wholesaler };
+  const pageNum = parseInt(page as string, 10);
+  const limitNum = parseInt(limit as string, 10);
+  const skip = (pageNum - 1) * limitNum;
 
-  // Search logic
-  let searchQuery = {};
+  // Base query
+  let mongoQuery: Record<string, any> = { role: USER_ROLES.Wholesaler };
+
+  // Search term
   if (searchTerm) {
-    searchQuery = {
-      $or: [
-        { name: { $regex: searchTerm, $options: "i" } },
-        { email: { $regex: searchTerm, $options: "i" } },
-        { phone: { $regex: searchTerm, $options: "i" } },
-        {
-          "storeInformation.businessName": {
-            $regex: searchTerm,
-            $options: "i",
-          },
-        },
-      ],
-    };
+    mongoQuery.$or = [
+      { name: { $regex: searchTerm, $options: "i" } },
+      { email: { $regex: searchTerm, $options: "i" } },
+      { phone: { $regex: searchTerm, $options: "i" } },
+      { "storeInformation.businessName": { $regex: searchTerm, $options: "i" } },
+    ];
   }
 
-  // Filter logic
-  const filterQuery = Object.keys(filters).reduce((acc, key) => {
-    acc[key] = { $regex: filters[key], $options: "i" };
-    return acc;
-  }, {} as Record<string, any>);
+  // Additional filters
+  Object.keys(filters).forEach((key) => {
+    mongoQuery[key] = { $regex: filters[key], $options: "i" };
+  });
 
-  const finalQuery = { ...baseQuery, ...filterQuery, ...searchQuery };
+  // Total count
+  const total = await User.countDocuments(mongoQuery);
 
-  // Initialize QueryBuilder
-  const queryBuilder = new QueryBuilder(User.find(finalQuery), query)
-    .sort()
-    .fields();
+  // Fetch data with pagination
+  const data = await User.find(mongoQuery)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limitNum)
+    .select("-__v"); // fields filtering
 
-  // ✅ Get total count & pagination info BEFORE applying skip/limit
-  const meta = await queryBuilder.getPaginationInfo();
-  console.log("Total wholesalers in DB:", meta.total);
-  // ✅ Apply pagination to fetch data
-  queryBuilder.paginate();
-  const data = await queryBuilder.modelQuery;
+  const totalPage = Math.ceil(total / limitNum);
 
-  return { meta, data };
+  return {
+    meta: {
+      total,
+      limit: limitNum,
+      page: pageNum,
+      totalPage,
+    },
+    data,
+  };
 };
-
 // get single wholesaler from db
 const getWholeSalerById = async (id: string) => {
   const wholeSalerUser = await User.findById(id);
