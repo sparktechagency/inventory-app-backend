@@ -69,7 +69,8 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
   )
     .sort()
     .paginate()
-    .fields();
+    .fields()
+    .paginate();
 
   const data = await queryBuilder.modelQuery;
   const meta = await queryBuilder.getPaginationInfo();
