@@ -73,6 +73,7 @@ export const getAllWholeSaler = async (query: Record<string, any>) => {
   // ✅ Apply pagination to fetch data
   queryBuilder.paginate();
   const data = await queryBuilder.modelQuery;
+  console.log("wholesaler count",User.find({role:USER_ROLES.Wholesaler}).countDocuments())
 
   return { meta, data };
 };
