@@ -8,8 +8,6 @@ import { Request, Response } from "express";
 const getAllWholeSalers = catchAsync(async (req: Request, res: Response) => {
   const result = await wholesalerServices.getAllWholeSaler(req.query);
 
-  console.log("Total wholesalers in DB:", result.meta.total); // ✅ Debug total
-
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,

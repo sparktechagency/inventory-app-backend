@@ -11,24 +11,67 @@ import { USER_ROLES } from "../../../enums/user";
 
 // get all wholesaler from db
 const getAllWholeSaler = async (query: Record<string, any>) => {
-  const queryBuilder = new QueryBuilder(
-    User.find({ role: USER_ROLES.Wholesaler }),
-    query
-  )
-    .search(["name", "email", "phone", "storeInformation.businessName"])
-    .filter()
-    .sort()
-    .paginate()
-    .fields();
+  const { searchTerm, page = 1, limit = 10 } = query;
 
-  const data = await queryBuilder.modelQuery;
-  const meta = await queryBuilder.getPaginationInfo();
+  const match: Record<string, any> = {
+    role: USER_ROLES.Wholesaler,
+  };
+
+  // Search logic
+  if (searchTerm) {
+    const regex = new RegExp(searchTerm, "i");
+    match.$or = [
+      { name: { $regex: regex } },
+      { email: { $regex: regex } },
+      { phone: { $regex: regex } },
+      { "storeInformation.businessName": { $regex: regex } },
+    ];
+  }
+
+  const pageNum = Number(page);
+  const limitNum = Number(limit);
+  const skip = (pageNum - 1) * limitNum;
+
+  // Aggregation pipeline
+  const pipeline = [
+    { $match: match },
+    {
+      // Add a field for first letter of businessName
+      $addFields: {
+        firstLetter: {
+          $toUpper: { $substrCP: ["$storeInformation.businessName", 0, 1] },
+        },
+      },
+    },
+    {
+      // Sort by first letter alphabetically and then createdAt desc
+      $sort: { firstLetter: 1, createdAt: -1 },
+    },
+    { $skip: skip },
+    { $limit: limitNum },
+    {
+      $project: {
+        firstLetter: 0, // hide helper field
+        __v: 0,
+      },
+    },
+  ];
+
+  const data = await User.aggregate(pipeline);
+  const total = await User.countDocuments(match);
+  const totalPage = Math.ceil(total / limitNum);
 
   return {
-    meta,
+    meta: {
+      total,
+      page: pageNum,
+      limit: limitNum,
+      totalPage,
+    },
     data,
   };
 };
+
 // get single wholesaler from db
 const getWholeSalerById = async (id: string) => {
   const wholeSalerUser = await User.findById(id);
