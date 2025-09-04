@@ -33,11 +33,13 @@ import { USER_ROLES } from "../../../enums/user";
 const getAllWholeSaler = async (query: Record<string, any>) => {
   const { searchTerm, ...filters } = query;
 
-  const searchConditions: any[] = [];
+  // Base query → role is always Wholesaler
+  const baseQuery = { role: USER_ROLES.Wholesaler };
 
-  // 🟢 Search condition
+  // 🔹 Search query (using $or)
+  let searchQuery = {};
   if (searchTerm) {
-    searchConditions.push({
+    searchQuery = {
       $or: [
         { name: { $regex: searchTerm, $options: "i" } },
         { email: { $regex: searchTerm, $options: "i" } },
@@ -49,44 +51,34 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
           },
         },
       ],
-    });
+    };
   }
 
-  // 🟢 Field filters
-  Object.keys(filters).forEach((field) => {
-    searchConditions.push({
-      [field]: { $regex: filters[field], $options: "i" },
-    });
-  });
+  // 🔹 Filters query (each field with regex)
+  const filterQuery = Object.keys(filters).reduce((acc, key) => {
+    acc[key] = { $regex: filters[key], $options: "i" };
+    return acc;
+  }, {} as Record<string, any>);
 
-  // 🟢 Final Mongo query
-  const finalQuery =
-    searchConditions.length > 0 ? { $and: searchConditions } : {};
+  // 🔹 Combine all queries safely
+  const finalQuery = { ...baseQuery, ...filterQuery, ...searchQuery };
 
-  // 🛠 Step 1: Build query without pagination
-  const queryBuilder = new QueryBuilder(
-    User.find({ role: USER_ROLES.Wholesaler }).find(finalQuery),
-    query
-  )
+  // 🔹 Step 1: Build QueryBuilder (no pagination yet)
+  const queryBuilder = new QueryBuilder(User.find(finalQuery), query)
     .sort()
     .fields();
 
-  // 🛠 Step 2: Get meta BEFORE pagination
+  // 🔹 Step 2: Get pagination info BEFORE applying pagination
   const meta = await queryBuilder.getPaginationInfo();
 
-  // 🛠 Step 3: Apply pagination AFTER meta
+  // 🔹 Step 3: Apply pagination AFTER meta
   queryBuilder.paginate();
 
-  // 🛠 Step 4: Execute query
+  // 🔹 Step 4: Execute final query
   const data = await queryBuilder.modelQuery;
 
-  return {
-    meta,
-    data,
-  };
+  return { meta, data };
 };
-
-
 
 // get single wholesaler from db
 const getWholeSalerById = async (id: string) => {
