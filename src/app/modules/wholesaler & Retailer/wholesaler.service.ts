@@ -30,8 +30,7 @@ import { USER_ROLES } from "../../../enums/user";
 //   };
 // };
 
-
-export const getAllWholeSaler = async (query: Record<string, any>) => {
+const getAllWholeSaler = async (query: Record<string, any>) => {
   const { searchTerm, ...filters } = query;
 
   const baseQuery = { role: USER_ROLES.Wholesaler };
@@ -69,15 +68,13 @@ export const getAllWholeSaler = async (query: Record<string, any>) => {
 
   // ✅ Get total count & pagination info BEFORE applying skip/limit
   const meta = await queryBuilder.getPaginationInfo();
-
+  console.log("Total wholesalers in DB:", meta.total);
   // ✅ Apply pagination to fetch data
   queryBuilder.paginate();
   const data = await queryBuilder.modelQuery;
-  console.log("wholesaler count",User.find({role:USER_ROLES.Wholesaler}).countDocuments())
 
   return { meta, data };
 };
-
 
 // get single wholesaler from db
 const getWholeSalerById = async (id: string) => {
