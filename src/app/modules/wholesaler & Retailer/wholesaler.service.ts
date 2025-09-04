@@ -35,7 +35,6 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
 
   const searchConditions: any[] = [];
 
-  // if searchTerm exist → search across multiple fields
   if (searchTerm) {
     searchConditions.push({
       $or: [
@@ -58,28 +57,30 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
     });
   });
 
-  // combine conditions
   const finalQuery =
     searchConditions.length > 0 ? { $and: searchConditions } : {};
 
-  // base query
+  // 🛠 Step 1: build query (NO paginate yet)
   const queryBuilder = new QueryBuilder(
     User.find({ role: USER_ROLES.Wholesaler }).find(finalQuery),
     query
-  )
-    .sort()
-    .paginate()
-    .fields()
-    .paginate();
+  ).sort().fields();
 
-  const data = await queryBuilder.modelQuery;
+  // 🛠 Step 2: get meta BEFORE pagination
   const meta = await queryBuilder.getPaginationInfo();
+
+  // 🛠 Step 3: apply pagination AFTER meta calculation
+  queryBuilder.paginate();
+
+  // 🛠 Step 4: execute final query
+  const data = await queryBuilder.modelQuery;
 
   return {
     meta,
     data,
   };
 };
+
 
 // get single wholesaler from db
 const getWholeSalerById = async (id: string) => {
