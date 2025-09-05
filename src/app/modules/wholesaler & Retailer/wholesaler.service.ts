@@ -11,7 +11,14 @@ import { PipelineStage } from "mongoose";
 
 // get all wholesaler from db
 const getAllWholeSaler = async (query: Record<string, any>) => {
-  const { searchTerm, email, phone, businessName, page = 1, limit = 10 } = query;
+  const {
+    searchTerm,
+    email,
+    phone,
+    businessName,
+    page = 1,
+    limit = 10,
+  } = query;
 
   const match: Record<string, any> = {
     role: USER_ROLES.Wholesaler,
@@ -75,7 +82,6 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
     data,
   };
 };
-
 
 // get single wholesaler from db
 const getWholeSalerById = async (id: string) => {

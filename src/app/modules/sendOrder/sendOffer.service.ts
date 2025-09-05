@@ -77,9 +77,13 @@ const productHistoryFromDB = async (
   user: JwtPayload,
   query: Record<string, any>
 ) => {
+  const updatedQuery = {
+    ...query,
+    limit: 20, 
+  };
   const queryBuilder = new QueryBuilder(
     SendOfferModelForRetailer.find({ retailer: user.id, status: true }),
-    query
+    updatedQuery
   )
     .search(["productName"])
     .filter()
