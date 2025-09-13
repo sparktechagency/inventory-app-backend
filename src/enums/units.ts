@@ -11,4 +11,5 @@ export enum UNIT {
   Bag = "Bag",
   Pkt = "Pkt",
   Other = "Other",
+  Dozen = "Dozen"
 }

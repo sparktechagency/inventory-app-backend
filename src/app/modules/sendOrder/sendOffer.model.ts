@@ -24,4 +24,4 @@ const sendOfferSchemaForRetailer = new Schema<ISendOffer>(
 );
 
 // Create the model
-export const SendOfferModelForRetailer = model<ISendOffer>("sendOffer", sendOfferSchemaForRetailer);
+export const SendOfferModelForRetailer = model<ISendOffer>("sendOffer", sendOfferSchemaForRetailer); 
