@@ -70,8 +70,6 @@ const getAllProductSendToWholeSalerFromDB = async (
   const productQuery = ProductSendModel.find(filter)
     .populate({
       path: "product",
-      // // TODO: Need to check for isDraft
-      // match: { isDraft: { $exists: true } },
     })
     .populate({
       path: "retailer",
@@ -175,6 +173,7 @@ const getAllReceivedProductFromWholesalerDB = async (user: JwtPayload) => {
   })
     .populate("product")
     .lean();
+
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
@@ -405,6 +404,8 @@ const saveAsDraftStatusTrueIntoDB = async (
   for (const prod of payload.product) {
     await SendOfferModelForRetailer.findByIdAndUpdate(prod._id, {
       isDraft: true,
+      price: prod.price,
+      availability: prod.availability,
     });
   }
   return updateStatus;

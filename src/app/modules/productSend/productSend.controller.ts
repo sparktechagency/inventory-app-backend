@@ -24,7 +24,6 @@ const getAllProductToWholesaler = catchAsync(
   async (req: Request, res: Response) => {
     const type = req.params.type as "pending" | "confirmed" | "received";
     const user = req.user;
-
     const result = await productSendService.getAllProductSendToWholeSalerFromDB(
       user,
       type,
