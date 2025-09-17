@@ -28,6 +28,9 @@ router.patch("/update-received/:id", auth(USER_ROLES.Retailer), productSendContr
 
 router.patch("/update-delivered/:id", auth(USER_ROLES.Wholesaler), productSendControllerFromRetailer.updateDelivaryStatusAsaWholesaler)
 
+// save as draft
+router.patch("/save-as-draft/:id", auth(USER_ROLES.Wholesaler), productSendControllerFromRetailer.saveAsDraftStatusTrue)
+
 router.delete("/:id", auth(USER_ROLES.Retailer, USER_ROLES.Wholesaler), productSendControllerFromRetailer.deleteProduct)
 
 export const productSendRoutes = router

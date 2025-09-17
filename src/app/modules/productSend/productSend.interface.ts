@@ -5,4 +5,5 @@ export interface IProductSend {
     status: "pending" | "confirmed" | "received" | "delivered"
     retailer: Types.ObjectId | undefined
     wholesaler: Types.ObjectId | undefined
+    isDeleted: boolean
 }

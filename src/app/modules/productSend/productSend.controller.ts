@@ -30,7 +30,6 @@ const getAllProductToWholesaler = catchAsync(
       type,
       req.query
     );
-
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,
@@ -178,6 +177,24 @@ const updateDelivaryStatusAsaWholesaler = catchAsync(
   }
 );
 
+// save as draft
+const saveAsDraftStatusTrue = catchAsync(
+  async (req: Request, res: Response) => {
+    const user = req.user;
+    const result = await productSendService.saveAsDraftStatusTrueIntoDB(
+      user,
+      req.params.id,
+      req.body
+    );
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "Product updated successfully",
+      data: result,
+    });
+  }
+);
+
 export const productSendControllerFromRetailer = {
   sendProductToWholesaler,
   getAllProductToWholesaler,
@@ -190,4 +207,5 @@ export const productSendControllerFromRetailer = {
   getAllReceivedProductFromRetailer,
   deleteProduct,
   updateDelivaryStatusAsaWholesaler,
+  saveAsDraftStatusTrue,
 };

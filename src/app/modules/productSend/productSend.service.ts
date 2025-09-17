@@ -52,7 +52,9 @@ const getAllProductSendToWholeSalerFromDB = async (
   type: "pending" | "confirmed" | "received",
   query: Record<string, any>
 ) => {
-  const filter: Record<string, any> = { status: type };
+  const filter: Record<string, any> = {
+    status: type,
+  };
 
   if (user.role === "Retailer") {
     filter.retailer = user.id;
@@ -62,25 +64,34 @@ const getAllProductSendToWholeSalerFromDB = async (
 
   if (query.status) {
     filter.status = query.status;
+    // filter.isDeleted = false;
   }
 
-  const productQuery = ProductSendModel.find(filter);
-
-  const queryBuilder = new QueryBuilder(productQuery, query)
-    .search(["note"]) // or any searchable field
-    .filter()
-    .sort()
-    .paginate()
-    .fields()
-    .populate(["product", "retailer", "wholesaler"], {
-      // product: 'productName unit quantity additionalInfo price availability',
-      retailer:
+  const productQuery = ProductSendModel.find(filter)
+    .populate({
+      path: "product",
+      // // TODO: Need to check for isDraft
+      // match: { isDraft: { $exists: true } },
+    })
+    .populate({
+      path: "retailer",
+      select:
         "name email image phone storeInformation.businessName storeInformation.location",
-      wholesaler:
+    })
+    .populate({
+      path: "wholesaler",
+      select:
         "name email image phone storeInformation.businessName storeInformation.location",
     });
 
-  const data = await queryBuilder.modelQuery;
+  const queryBuilder = new QueryBuilder(productQuery, query)
+    .search(["note"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const data = await queryBuilder.modelQuery.exec();
   const meta = await queryBuilder.getPaginationInfo();
 
   return {
@@ -184,7 +195,7 @@ const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
     { status: "received" },
     { new: true }
   ).exec();
-
+  // console.log("statusUpdate", statusUpdate);
   if (!statusUpdate) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product");
   }
@@ -194,8 +205,10 @@ const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
       price: prod.price,
       availability: prod.availability,
       status: true,
+      $unset: { isDraft: 1 },
     });
   }
+  // console.log("SendOfferModelForRetailer", payload.product);
 
   const notificationPayload = {
     sender: user.id,
@@ -361,11 +374,40 @@ const updateDelivaryStatusAsaWholesalerIntoDB = async (
 };
 
 const deleteProductFromDB = async (id: string) => {
-  const result = await ProductSendModel.findByIdAndDelete(id);
+  const result = await ProductSendModel.findByIdAndUpdate(id, {
+    isDeleted: true,
+  });
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to delete product");
   }
   return result;
+};
+
+// product update save as like isDraft true.
+
+const saveAsDraftStatusTrueIntoDB = async (
+  user: JwtPayload,
+  id: string,
+  payload: any
+) => {
+  const details = await ProductSendModel.findById(id);
+  if (!details) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
+  }
+  const updateStatus = await ProductSendModel.findByIdAndUpdate(
+    id,
+    { isDraft: true },
+    { new: true }
+  ).exec();
+  if (!updateStatus) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product");
+  }
+  for (const prod of payload.product) {
+    await SendOfferModelForRetailer.findByIdAndUpdate(prod._id, {
+      isDraft: true,
+    });
+  }
+  return updateStatus;
 };
 
 export const productSendService = {
@@ -380,4 +422,5 @@ export const productSendService = {
   getAllReceivedProductFromRetailerDB,
   deleteProductFromDB,
   updateDelivaryStatusAsaWholesalerIntoDB,
+  saveAsDraftStatusTrueIntoDB,
 };

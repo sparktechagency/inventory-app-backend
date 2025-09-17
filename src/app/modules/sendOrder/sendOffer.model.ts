@@ -17,6 +17,7 @@ const sendOfferSchemaForRetailer = new Schema<ISendOffer>(
         status: { type: Boolean, default: false },
         price: { type: Number },
         availability: { type: Boolean },
+        isDraft: { type: Boolean, default: false },
     },
     {
         timestamps: true,

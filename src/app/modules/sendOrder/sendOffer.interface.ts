@@ -10,4 +10,5 @@ export interface ISendOffer {
     status: boolean
     price?: number
     availability?: boolean
+    isDraft?: boolean
 }
