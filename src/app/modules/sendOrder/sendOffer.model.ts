@@ -15,8 +15,6 @@ const sendOfferSchemaForRetailer = new Schema<ISendOffer>(
         additionalInfo: { type: String },
         retailer: { type: Types.ObjectId, ref: "User" },
         status: { type: Boolean, default: false },
-        price: { type: Number },
-        availability: { type: Boolean },
         isDraft: { type: Boolean, default: false },
     },
     {

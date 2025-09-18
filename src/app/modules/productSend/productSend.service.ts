@@ -12,20 +12,29 @@ import { USER_ROLES } from "../../../enums/user";
 
 const sendProductToWholesalerIntoDB = async (
   user: JwtPayload,
-  payload: IProductSend[]
+  payload: any
 ) => {
   // collect all product IDs from payload
-  const productIds = payload.flatMap((item) => item.product);
+  const productIds = payload.flatMap((item: any) => item.product);
 
   // product status update only for given productIds
   await SendOfferModelForRetailer.updateMany(
     { retailer: user.id, _id: { $in: productIds } },
     { status: true }
   );
-  const formattedPayload = payload?.map((item) => ({
-    ...item,
-    retailer: user.id,
+
+  const formattedPayload: IProductSend[] = payload.map((item: any) => ({
+    product: item.product?.map((id: any) => ({
+      _id: id,
+      price: 0,
+      availability: false,
+    })),
+    retailer: user.id as any,
+    wholesaler: item.wholesaler as any,
+    status: "pending",
+    isDeleted: false,
   }));
+
   const result = await ProductSendModel.create(formattedPayload);
   if (!result) {
     throw new ApiError(
@@ -69,7 +78,9 @@ const getAllProductSendToWholeSalerFromDB = async (
 
   const productQuery = ProductSendModel.find(filter)
     .populate({
-      path: "product",
+      path: "product._id",
+      select:
+        "productName unit quantity additionalInfo retailer status ",
     })
     .populate({
       path: "retailer",
@@ -101,7 +112,11 @@ const getAllProductSendToWholeSalerFromDB = async (
 const updateProductSendDetailIntoDB = async (
   id: string,
   user: JwtPayload,
-  productData: any
+  productData: {
+    product: string;
+    price: number;
+    availability: boolean;
+  }[]
 ) => {
   const details = await ProductSendModel.findById(id);
   const updateStatusRequest = await ProductSendModel.findByIdAndUpdate(id, {
@@ -111,7 +126,6 @@ const updateProductSendDetailIntoDB = async (
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
-
   if (!details.product || details.product.length === 0) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
@@ -184,20 +198,65 @@ const getAllReceivedProductFromWholesalerDB = async (user: JwtPayload) => {
 // availability?: boolean
 // status: "received"
 
+// const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
+//   user: JwtPayload,
+//   id: string,
+//   payload: any
+// ) => {
+//   const statusUpdate = await ProductSendModel.findByIdAndUpdate(
+//     id,
+//     { status: "received" },
+//     { new: true }
+//   ).exec();
+//   // console.log("statusUpdate", statusUpdate);
+//   if (!statusUpdate) {
+//     throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product");
+//   }
+
+//   for (const prod of payload.product) {
+//     await SendOfferModelForRetailer.findByIdAndUpdate(prod._id, {
+//       price: prod.price,
+//       availability: prod.availability,
+//       status: true,
+//       $unset: { isDraft: 1 },
+//     });
+//   }
+//   // console.log("SendOfferModelForRetailer", payload.product);
+
+//   const notificationPayload = {
+//     sender: user.id,
+//     receiver: statusUpdate.retailer,
+//     message: `${user.name} has confirmed the order id ${id}`,
+//   };
+
+//   await sendNotifications(notificationPayload);
+
+//   return statusUpdate;
+// };
+// TODO: update product jeta wholesaler price and availability update korbe.
 const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
   user: JwtPayload,
   id: string,
-  payload: any
+  payload: IProductSend
 ) => {
-  const statusUpdate = await ProductSendModel.findByIdAndUpdate(
-    id,
-    { status: "received" },
-    { new: true }
-  ).exec();
-  // console.log("statusUpdate", statusUpdate);
-  if (!statusUpdate) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product");
+  const productSend = await ProductSendModel.findById(id);
+  if (!productSend) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Product not found");
   }
+
+  productSend.status = "received";
+
+  for (const updatedProd of payload.product) {
+    const prodIndex = productSend.product.findIndex(
+      (p) => p._id.toString() === updatedProd._id.toString()
+    );
+    if (prodIndex !== -1) {
+      productSend.product[prodIndex].price = updatedProd.price;
+      productSend.product[prodIndex].availability = updatedProd.availability;
+    }
+  }
+
+  await productSend.save();
 
   for (const prod of payload.product) {
     await SendOfferModelForRetailer.findByIdAndUpdate(prod._id, {
@@ -207,17 +266,15 @@ const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
       $unset: { isDraft: 1 },
     });
   }
-  // console.log("SendOfferModelForRetailer", payload.product);
 
   const notificationPayload = {
     sender: user.id,
-    receiver: statusUpdate.retailer,
+    receiver: productSend.retailer,
     message: `${user.name} has confirmed the order id ${id}`,
   };
-
   await sendNotifications(notificationPayload);
 
-  return statusUpdate;
+  return productSend;
 };
 
 // update bulk quantity base on retailer
@@ -254,6 +311,7 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB =
 
 // get all confirm base on retailer
 const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
+
   const details = await ProductSendModel.find({
     retailer: user.id,
     status: { $in: ["confirmed", "delivered"] },
@@ -285,7 +343,9 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
     status: "received",
   })
     .populate({
-      path: "product",
+      path: "product._id",
+      select:
+        "productName unit quantity additionalInfo retailer status ",
     })
     .populate({
       path: "retailer",
@@ -306,12 +366,14 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
 
 // get all confirm base on wholesaler
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
+  console.log("I am here");
   const details = await ProductSendModel.find({
     wholesaler: user.id,
     status: { $in: ["confirmed", "delivered"] },
   })
     .populate({
-      path: "product",
+      path: "product._id",
+      select: "productName unit quantity additionalInfo retailer status ",
     })
     .populate({
       path: "retailer",
@@ -373,9 +435,7 @@ const updateDelivaryStatusAsaWholesalerIntoDB = async (
 };
 
 const deleteProductFromDB = async (id: string) => {
-  const result = await ProductSendModel.findByIdAndUpdate(id, {
-    isDeleted: true,
-  });
+  const result = await ProductSendModel.findByIdAndDelete(id);
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to delete product");
   }
@@ -386,29 +446,37 @@ const deleteProductFromDB = async (id: string) => {
 
 const saveAsDraftStatusTrueIntoDB = async (
   user: JwtPayload,
-  id: string,
+  productSendId: string,
   payload: any
 ) => {
-  const details = await ProductSendModel.findById(id);
-  if (!details) {
+  const productSend = await ProductSendModel.findById(productSendId);
+  if (!productSend) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
-  const updateStatus = await ProductSendModel.findByIdAndUpdate(
-    id,
-    { isDraft: true },
-    { new: true }
-  ).exec();
-  if (!updateStatus) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product");
-  }
+
   for (const prod of payload.product) {
-    await SendOfferModelForRetailer.findByIdAndUpdate(prod._id, {
-      isDraft: true,
-      price: prod.price,
-      availability: prod.availability,
-    });
+    const result = await ProductSendModel.updateOne(
+      { _id: productSendId, "product._id": prod._id },
+      {
+        $set: {
+          "product.$.isDraft": true,
+          "product.$.price": prod.price,
+          "product.$.availability": prod.availability,
+        },
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      throw new ApiError(
+        StatusCodes.BAD_REQUEST,
+        `Failed to update product with ID ${prod._id}`
+      );
+    }
   }
-  return updateStatus;
+
+  const updatedProductSend = await ProductSendModel.findById(productSendId);
+
+  return updatedProductSend;
 };
 
 export const productSendService = {
