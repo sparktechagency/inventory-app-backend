@@ -26,7 +26,7 @@ const getAllNewOrders = catchAsync(async (req: Request, res: Response) => {
     statusCode: StatusCodes.OK,
     message: "Orders fetched successfully",
     pagination: result.meta,
-    data: result.result,
+    data: result.updatedData,
   });
 });
 
@@ -74,7 +74,7 @@ const productHistoryFromDB = catchAsync(async (req: Request, res: Response) => {
     statusCode: StatusCodes.OK,
     message: "Orders fetched successfully",
     pagination: result.meta,
-    data: result.result,
+    data: result.updatedData,
   });
 });
 

@@ -43,6 +43,15 @@ const getAllReceivedRequestFromWholesalerFromDB = async (user: JwtPayload, query
 
     const groupedArray = Object.values(groupedData);
 
+    // for 1 hour ahead time display
+    // TODO: need to check this api.
+    groupedArray.forEach((group) => {
+        group.orders = group.orders.map((order: any) => ({
+            ...order,
+            createdAt: new Date(new Date(order.createdAt).getTime() + 60 * 60 * 1000),
+        }));
+    });
+
     return {
         meta,
         data: groupedArray,

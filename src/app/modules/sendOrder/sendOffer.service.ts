@@ -33,10 +33,16 @@ const getAllNewOrdersFromDB = async (
 
   const result = await queryBuilder.modelQuery;
   const meta = await queryBuilder.getPaginationInfo();
+  // for 1 hour ahead time display
+  const updatedData = result?.map((doc: any) => {
+    const obj = doc.toObject(); // Mongoose document -> plain object
+    obj.createdAt = new Date(new Date(obj.createdAt).getTime() + 60 * 60 * 1000);
+    return obj;
+  });
+
 
   return {
-    meta,
-    result,
+    meta, updatedData,
   };
 };
 
@@ -79,7 +85,7 @@ const productHistoryFromDB = async (
 ) => {
   const updatedQuery = {
     ...query,
-    limit: 20, 
+    limit: 20,
   };
   const queryBuilder = new QueryBuilder(
     SendOfferModelForRetailer.find({ retailer: user.id, status: true }),
@@ -94,9 +100,16 @@ const productHistoryFromDB = async (
   const result = await queryBuilder.modelQuery;
   const meta = await queryBuilder.getPaginationInfo();
 
+  // for 1 hour ahead time display
+  const updatedData = result?.map((doc: any) => {
+    const obj = doc.toObject(); // Mongoose document -> plain object
+    obj.createdAt = new Date(new Date(obj.createdAt).getTime() + 60 * 60 * 1000);
+    return obj;
+  });
+
   return {
     meta,
-    result,
+    updatedData,
   };
 };
 

@@ -102,10 +102,16 @@ const getAllProductSendToWholeSalerFromDB = async (
 
   const data = await queryBuilder.modelQuery.exec();
   const meta = await queryBuilder.getPaginationInfo();
+  // for 1 hour ahead time display
+  const updatedData = data.map((doc: any) => {
+    const obj = doc.toObject(); // Mongoose document -> plain object
+    obj.createdAt = new Date(new Date(obj.createdAt).getTime() + 60 * 60 * 1000);
+    return obj;
+  });
 
   return {
     meta,
-    data,
+    data: updatedData,
   };
 };
 
@@ -191,7 +197,13 @@ const getAllReceivedProductFromWholesalerDB = async (user: JwtPayload) => {
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
-  return details;
+  // for 1 hour ahead time display
+  const updatedData = details?.map((doc: any) => {
+    const obj = doc.toObject(); // Mongoose document -> plain object
+    obj.createdAt = new Date(new Date(obj.createdAt).getTime() + 60 * 60 * 1000);
+    return obj;
+  });
+  return updatedData;
 };
 
 // price?: number
@@ -333,7 +345,13 @@ const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
-  return details;
+  // for 1 hour ahead time display
+  const updatedData = details?.map((doc: any) => {
+    const obj = doc.toObject(); // Mongoose document -> plain object
+    obj.createdAt = new Date(new Date(obj.createdAt).getTime() + 60 * 60 * 1000);
+    return obj;
+  });
+  return updatedData;
 };
 
 // get all received base on wholesaler
@@ -361,7 +379,13 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
-  return details;
+  // for 1 hour ahead time display
+  const updatedData = details.map((doc: any) => ({
+    ...doc,
+    createdAt: new Date(new Date(doc.createdAt).getTime() + 60 * 60 * 1000),
+  }));
+
+  return updatedData;
 };
 
 // get all confirm base on wholesaler
@@ -391,7 +415,13 @@ const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
-  return details;
+  // for 1 hour ahead time display
+  const updatedData = details.map((doc: any) => ({
+    ...doc,
+    createdAt: new Date(new Date(doc.createdAt).getTime() + 60 * 60 * 1000),
+  }));
+
+  return updatedData;
 };
 
 // delivary status change

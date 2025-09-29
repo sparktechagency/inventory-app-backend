@@ -87,6 +87,7 @@ const getAllConfrimRequestFromRetailerIntoDB = async (user: JwtPayload, query: R
         wholesalers: Array.from(wholesalersMap.values()),
     };
 
+
     return {
         meta,
         data,
