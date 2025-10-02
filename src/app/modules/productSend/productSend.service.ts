@@ -361,8 +361,7 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
     status: "received",
   })
     .populate({
-      // TODO: change product to product._id
-      path: "product",
+      path: "product._id",
       select:
         "productName unit quantity additionalInfo retailer status ",
     })
@@ -380,14 +379,14 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
-  // for 1 hour ahead time display
-  const updatedData = details.map((doc: any) => ({
-    ...doc,
-    createdAt: new Date(new Date(doc.createdAt).getTime() + 60 * 60 * 1000),
-  }));
+  // // for 1 hour ahead time display
+  // const updatedData = details.map((doc: any) => ({
+  //   ...doc,
+  //   createdAt: new Date(new Date(doc.createdAt).getTime() + 60 * 60 * 1000),
+  // }));
 
 
-  return updatedData;
+  return details;
 };
 
 // get all confirm base on wholesaler
