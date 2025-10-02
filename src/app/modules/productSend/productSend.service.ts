@@ -355,6 +355,40 @@ const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
 };
 
 // get all received base on wholesaler
+// const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
+//   const details = await ProductSendModel.find({
+//     wholesaler: user.id,
+//     status: "received",
+//   })
+//     .populate({
+//       path: "product._id",
+//       select:
+//         "productName unit quantity additionalInfo retailer status ",
+//     })
+//     .populate({
+//       path: "retailer",
+//       select:
+//         "name email image phone storeInformation.businessName  storeInformation.location ",
+//     })
+//     .populate({
+//       path: "wholesaler",
+//       select:
+//         "name email image phone storeInformation.businessName storeInformation.location ",
+//     })
+//     .lean();
+//   if (!details) {
+//     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
+//   }
+//   // // for 1 hour ahead time display
+//   // const updatedData = details.map((doc: any) => ({
+//   //   ...doc,
+//   //   createdAt: new Date(new Date(doc.createdAt).getTime() + 60 * 60 * 1000),
+//   // }));
+
+
+//   return details;
+// };
+
 const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   const details = await ProductSendModel.find({
     wholesaler: user.id,
@@ -379,13 +413,6 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
-  // // for 1 hour ahead time display
-  // const updatedData = details.map((doc: any) => ({
-  //   ...doc,
-  //   createdAt: new Date(new Date(doc.createdAt).getTime() + 60 * 60 * 1000),
-  // }));
-
-
   return details;
 };
 
