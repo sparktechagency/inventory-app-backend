@@ -396,12 +396,7 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   })
     .populate({
       path: "product",
-      model: "Product",
-      select: "_id productName unit quantity additionalInfo retailer status",
-      populate: {
-        path: "retailer",
-        select: "name email phone storeInformation"
-      }
+      select: "_id"
     })
     .populate({
       path: "retailer",
@@ -417,16 +412,7 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
-  // ✅ product._id safe extract
-  const formatted = details.map(item => {
-    return {
-      ...item,
-      productIds: item.product.map((p: any) =>
-        typeof p === "string" ? p : p?._id
-      ),
-    };
-  });
-  return formatted;
+  return details;
 };
 
 // get all confirm base on wholesaler
