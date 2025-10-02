@@ -392,12 +392,12 @@ const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
 const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   const details = await ProductSendModel.find({
     wholesaler: user.id,
-    select: "_id productName unit quantity additionalInfo retailer status",
+    status: "received",
   })
     .populate({
       path: "product",
       model: "Product",
-      select: "_id productName unit quantity additionalInfo retailer status", 
+      select: "_id productName unit quantity additionalInfo retailer status",
       populate: {
         path: "retailer",
         select: "name email phone storeInformation"
