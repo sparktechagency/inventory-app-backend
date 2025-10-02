@@ -417,7 +417,16 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
-  return details;
+  // ✅ product._id safe extract
+  const formatted = details.map(item => {
+    return {
+      ...item,
+      productIds: item.product.map((p: any) =>
+        typeof p === "string" ? p : p?._id
+      ),
+    };
+  });
+  return formatted;
 };
 
 // get all confirm base on wholesaler
