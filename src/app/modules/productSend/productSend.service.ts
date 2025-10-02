@@ -361,7 +361,8 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
     status: "received",
   })
     .populate({
-      path: "product._id",
+      // TODO: change product to product._id
+      path: "product",
       select:
         "productName unit quantity additionalInfo retailer status ",
     })
@@ -384,6 +385,7 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
     ...doc,
     createdAt: new Date(new Date(doc.createdAt).getTime() + 60 * 60 * 1000),
   }));
+
 
   return updatedData;
 };
