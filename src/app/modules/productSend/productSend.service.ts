@@ -396,7 +396,12 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   })
     .populate({
       path: "product",
-      select:"_id"
+      model: "Product",
+      select: "_id productName unit quantity additionalInfo retailer status", 
+      populate: {
+        path: "retailer",
+        select: "name email phone storeInformation"
+      }
     })
     .populate({
       path: "retailer",
