@@ -27,11 +27,6 @@ const loginUserFromDB = async (payload: ILoginData) => {
     );
   }
 
-  console.log("Stored password hash:", isExistUser?.password);
-  console.log("Login password:", payload.password);
-  const match = await bcrypt.compare(payload.password, isExistUser!.password);
-  console.log("Password match:", match);
-
   if (!isExistUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }
