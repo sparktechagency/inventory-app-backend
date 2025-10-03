@@ -8,8 +8,7 @@ import unlinkFile from "../../../shared/unlinkFile";
 import generateOTP from "../../../util/generateOTP";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
-import { PublishCommand, SNSClient } from "@aws-sdk/client-sns";
-import { formatPhoneNumber } from "../../../util/formatPhoneNumber";
+import { SNSClient } from "@aws-sdk/client-sns";
 import { IVerifyEmail } from "../../../types/auth";
 import config from "../../../config";
 import { ResetToken } from "../resetToken/resetToken.model";
@@ -28,7 +27,7 @@ const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
   if (existingUser) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "User already exists with this email or phone."
+      `User already exists with this ${payload.email ? "email" : "phone"}.`
     );
   }
 
@@ -39,7 +38,7 @@ const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
     if (error.code === 11000) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
-        "User already exists with this email or phone."
+        `User already exists with this ${payload.email ? "email" : "phone"}.`
       );
     }
     throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create user");

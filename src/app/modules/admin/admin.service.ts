@@ -5,25 +5,33 @@ import bcrypt from "bcrypt";
 import { IUser } from "../user/user.interface";
 
 const createUserIntoDB = async (payload: IUser) => {
-    try {
-        if (payload.password) {
-            const saltRounds = 10;
-            payload.password = await bcrypt.hash(payload.password, saltRounds);
-        } else {
-            throw new ApiError(StatusCodes.BAD_REQUEST, "Password is required");
-        }
-
-        const result = await User.create(payload);
-
-        if (!result) {
-            throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create user");
-        }
-
-        return result;
-    } catch (error) {
-        console.error("Error while creating user:", error);
-        throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Database operation failed");
+    payload.verified = true;
+    if (payload.password) {
+        const saltRounds = 12;
+        payload.password = await bcrypt.hash(payload.password, saltRounds);
+    } else {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Password is required");
     }
+
+    const existingUser = await User.isExistUserByEmailOrPhone(payload.email!);
+    // Check if password and confirmPassword match
+    if (payload.password !== payload.confirmPassword) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, `Password and Confirm Password do not match`);
+    }
+    // Check if user already exists
+    if (existingUser) {
+        throw new ApiError(
+            StatusCodes.BAD_REQUEST,
+            "User already exists with this email or phone."
+        );
+    }
+    const result = await User.create(payload);
+
+    if (!result) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create user");
+    }
+    return result;
+
 }
 
 

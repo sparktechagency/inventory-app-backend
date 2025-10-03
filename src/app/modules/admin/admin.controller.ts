@@ -2,27 +2,10 @@ import catchAsync from "../../../shared/catchAsync";
 import { Request, Response } from "express";
 import { adminService } from "./admin.service";
 import { StatusCodes } from "http-status-codes";
+import sendResponse from "../../../shared/sendResponse";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
-    const { Password, confirmPassword, image, isVerified, ...userData } = req.body;
-
-    const verified = true;
-    // Check if password and confirmPassword exist
-    if (!Password || !confirmPassword) {
-        return res.status(400).json({
-            success: false,
-            message: "Password and Confirm Password are required"
-        });
-    }
-
-    // Ensure password and confirmPassword match
-    if (Password !== confirmPassword) {
-        return res.status(400).json({
-            success: false,
-            message: "Passwords do not match"
-        });
-    }
-
+    const { ...userData } = req.body;
     // Parse storeInformation if it’s a string
     if (userData.storeInformation) {
         if (typeof userData.storeInformation === 'string') {
@@ -40,21 +23,16 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
         console.log('storeInformation is not provided in the request');
     }
 
-    // Log the final payload being sent to the service
-    const payload = { ...userData, password: Password, image: image || null, verified };
-
     // Proceed to create the user
-    const user = await adminService.createUserIntoDB(payload);
+    const user = await adminService.createUserIntoDB(userData);
 
-    res.status(201).json({
+    sendResponse(res, {
+        statusCode: StatusCodes.CREATED,
         success: true,
-        message: "User created successfully",
+        message: "User created successfully by admin",
         data: user
     });
 });
-
-
-
 
 
 

@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { adminController } from "./admin.controller";
 import auth from "../../middlewares/auth";
 import { USER_ROLES } from "../../../enums/user";
 import fileUploadHandler from "../../middlewares/fileUploadHandler";
 import { getSingleFilePath } from "../../../shared/getFilePath";
 import ApiError from "../../../errors/ApiError";
 import { StatusCodes } from "http-status-codes";
+import { adminController } from "./admin.controller";
 
 const route = Router()
 
@@ -22,17 +22,15 @@ route.post("/users",
                     ...payload
                 };
             }
-
-            // Pass the request to the next middleware (adminController.createUser)
             next();
         } catch (error) {
-            // Handle error in a way that returns a helpful message
             // @ts-ignore
             res.status(400).json({ error: error.message || "Error in file upload" });
         }
     },
-    auth(USER_ROLES.SUPER_ADMIN), adminController.createUser);
-
+    auth(USER_ROLES.SUPER_ADMIN),
+    adminController.createUser
+);
 route.patch("/users/:id",
     fileUploadHandler() as any,
     async (req: Request, res: Response, next: NextFunction) => {

@@ -4,8 +4,6 @@ import catchAsync from '../../../shared/catchAsync';
 import { getSingleFilePath } from '../../../shared/getFilePath';
 import sendResponse from '../../../shared/sendResponse';
 import { UserService } from './user.service';
-import { UserValidation } from './user.validation';
-import ApiError from '../../../errors/ApiError';
 
 const createUser = catchAsync(
   async (req: Request, res: Response) => {
