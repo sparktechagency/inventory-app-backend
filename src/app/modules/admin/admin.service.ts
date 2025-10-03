@@ -10,7 +10,7 @@ const createUserIntoDB = async (payload: IUser) => {
         const saltRounds = 12;
         payload.password = await bcrypt.hash(payload.password, saltRounds);
     } else {
-        throw new ApiError(StatusCodes.BAD_REQUEST, "Password is required");
+        throw new ApiError(StatusCodes.BAD_REQUEST, `Password is required`);
     }
 
     const existingUser = await User.isExistUserByEmailOrPhone(payload.email!);

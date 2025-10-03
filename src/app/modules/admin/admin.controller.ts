@@ -5,7 +5,25 @@ import { StatusCodes } from "http-status-codes";
 import sendResponse from "../../../shared/sendResponse";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
-    const { ...userData } = req.body;
+    const { Password, confirmPassword, ...userData } = req.body;
+
+    if (!Password || !confirmPassword) {
+        return res.status(400).json({
+            success: false,
+            message: "Password and Confirm Password are required"
+        });
+    }
+
+    if (Password !== confirmPassword) {
+        return res.status(400).json({
+            success: false,
+            message: "Password and Confirm Password do not match"
+        });
+    }
+
+    // Map Password to password
+    userData.password = Password;
+    userData.confirmPassword = confirmPassword;
     // Parse storeInformation if it’s a string
     if (userData.storeInformation) {
         if (typeof userData.storeInformation === 'string') {
