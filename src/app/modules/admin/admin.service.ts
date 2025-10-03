@@ -11,7 +11,6 @@ const createUserIntoDB = async (payload: Partial<IUser>): Promise<IUser> => {
         throw new ApiError(StatusCodes.BAD_REQUEST, "Password is required");
     }
 
-    // Confirm password check
     if (payload.password !== payload.confirmPassword) {
         throw new ApiError(
             StatusCodes.BAD_REQUEST,
@@ -26,28 +25,9 @@ const createUserIntoDB = async (payload: Partial<IUser>): Promise<IUser> => {
             "User already exists with this email or phone."
         );
     }
+    const result = await User.create(payload);
 
-    try {
-        // Hash password before saving
-        const saltRounds = 12;
-        payload.password = await bcrypt.hash(payload.password, saltRounds);
-
-        const result = await User.create(payload);
-
-        if (!result) {
-            throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create user");
-        }
-
-        return result;
-    } catch (error: any) {
-        if (error.code === 11000) {
-            throw new ApiError(
-                StatusCodes.BAD_REQUEST,
-                "Duplicate email or phone found. Please use another one."
-            );
-        }
-        throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to create user");
-    }
+    return result;
 };
 
 

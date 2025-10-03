@@ -27,6 +27,11 @@ const loginUserFromDB = async (payload: ILoginData) => {
     );
   }
 
+  console.log("Stored password hash:", isExistUser?.password);
+  console.log("Login password:", payload.password);
+  const match = await bcrypt.compare(payload.password, isExistUser!.password);
+  console.log("Password match:", match);
+
   if (!isExistUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }
@@ -40,12 +45,16 @@ const loginUserFromDB = async (payload: ILoginData) => {
   }
 
   // If the user is verified, check the password
-  if (payload.password) {
-    // Check match password
-    if (!(await User.isMatchPassword(payload.password, isExistUser.password))) {
-      throw new ApiError(StatusCodes.BAD_REQUEST, "Password is incorrect!");
-    }
+  const isPasswordCorrect = await User.isMatchPassword(
+    payload.password.trim(),
+    isExistUser.password!
+  );
+  console.log(isPasswordCorrect);
+  if (!isPasswordCorrect) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Password is incorrect!");
   }
+
+
 
   // Create token after verifying the password or OTP
   const createToken = jwtHelper.createToken(
