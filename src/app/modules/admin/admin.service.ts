@@ -4,35 +4,52 @@ import { User } from "../user/user.model";
 import bcrypt from "bcrypt";
 import { IUser } from "../user/user.interface";
 
-const createUserIntoDB = async (payload: IUser) => {
+const createUserIntoDB = async (payload: Partial<IUser>): Promise<IUser> => {
     payload.verified = true;
-    if (payload.password) {
-        const saltRounds = 12;
-        payload.password = await bcrypt.hash(payload.password, saltRounds);
-    } else {
-        throw new ApiError(StatusCodes.BAD_REQUEST, `Password is required`);
+
+    if (!payload.password) {
+        throw new ApiError(StatusCodes.BAD_REQUEST, "Password is required");
+    }
+
+    // Confirm password check
+    if (payload.password !== payload.confirmPassword) {
+        throw new ApiError(
+            StatusCodes.BAD_REQUEST,
+            "Password and Confirm Password do not match"
+        );
     }
 
     const existingUser = await User.isExistUserByEmailOrPhone(payload.email!);
-    // Check if password and confirmPassword match
-    if (payload.password !== payload.confirmPassword) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, `Password and Confirm Password do not match`);
-    }
-    // Check if user already exists
     if (existingUser) {
         throw new ApiError(
             StatusCodes.BAD_REQUEST,
             "User already exists with this email or phone."
         );
     }
-    const result = await User.create(payload);
 
-    if (!result) {
-        throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create user");
+    try {
+        // Hash password before saving
+        const saltRounds = 12;
+        payload.password = await bcrypt.hash(payload.password, saltRounds);
+
+        const result = await User.create(payload);
+
+        if (!result) {
+            throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create user");
+        }
+
+        return result;
+    } catch (error: any) {
+        if (error.code === 11000) {
+            throw new ApiError(
+                StatusCodes.BAD_REQUEST,
+                "Duplicate email or phone found. Please use another one."
+            );
+        }
+        throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to create user");
     }
-    return result;
+};
 
-}
 
 
 

@@ -5,50 +5,49 @@ import { StatusCodes } from "http-status-codes";
 import sendResponse from "../../../shared/sendResponse";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
-    let { Password, confirmPassword, ...userData } = req.body;
+    let { password, confirmPassword, Password, ...userData } = req.body;
 
-    if (!Password || !confirmPassword) {
-        return res.status(400).json({
+    // Handle frontend using Password / password
+    password = password || Password;
+    confirmPassword = confirmPassword || req.body.confirmPassword;
+
+    if (!password || !confirmPassword) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
             success: false,
-            message: "Password and Confirm Password are required"
+            message: "Password and Confirm Password are required",
         });
     }
 
-    if (Password !== confirmPassword) {
-        return res.status(400).json({
+    if (password !== confirmPassword) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
             success: false,
-            message: "Password and Confirm Password do not match"
+            message: "Password and Confirm Password do not match",
         });
     }
 
-    // Map Password to password
-    userData.password = Password;
+    // Map password to userData
+    userData.password = password;
     userData.confirmPassword = confirmPassword;
+
     // Parse storeInformation if it’s a string
-    if (userData.storeInformation) {
-        if (typeof userData.storeInformation === 'string') {
-            try {
-                userData.storeInformation = JSON.parse(userData.storeInformation);
-            } catch (error) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid format for store information"
-                });
-            }
-        } else {
+    if (userData.storeInformation && typeof userData.storeInformation === "string") {
+        try {
+            userData.storeInformation = JSON.parse(userData.storeInformation);
+        } catch (error) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                success: false,
+                message: "Invalid format for store information",
+            });
         }
-    } else {
-        console.log('storeInformation is not provided in the request');
     }
 
-    // Proceed to create the user
     const user = await adminService.createUserIntoDB(userData);
 
     sendResponse(res, {
         statusCode: StatusCodes.CREATED,
         success: true,
         message: "User created successfully by admin",
-        data: user
+        data: user,
     });
 });
 
