@@ -1,2 +1,0 @@
-Mon Mar 24 2025 15:47:29 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/send-offer/received 404 - 32.746 ms
-Mon Mar 24 2025 15:58:1 [SERVER-NAME] error: 10.0.70.188 - GET /api/v1/send-offer/received 404 - 35.183 ms

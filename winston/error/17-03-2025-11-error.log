@@ -1,8 +1,0 @@
-Mon Mar 17 2025 11:3:41 [SERVER-NAME] error: 10.0.70.30 - POST /api/v1/user 400 - 3.874 ms
-Mon Mar 17 2025 11:7:14 [SERVER-NAME] error: 10.0.70.30 - GET //api/v1/notification/ 404 - 0.484 ms
-Mon Mar 17 2025 11:7:25 [SERVER-NAME] error: 10.0.70.30 - GET /api/v1/notification/ 401 - 1.978 ms
-Mon Mar 17 2025 11:8:5 [SERVER-NAME] error: 10.0.70.30 - GET /api/v1/notification/ 401 - 1.980 ms
-Mon Mar 17 2025 11:24:39 [SERVER-NAME] error: 10.0.70.171 - GET /api/v1/send-offer/received 404 - 4.607 ms
-Mon Mar 17 2025 11:31:8 [SERVER-NAME] error: 10.0.70.171 - GET /api/v1/send-offer/received 404 - 2.173 ms
-Mon Mar 17 2025 11:35:13 [SERVER-NAME] error: 10.0.70.171 - GET /api/v1/send-offer/received 404 - 2.114 ms
-Mon Mar 17 2025 11:52:6 [SERVER-NAME] error: 10.0.70.171 - GET /api/v1/send-offer/received 404 - 2.011 ms

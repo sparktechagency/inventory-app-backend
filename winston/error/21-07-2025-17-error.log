@@ -1,7 +1,0 @@
-Mon Jul 21 2025 17:30:59 [SERVER-NAME] error: 10.10.7.58 - GET /api/v1/send-offer/pending-retailer/687e17c16bc2ff5bdf61cddd 404 - 0.917 ms
-Mon Jul 21 2025 17:31:21 [SERVER-NAME] error: 10.10.7.58 - GET /api/v1/send-offer/pending/687e17c16bc2ff5bdf61cddd 404 - 5.937 ms
-Mon Jul 21 2025 17:39:42 [SERVER-NAME] error: 10.10.7.58 - GET /api/v1/send-offer/received 404 - 22.098 ms
-Mon Jul 21 2025 17:40:27 [SERVER-NAME] error: 10.10.7.58 - GET /api/v1/send-offer/received 404 - 18.196 ms
-Mon Jul 21 2025 17:40:57 [SERVER-NAME] error: 10.10.7.58 - GET /api/v1/wholesalers 403 - 21.075 ms
-Mon Jul 21 2025 17:41:20 [SERVER-NAME] error: 10.10.7.58 - GET /api/v1/send-offer/received 404 - 18.396 ms
-Mon Jul 21 2025 17:51:53 [SERVER-NAME] error: 10.10.7.58 - GET /api/v1/send-offer/received 404 - 3.658 ms

@@ -1,6 +1,5 @@
 import { StatusCodes } from "http-status-codes";
 import { JwtPayload, Secret } from "jsonwebtoken";
-import { BUSINESS_CATEGORY, USER_ROLES } from "../../../enums/user";
 import ApiError from "../../../errors/ApiError";
 import { emailHelper } from "../../../helpers/emailHelper";
 import { emailTemplate } from "../../../shared/emailTemplate";
@@ -8,7 +7,6 @@ import unlinkFile from "../../../shared/unlinkFile";
 import generateOTP from "../../../util/generateOTP";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
-import { SNSClient } from "@aws-sdk/client-sns";
 import { IVerifyEmail } from "../../../types/auth";
 import config from "../../../config";
 import { ResetToken } from "../resetToken/resetToken.model";
@@ -19,7 +17,7 @@ const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
   if (!payload.email) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "Either email or phone is required."
+      "Email is required."
     );
   }
 
@@ -38,7 +36,7 @@ const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
     if (error.code === 11000) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
-        `User already exists with this ${payload.email ? "email" : "phone"}.`
+        `Duplicate email or phone found. Please use another one.`
       );
     }
     throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create user");
@@ -68,10 +66,12 @@ const updateProfileToDB = async (
   }
 
   // Parse the stringified JSON for storeInformation if needed
+  // @ts-ignore
   if (payload["storeInformation[location]"]) {
     // Update the location field in storeInformation
     const updatedStoreInfo = {
       ...isExistUser.storeInformation,  // Keep existing fields
+      // @ts-ignore
       location: payload["storeInformation[location]"]  // Update location
     };
 
@@ -93,13 +93,13 @@ const updateProfileToDB = async (
 
   return updateDoc;
 };
-const snsClient = new SNSClient({
-  region: process.env.AWS_REGION as string,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
-  },
-});
+// const snsClient = new SNSClient({
+//   region: process.env.AWS_REGION as string,
+//   credentials: {
+//     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+//   },
+// });
 
 const updateStoreData = async (
   userId: string,
@@ -110,6 +110,14 @@ const updateStoreData = async (
   }
 ): Promise<IUser | null> => {
   const otp = generateOTP();
+
+  //  Check if OTP is exactly 4 digits
+  if (!/^\d{4}$/.test(String(otp))) {
+    throw new ApiError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      `Failed to generate OTP. Please try again.`
+    );
+  }
 
   const user = await User.findById(userId);
   if (!user) {

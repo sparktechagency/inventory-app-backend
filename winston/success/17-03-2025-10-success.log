@@ -1,9 +1,0 @@
-Mon Mar 17 2025 10:15:23 [SERVER-NAME] info: 10.0.70.171 - POST /api/v1/user 200 - 169.755 ms
-Mon Mar 17 2025 10:15:34 [SERVER-NAME] info: 10.0.70.171 - PATCH /api/v1/user/update-store/67d7a1db58f830c28dfa90d9 200 - 3.740 ms
-Mon Mar 17 2025 10:15:36 [SERVER-NAME] info: Mail send successfully
-Mon Mar 17 2025 10:32:38 [SERVER-NAME] info: 10.0.70.171 - PATCH /api/v1/user/update-store/67d7a1db58f830c28dfa90d9 200 - 3.350 ms
-Mon Mar 17 2025 10:32:41 [SERVER-NAME] info: Mail send successfully
-Mon Mar 17 2025 10:33:1 [SERVER-NAME] info: 10.0.70.171 - POST /api/v1/user/verify-otp 200 - 3.371 ms
-Mon Mar 17 2025 10:33:52 [SERVER-NAME] info: 10.0.70.171 - POST /api/v1/auth/login 200 - 172.416 ms
-Mon Mar 17 2025 10:33:53 [SERVER-NAME] info: 10.0.70.171 - GET /api/v1/send-offer/pending-retailer 200 - 5.822 ms
-Mon Mar 17 2025 10:33:53 [SERVER-NAME] info: 10.0.70.171 - GET /api/v1/send-offer/confirm 200 - 6.161 ms

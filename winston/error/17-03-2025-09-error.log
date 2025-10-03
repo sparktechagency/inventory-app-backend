@@ -1,4 +1,0 @@
-Mon Mar 17 2025 9:19:30 [SERVER-NAME] error: 10.0.70.171 - GET /api/v1/send-offer/received 404 - 15.509 ms
-Mon Mar 17 2025 9:21:41 [SERVER-NAME] error: 10.0.70.171 - POST /api/v1/user/update-store/67d7953b58f830c28dfa90b7 404 - 2.026 ms
-Mon Mar 17 2025 9:21:55 [SERVER-NAME] error: 10.0.70.171 - POST /api/v1/user/update-store/67d7953b58f830c28dfa90b7 404 - 1.162 ms
-Mon Mar 17 2025 9:34:53 [SERVER-NAME] error: 10.0.70.171 - GET /api/v1/send-offer/received 404 - 1.948 ms

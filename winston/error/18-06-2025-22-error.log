@@ -1,2 +1,0 @@
-Wed Jun 18 2025 22:4:10 [SERVER-NAME] error: 10.0.70.105 - POST /api/v1/user/verify-otp 400 - 6.083 ms
-Wed Jun 18 2025 22:5:35 [SERVER-NAME] error: 10.0.70.105 - GET /api/v1/send-offer/received 404 - 49.481 ms
