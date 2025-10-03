@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import sendResponse from "../../../shared/sendResponse";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
-    const { Password, confirmPassword, ...userData } = req.body;
+    let { Password, confirmPassword, ...userData } = req.body;
 
     if (!Password || !confirmPassword) {
         return res.status(400).json({
