@@ -73,9 +73,22 @@ const getAllWholeSaler = async (query: Record<string, any>) => {
     { $project: { firstLetter: 0, __v: 0 } },
   ];
 
-  const data = await User.aggregate(pipeline as PipelineStage[]);
+  const result = await User.aggregate(pipeline as PipelineStage[]);
   const total = await User.countDocuments(match);
   const totalPage = Math.ceil(total / limitNum);
+
+  // 🧩 Normalize storeInformation
+  const data = result.map((user) => {
+    if (typeof user.storeInformation === "string") {
+      try {
+        user.storeInformation = JSON.parse(user.storeInformation);
+      } catch {
+        // @ts-ignore
+        user.storeInformation = {};
+      }
+    }
+    return user;
+  });
 
   return {
     meta: { total, page: pageNum, limit: limitNum, totalPage },
@@ -134,19 +147,29 @@ const getAllRetailers = async ({
     paginationHelper.calculatePagination(paginationOptions || {});
   const sortCondition: any = { [sortBy]: sortOrder === "asc" ? 1 : -1 };
 
-  const result = await User.find(filter)
+  const users = await User.find(filter)
     .sort(sortCondition)
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .lean();
+
+  // 🧩 Normalize storeInformation
+  const result = users.map((user) => {
+    if (typeof user.storeInformation === "string") {
+      try {
+        user.storeInformation = JSON.parse(user.storeInformation);
+      } catch {
+        // @ts-ignore
+        user.storeInformation = {};
+      }
+    }
+    return user;
+  });
 
   const total = await User.countDocuments(filter);
 
   return {
-    meta: {
-      page,
-      limit,
-      total,
-    },
+    meta: { page, limit, total },
     data: result,
   };
 };

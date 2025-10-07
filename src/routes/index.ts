@@ -19,6 +19,7 @@ import { confirmationFromRetailerRoutes } from "../app/modules/ConfirmationFromR
 import { inviteLinkRoutes } from "../app/modules/inviteLink/inviteLink.routes";
 import { aboutUsContactUsTermsAndConditionsRoutes } from "../app/modules/about-us-contact-us-terms-and-conditions/about-us-contact-us-terms-and-conditions.routes";
 import { faqRoutes } from "../app/modules/faq/faq.routes";
+import { applinkGeneratedRoutes } from "../app/modules/applinkGenerated/applinkGenerated.routes";
 const router = express.Router();
 
 const apiRoutes = [
@@ -100,7 +101,11 @@ const apiRoutes = [
   {
     path: "/faq",
     route: faqRoutes,
-  },  
+  },
+  {
+    path: "/applink-generated",
+    route: applinkGeneratedRoutes,
+  },
 ];
 
 apiRoutes.forEach((route) => router.use(route?.path, route.route));
