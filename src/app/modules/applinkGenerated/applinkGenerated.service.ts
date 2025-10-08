@@ -53,7 +53,9 @@ const getApplinkGeneratedFromDB = async (type: string) => {
   return result;
 };
 
+
+
 export const applinkGeneratedService = {
   createApplinkGeneratedInToDB,
-  getApplinkGeneratedFromDB,
+  getApplinkGeneratedFromDB
 };

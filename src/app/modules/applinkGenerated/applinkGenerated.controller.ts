@@ -19,17 +19,18 @@ const createApplinkGenerated = catchAsync(
 );
 
 const getApplinkGenerated = catchAsync(async (req: Request, res: Response) => {
-    const result = await applinkGeneratedService.getApplinkGeneratedFromDB(req.params.type);
-    sendResponse(res, {
-      statusCode: StatusCodes.OK,
-      success: true,
-      message: "Applink generated successfully",
-      data: result,
-    });
+  const result = await applinkGeneratedService.getApplinkGeneratedFromDB(
+    req.params.type
+  );
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Applink generated successfully",
+    data: result,
   });
+});
 
-
-  export const applinkGeneratedController = {
-    createApplinkGenerated,
-    getApplinkGenerated,
-  };
+export const applinkGeneratedController = {
+  createApplinkGenerated,
+  getApplinkGenerated,
+};
