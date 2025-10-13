@@ -12,7 +12,7 @@ rotute.post(
 );
 rotute.get(
   "/:type",
-  auth(USER_ROLES.SUPER_ADMIN),
+  auth(USER_ROLES.Wholesaler, USER_ROLES.Retailer, USER_ROLES.SUPER_ADMIN),
   applinkGeneratedController.getApplinkGenerated
 );
 

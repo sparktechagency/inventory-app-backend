@@ -15,10 +15,7 @@ import { jwtHelper } from "../../../helpers/jwtHelper";
 
 const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
   if (!payload.email) {
-    throw new ApiError(
-      StatusCodes.BAD_REQUEST,
-      "Email is required."
-    );
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Email is required.");
   }
 
   const existingUser = await User.isExistUserByEmailOrPhone(payload.email);
@@ -31,6 +28,9 @@ const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
 
   try {
     const createUser = await User.create(payload);
+    if (!createUser) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to create user");
+    }
     return createUser;
   } catch (error: any) {
     if (error.code === 11000) {
@@ -57,7 +57,7 @@ const getUserProfileFromDB = async (
 
 const updateProfileToDB = async (
   user: JwtPayload,
-  payload: Partial<IUser>,
+  payload: Partial<IUser>
 ): Promise<Partial<IUser | null>> => {
   const id = user?.authId || user?.id;
   const isExistUser = await User.isExistUserById(id);
@@ -70,9 +70,9 @@ const updateProfileToDB = async (
   if (payload["storeInformation[location]"]) {
     // Update the location field in storeInformation
     const updatedStoreInfo = {
-      ...isExistUser.storeInformation,  // Keep existing fields
+      ...isExistUser.storeInformation, // Keep existing fields
       // @ts-ignore
-      location: payload["storeInformation[location]"]  // Update location
+      location: payload["storeInformation[location]"], // Update location
     };
 
     // Include the updated storeInformation in the payload
@@ -81,9 +81,8 @@ const updateProfileToDB = async (
 
   // If a new image is provided, unlink the old one
   if (payload.image && isExistUser.image) {
-    unlinkFile(isExistUser.image);  // Unlink previous image if new one is provided
+    unlinkFile(isExistUser.image); // Unlink previous image if new one is provided
   }
-
 
   const updateDoc = await User.findOneAndUpdate(
     { _id: id },
