@@ -5,6 +5,7 @@ import axios from "axios";
 import config from "../config";
 import { User } from "../app/modules/user/user.model";
 import { Payment } from "../app/modules/subscription/payment.model";
+import { flutterWaveModel } from "../app/modules/flutterwavePackage/flutterwavePackage.model";
 
 const FLW_SECRET_KEY = config.FLUTTER_WAVE.SECRETKEY;
 const FLW_API_URL = "https://api.flutterwave.com/v3/payments";
@@ -14,11 +15,24 @@ export const initiateSubscriptionPayment = async (
   amount: number
 ) => {
   try {
-    const userExist = await User.findOne({ email: userEmail })
+    const userExist = await User.findOne({ email: userEmail });
     if (!userExist) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
         "User not found in the database."
+      );
+    }
+
+    const isSubscribed = await flutterWaveModel.findOne({
+      userEmail,
+      status: "successful",
+    });
+    if (isSubscribed) {
+      throw new ApiError(
+        StatusCodes.BAD_REQUEST,
+        `${
+          userExist.storeInformation?.businessName || "User"
+        } you are already subscribed.`
       );
     }
 
@@ -71,7 +85,7 @@ export const initiateSubscriptionPayment = async (
         subscriptionId: subscription._id,
       },
     };
-  } catch (error) {
-    console.log(`Error message: ${error}`);
+  } catch (error: any) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, `${error.message}`);
   }
 };
