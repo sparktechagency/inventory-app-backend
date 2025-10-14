@@ -6,5 +6,6 @@ export interface IFlutterWave {
     tx_ref?: string;
     redirect_url?: string,
     startTime?: Date,
+    endTime?: Date,
     email?: string
 }

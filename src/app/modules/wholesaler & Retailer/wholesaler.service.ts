@@ -286,39 +286,36 @@ const deleteRetailerFromDB = async (id: string) => {
 };
 
 const getDashboardStatistics = async () => {
-  const [
-    totalWholesalers,
-    totalRetailers,
-    totalUniqueSubscribers,
-    totalEarnings,
-  ] = await Promise.all([
-    User.countDocuments({ role: "Wholesaler", verified: true }),
-    User.countDocuments({ role: "Retailer", verified: true }),
+  const totalWholesalers = await User.find({
+    role: USER_ROLES.Wholesaler,
+    verified: true,
+  }).countDocuments();
+  const totalRetailers = await User.find({
+    role: USER_ROLES.Retailer,
+    verified: true,
+  }).countDocuments();
 
-    // Log the raw data before aggregation
-    (async () => {
-      const rawPayments = await paymentVerificationModel.find({
-        status: "successful",
-      });
-      return paymentVerificationModel.aggregate([
-        { $match: { status: "successful" } },
-        { $group: { _id: "$email" } },
-      ]);
-    })(),
+  const totalSubscribers = await flutterWaveModel
+    .find({
+      status: "successful",
+    })
+    .countDocuments();
 
-    // Total Earnings Calculation
-    flutterWaveModel.aggregate([
-      { $group: { _id: null, total: { $sum: "$amount" } } },
-    ]),
-  ]);
+  const earnings = await flutterWaveModel.find({
+    status: "successful",
+  });
+  const totalEarnings = earnings.reduce(
+    (total, item) => total + item.amount,
+    0
+  );
 
   // Log the result of the aggregation for unique subscribers
 
   return {
     totalWholesalers,
     totalRetailers,
-    totalSubscribers: totalUniqueSubscribers.length, // Directly use the length of the aggregation result
-    totalEarnings: totalEarnings.length > 0 ? totalEarnings[0].total : 0,
+    totalSubscribers,
+    totalEarnings,
   };
 };
 

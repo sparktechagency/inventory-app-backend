@@ -4,8 +4,8 @@ import ApiError from "../errors/ApiError";
 import axios from "axios";
 import config from "../config";
 import { User } from "../app/modules/user/user.model";
-import { Payment } from "../app/modules/subscription/payment.model";
 import { flutterWaveModel } from "../app/modules/flutterwavePackage/flutterwavePackage.model";
+import { paymentVerificationModel } from "../app/modules/multiPaymentMethod/multiPaymentMethod.model";
 
 const FLW_SECRET_KEY = config.FLUTTER_WAVE.SECRETKEY;
 const FLW_API_URL = "https://api.flutterwave.com/v3/payments";
@@ -22,17 +22,31 @@ export const initiateSubscriptionPayment = async (
         "User not found in the database."
       );
     }
-
-    const isSubscribed = await flutterWaveModel.findOne({
+    const activeSubscription = await flutterWaveModel.findOne({
       userEmail,
       status: "successful",
+      startTime: { $lte: new Date() },
+      endTime: { $gte: new Date() },
     });
-    if (isSubscribed) {
+
+    const activeSubscriberEndDate =
+      activeSubscription?.endTime &&
+      activeSubscription.endTime.toLocaleDateString();
+    const activeSubscriptionVarify = await paymentVerificationModel.find({
+      email: userEmail,
+    });
+    const endDateMessage = activeSubscriptionVarify.length
+      ? activeSubscriptionVarify[
+          activeSubscriptionVarify.length - 1
+        ].endTime?.toLocaleDateString() || activeSubscriberEndDate
+      : activeSubscriberEndDate;
+
+    if (activeSubscription) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
         `${
           userExist.storeInformation?.businessName || "User"
-        } you are already subscribed.`
+        } you are already subscribed. Please try again after ${endDateMessage}`
       );
     }
 
@@ -70,7 +84,8 @@ export const initiateSubscriptionPayment = async (
       amount,
       "pending",
       response.data.data.link,
-      new Date()
+      new Date(),
+      new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000)
     );
 
     return {

@@ -11,7 +11,8 @@ const createSubscriptionPackage = async (
   amount: number,
   status: string,
   redirect_url: string,
-  startTime: Date
+  startTime: Date,
+  endTime: Date
 ) => {
   try {
     const subscription = await flutterWaveModel.create({
@@ -22,6 +23,7 @@ const createSubscriptionPackage = async (
       tx_ref,
       redirect_url,
       startTime,
+      endTime,
     });
     return subscription;
   } catch (error) {
