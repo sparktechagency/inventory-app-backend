@@ -19,8 +19,8 @@ app.post(
 //body parser
 app.use(
   cors({
-    // origin: 'http://75.119.138.163:4173',
-    origin: "http://10.10.7.48:3004",
+    origin: 'http://75.119.138.163:4173',
+    // origin: "http://10.10.7.48:3004",
     // origin: "*",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"],
