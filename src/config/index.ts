@@ -17,7 +17,7 @@ export default {
     user: process.env.EMAIL_USER,
     port: process.env.EMAIL_PORT,
     host: process.env.EMAIL_HOST,
-    pass: process.env.EMAIL_PASS,
+    pass: process.env.EMAIL_PASS! as string,
   },
   // for stripe
   stripe: {
