@@ -68,6 +68,7 @@ const allPackageData = async () => {
       const endDate = new Date(currentYear, index + 1, 0);
 
       const total = await flutterWaveModel.countDocuments({
+        status: "successful",
         createdAt: { $gte: startDate, $lte: endDate },
       });
 
