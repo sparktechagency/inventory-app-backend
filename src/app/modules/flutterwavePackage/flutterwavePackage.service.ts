@@ -87,7 +87,7 @@ const totalEarnings = async () => {
 
 // get total user subscription
 const totalUserSubscription = async (name: string, email: string) => {
-  const total = await flutterWaveModel.find();
+  const total = await flutterWaveModel.find({ status: "successful" });
   if (!total || total.length === 0) {
     throw new ApiError(StatusCodes.NOT_FOUND, "No subscription found");
   }
