@@ -68,7 +68,7 @@ const updateRequestFromWholesalerAsRetailerForConfirm = async (user: JwtPayload,
     const notificationPayload = {
         sender: user.id,
         receiver: result.wholesaler,
-        message: `${findThisUser?.name} has confirmed the order ${result._id}`,
+        message: `${findThisUser?.name || "Retailer"} has confirmed the order ${result._id}`,
     };
 
     await sendNotifications(notificationPayload);

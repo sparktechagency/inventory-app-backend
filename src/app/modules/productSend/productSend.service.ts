@@ -48,7 +48,9 @@ const sendProductToWholesalerIntoDB = async (
     const notificationPayload = {
       sender: user.id,
       receiver: item.wholesaler,
-      message: `${findThisUser?.name} has send the order is this product available?`,
+      message: `${
+        findThisUser?.name || "Retailer"
+      } has send the order is this product available?`,
     };
     await sendNotifications(notificationPayload);
   }
@@ -79,8 +81,7 @@ const getAllProductSendToWholeSalerFromDB = async (
   const productQuery = ProductSendModel.find(filter)
     .populate({
       path: "product._id",
-      select:
-        "productName unit quantity additionalInfo retailer status ",
+      select: "productName unit quantity additionalInfo retailer status ",
     })
     .populate({
       path: "retailer",
@@ -105,7 +106,9 @@ const getAllProductSendToWholeSalerFromDB = async (
   // for 1 hour ahead time display
   const updatedData = data.map((doc: any) => {
     const obj = doc.toObject(); // Mongoose document -> plain object
-    obj.createdAt = new Date(new Date(obj.createdAt).getTime() + 60 * 60 * 1000);
+    obj.createdAt = new Date(
+      new Date(obj.createdAt).getTime() + 60 * 60 * 1000
+    );
     return obj;
   });
 
@@ -178,7 +181,7 @@ const updateProductSendDetailIntoDB = async (
   const notificationPayload = {
     sender: user.id,
     receiver: details.retailer,
-    message: `${findThisUser?.name} has confirmed the order id ${id}`,
+    message: `${findThisUser?.name || "Wholesaler"} has confirmed the order id ${id}`,
   };
 
   await sendNotifications(notificationPayload);
@@ -200,7 +203,9 @@ const getAllReceivedProductFromWholesalerDB = async (user: JwtPayload) => {
   // for 1 hour ahead time display
   const updatedData = details?.map((doc: any) => {
     const obj = doc.toObject(); // Mongoose document -> plain object
-    obj.createdAt = new Date(new Date(obj.createdAt).getTime() + 60 * 60 * 1000);
+    obj.createdAt = new Date(
+      new Date(obj.createdAt).getTime() + 60 * 60 * 1000
+    );
     return obj;
   });
   return updatedData;
@@ -282,7 +287,7 @@ const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
   const notificationPayload = {
     sender: user.id,
     receiver: productSend.retailer,
-    message: `${user.name} has confirmed the order id ${id}`,
+    message: `${user.name || "Wholesaler"} has confirmed the order id ${id}`,
   };
   await sendNotifications(notificationPayload);
 
@@ -323,7 +328,6 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB =
 
 // get all confirm base on retailer
 const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
-
   const details = await ProductSendModel.find({
     retailer: user.id,
     status: { $in: ["confirmed", "delivered"] },
@@ -348,7 +352,9 @@ const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
   // for 1 hour ahead time display
   const updatedData = details?.map((doc: any) => {
     const obj = doc.toObject(); // Mongoose document -> plain object
-    obj.createdAt = new Date(new Date(obj.createdAt).getTime() + 60 * 60 * 1000);
+    obj.createdAt = new Date(
+      new Date(obj.createdAt).getTime() + 60 * 60 * 1000
+    );
     return obj;
   });
   return updatedData;
@@ -384,7 +390,6 @@ const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
 //   //   ...doc,
 //   //   createdAt: new Date(new Date(doc.createdAt).getTime() + 60 * 60 * 1000),
 //   // }));
-
 
 //   return details;
 // };
@@ -482,7 +487,7 @@ const updateDelivaryStatusAsaWholesalerIntoDB = async (
   const notificationPayload = {
     sender: user.id,
     receiver: statusUpdate.retailer,
-    message: `${findThisUser?.name} has confirmed the order id ${id}`,
+    message: `${findThisUser?.name || "Wholesaler"} has confirmed the order id ${id}`,
   };
 
   await sendNotifications(notificationPayload);
