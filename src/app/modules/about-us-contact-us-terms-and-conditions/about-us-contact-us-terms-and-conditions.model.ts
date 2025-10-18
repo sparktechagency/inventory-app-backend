@@ -7,7 +7,7 @@ const aboutUsContactUsTermsAndConditionsSchema =
       body: { type: String, required: true },
       types: {
         type: String,
-        enum: ["aboutUs", "contactUs", "termsAndConditions"],
+        enum: ["aboutUs", "contactUs", "termsAndConditions", "privacyPolicy"],
         required: true,
       },
     },
