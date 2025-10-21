@@ -70,12 +70,10 @@ const updateProfileToDB = async (
   if (payload["storeInformation[location]"]) {
     // Update the location field in storeInformation
     const updatedStoreInfo = {
-      ...isExistUser.storeInformation, // Keep existing fields
+      ...isExistUser.storeInformation,
       // @ts-ignore
-      location: payload["storeInformation[location]"], // Update location
+      location: payload["storeInformation[location]"], 
     };
-
-    // Include the updated storeInformation in the payload
     payload.storeInformation = updatedStoreInfo;
   }
 
@@ -92,13 +90,7 @@ const updateProfileToDB = async (
 
   return updateDoc;
 };
-// const snsClient = new SNSClient({
-//   region: process.env.AWS_REGION as string,
-//   credentials: {
-//     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
-//   },
-// });
+
 
 const updateStoreData = async (
   userId: string,
