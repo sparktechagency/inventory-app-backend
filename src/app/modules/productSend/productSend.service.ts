@@ -210,46 +210,6 @@ const getAllReceivedProductFromWholesalerDB = async (user: JwtPayload) => {
   });
   return updatedData;
 };
-
-// price?: number
-// availability?: boolean
-// status: "received"
-
-// const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
-//   user: JwtPayload,
-//   id: string,
-//   payload: any
-// ) => {
-//   const statusUpdate = await ProductSendModel.findByIdAndUpdate(
-//     id,
-//     { status: "received" },
-//     { new: true }
-//   ).exec();
-//   // console.log("statusUpdate", statusUpdate);
-//   if (!statusUpdate) {
-//     throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product");
-//   }
-
-//   for (const prod of payload.product) {
-//     await SendOfferModelForRetailer.findByIdAndUpdate(prod._id, {
-//       price: prod.price,
-//       availability: prod.availability,
-//       status: true,
-//       $unset: { isDraft: 1 },
-//     });
-//   }
-//   // console.log("SendOfferModelForRetailer", payload.product);
-
-//   const notificationPayload = {
-//     sender: user.id,
-//     receiver: statusUpdate.retailer,
-//     message: `${user.name} has confirmed the order id ${id}`,
-//   };
-
-//   await sendNotifications(notificationPayload);
-
-//   return statusUpdate;
-// };
 // TODO: update product jeta wholesaler price and availability update korbe.
 const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
   user: JwtPayload,
@@ -360,39 +320,6 @@ const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
   return updatedData;
 };
 
-// get all received base on wholesaler
-// const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
-//   const details = await ProductSendModel.find({
-//     wholesaler: user.id,
-//     status: "received",
-//   })
-//     .populate({
-//       path: "product._id",
-//       select:
-//         "productName unit quantity additionalInfo retailer status ",
-//     })
-//     .populate({
-//       path: "retailer",
-//       select:
-//         "name email image phone storeInformation.businessName  storeInformation.location ",
-//     })
-//     .populate({
-//       path: "wholesaler",
-//       select:
-//         "name email image phone storeInformation.businessName storeInformation.location ",
-//     })
-//     .lean();
-//   if (!details) {
-//     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
-//   }
-//   // // for 1 hour ahead time display
-//   // const updatedData = details.map((doc: any) => ({
-//   //   ...doc,
-//   //   createdAt: new Date(new Date(doc.createdAt).getTime() + 60 * 60 * 1000),
-//   // }));
-
-//   return details;
-// };
 
 const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   const details = await ProductSendModel.find({
@@ -421,7 +348,6 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
 
 // get all confirm base on wholesaler
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
-  console.log("I am here");
   const details = await ProductSendModel.find({
     wholesaler: user.id,
     status: { $in: ["confirmed", "delivered"] },

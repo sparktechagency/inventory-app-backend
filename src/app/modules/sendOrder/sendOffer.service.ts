@@ -36,13 +36,15 @@ const getAllNewOrdersFromDB = async (
   // for 1 hour ahead time display
   const updatedData = result?.map((doc: any) => {
     const obj = doc.toObject(); // Mongoose document -> plain object
-    obj.createdAt = new Date(new Date(obj.createdAt).getTime() + 60 * 60 * 1000);
+    obj.createdAt = new Date(
+      new Date(obj.createdAt).getTime() + 60 * 60 * 1000
+    );
     return obj;
   });
 
-
   return {
-    meta, updatedData,
+    meta,
+    updatedData,
   };
 };
 
@@ -97,13 +99,15 @@ const productHistoryFromDB = async (
     .fields();
   queryBuilder.modelQuery = queryBuilder.modelQuery.sort("createdAt");
 
-  const result = await queryBuilder.modelQuery;
+  const result = await queryBuilder.modelQuery.lean().exec();
   const meta = await queryBuilder.getPaginationInfo();
 
   // for 1 hour ahead time display
   const updatedData = result?.map((doc: any) => {
-    const obj = doc.toObject(); // Mongoose document -> plain object
-    obj.createdAt = new Date(new Date(obj.createdAt).getTime() + 60 * 60 * 1000);
+    const obj = doc.toObject();
+    obj.createdAt = new Date(
+      new Date(obj.createdAt).getTime() + 60 * 60 * 1000
+    );
     return obj;
   });
 
