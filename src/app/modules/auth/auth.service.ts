@@ -44,12 +44,9 @@ const loginUserFromDB = async (payload: ILoginData) => {
     payload.password.trim(),
     isExistUser.password!
   );
-  console.log(isPasswordCorrect);
   if (!isPasswordCorrect) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Password is incorrect!");
   }
-
-
 
   // Create token after verifying the password or OTP
   const createToken = jwtHelper.createToken(

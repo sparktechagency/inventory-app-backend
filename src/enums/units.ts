@@ -10,6 +10,7 @@ export enum UNIT {
   Gal = "Gal",
   Bag = "Bag",
   Pkt = "Pkt",
+  Box = "Box",
   Other = "Other",
   Dozen = "Dozen"
 }

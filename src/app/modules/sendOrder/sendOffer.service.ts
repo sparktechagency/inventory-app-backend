@@ -32,18 +32,22 @@ const getAllNewOrdersFromDB = async (
     .fields();
 
   const result = await queryBuilder.modelQuery;
-  const meta = await queryBuilder.getPaginationInfo();
   // for 1 hour ahead time display
-  const updatedData = result?.map((doc: any) => {
-    const obj = doc.toObject(); // Mongoose document -> plain object
-    obj.createdAt = new Date(
-      new Date(obj.createdAt).getTime() + 60 * 60 * 1000
+  const updatedData = result
+    ?.map((doc: any) => {
+      const obj = doc.toObject(); // Mongoose document -> plain object
+      obj.createdAt = new Date(
+        new Date(obj.createdAt).getTime() + 60 * 60 * 1000
+      );
+      return obj;
+    })
+    .sort((first, sec) =>
+      first.productName
+        .toLowerCase()
+        .localeCompare(sec.productName.toLowerCase())
     );
-    return obj;
-  });
 
   return {
-    meta,
     updatedData,
   };
 };
