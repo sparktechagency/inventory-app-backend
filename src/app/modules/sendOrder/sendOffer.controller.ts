@@ -19,7 +19,7 @@ const createNewOrder = catchAsync(async (req: Request, res: Response) => {
 // get all new order
 const getAllNewOrders = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
-  const result = await sendOfferService.getAllNewOrdersFromDB(user, req.query); 
+  const result = await sendOfferService.getAllNewOrdersFromDB(user);
 
   sendResponse(res, {
     success: true,
@@ -66,14 +66,13 @@ const deleteSingleOrMulifulOrder = catchAsync(
 // all order history
 const productHistoryFromDB = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
-  const result = await sendOfferService.productHistoryFromDB(user, req.query);
+  const result = await sendOfferService.productHistoryFromDB(user);
 
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
     message: "Orders fetched successfully",
-    pagination: result.meta,
-    data: result.updatedData,
+    data: result.result,
   });
 });
 

@@ -17,23 +17,14 @@ const createNewOrderIntoDB = async (user: JwtPayload, payload: ISendOffer) => {
 };
 
 // get all
-const getAllNewOrdersFromDB = async (
-  user: JwtPayload,
-  query: Record<string, any>
-) => {
-  const queryBuilder = new QueryBuilder(
-    SendOfferModelForRetailer.find({ retailer: user.id, status: false }),
-    query
-  )
-    .search(["productName"])
-    .filter()
-    .sort()
-    .paginate()
-    .fields();
+const getAllNewOrdersFromDB = async (user: JwtPayload) => {
+  const queryBuilder = await SendOfferModelForRetailer.find({
+    retailer: user.id,
+    status: false,
+  });
 
-  const result = await queryBuilder.modelQuery;
   // for 1 hour ahead time display
-  const updatedData = result
+  const updatedData = queryBuilder
     ?.map((doc: any) => {
       const obj = doc.toObject(); // Mongoose document -> plain object
       obj.createdAt = new Date(
@@ -85,39 +76,23 @@ const deleteSingleOrMulifulOrderIntoDB = async (
 };
 
 // all order history
-const productHistoryFromDB = async (
-  user: JwtPayload,
-  query: Record<string, any>
-) => {
-  const updatedQuery = {
-    ...query,
-    limit: 20,
-  };
-  const queryBuilder = new QueryBuilder(
-    SendOfferModelForRetailer.find({ retailer: user.id, status: true }),
-    updatedQuery
-  )
-    .search(["productName"])
-    .filter()
-    .paginate()
-    .fields();
-  queryBuilder.modelQuery = queryBuilder.modelQuery.sort("createdAt");
-
-  const result = await queryBuilder.modelQuery.lean().exec();
-  const meta = await queryBuilder.getPaginationInfo();
-
-  // for 1 hour ahead time display
-  const updatedData = result?.map((doc: any) => {
-    const obj = doc.toObject();
-    obj.createdAt = new Date(
-      new Date(obj.createdAt).getTime() + 60 * 60 * 1000
-    );
-    return obj;
+const productHistoryFromDB = async (user: JwtPayload) => {
+  // Fetch all documents from DB where status is true
+  const result = await SendOfferModelForRetailer.find({
+    retailer: user.id,
+    status: true,
   });
 
+  // Convert Mongoose documents to plain objects, filter out any without _id
+  const updatedData = result
+    .map((doc: any) => doc.toObject())
+    .filter((doc: any) => doc._id) // only keep docs with _id
+    .sort((a, b) =>
+      a.productName.toLowerCase().localeCompare(b.productName.toLowerCase())
+    ); // case-insensitive alphabetical sort
+
   return {
-    meta,
-    updatedData,
+    result: updatedData,
   };
 };
 
