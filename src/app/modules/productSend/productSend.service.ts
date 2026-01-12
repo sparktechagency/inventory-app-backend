@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { JwtPayload } from "jsonwebtoken";
 import ApiError from "../../../errors/ApiError";
 import { IProductSend } from "./productSend.interface";
@@ -14,47 +15,66 @@ const sendProductToWholesalerIntoDB = async (
   user: JwtPayload,
   payload: any
 ) => {
-  // collect all product IDs from payload
-  const productIds = payload.flatMap((item: any) => item.product);
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  // product status update only for given productIds
-  await SendOfferModelForRetailer.updateMany(
-    { retailer: user.id, _id: { $in: productIds } },
-    { status: true }
-  );
 
-  const formattedPayload: IProductSend[] = payload.map((item: any) => ({
-    product: item.product?.map((id: any) => ({
-      _id: id,
-      price: 0,
-      availability: false,
-    })),
-    retailer: user.id as any,
-    wholesaler: item.wholesaler as any,
-    status: "pending",
-    isDeleted: false,
-  }));
+  try {
+    const productIds = payload.flatMap((item: any) => item.product);
 
-  const result = await ProductSendModel.create(formattedPayload);
-  if (!result) {
-    throw new ApiError(
-      StatusCodes.BAD_REQUEST,
-      "Failed to send product to wholesaler"
+    // product status update only for given productIds
+    await SendOfferModelForRetailer.updateMany(
+      { retailer: user.id, _id: { $in: productIds } },
+      { status: true },
+      { session }
     );
+
+    const formattedPayload: IProductSend[] = payload.map((item: any) => ({
+      product: item.product?.map((id: any) => ({
+        _id: id,
+        price: 0,
+        availability: false,
+      })),
+      retailer: user.id as any,
+      wholesaler: item.wholesaler as any,
+      status: "pending",
+      isDeleted: false,
+    }));
+
+    const result = await ProductSendModel.insertMany(formattedPayload, {
+      session,
+    });
+
+    if (!result) {
+      throw new ApiError(
+        StatusCodes.BAD_REQUEST,
+        "Failed to send product to wholesaler"
+      );
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+    // TODO: need to send notification to wholesaler
+    process.nextTick(async () => {
+      const userInfo = await User.findById(user.id);
+      for (const item of formattedPayload) {
+        await sendNotifications({
+          sender: user.id,
+          receiver: item.wholesaler,
+          message: `${userInfo?.name || "Retailer"} has sent products. Please check availability.`,
+        });
+      }
+    });
+
+
+    return result;
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
   }
-  // TODO: need to send notification to wholesaler
-  const findThisUser = await User.findById(user.id);
-  for (const item of formattedPayload) {
-    const notificationPayload = {
-      sender: user.id,
-      receiver: item.wholesaler,
-      message: `${
-        findThisUser?.name || "Retailer"
-      } has send the order is this product available?`,
-    };
-    await sendNotifications(notificationPayload);
-  }
-  return result;
+  // collect all product IDs from payload
+
 };
 
 // get all just status true
