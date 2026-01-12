@@ -80,42 +80,49 @@ const sendProductToWholesalerIntoDB = async (
 // get all just status true
 const getAllProductSendToWholeSalerFromDB = async (
   user: JwtPayload,
-  type: "pending" | "confirmed" | "received",
+  type: 'pending' | 'confirmed' | 'received',
   query: Record<string, any>
 ) => {
   const filter: Record<string, any> = {
     status: type,
+    isDeleted: false,
   };
 
-  if (user.role === "Retailer") {
+  if (user.role === 'Retailer') {
     filter.retailer = user.id;
-  } else if (user.role === "Wholesaler") {
+  } else if (user.role === 'Wholesaler') {
     filter.wholesaler = { $in: [user.id] };
   }
 
   if (query.status) {
     filter.status = query.status;
-    // filter.isDeleted = false;
   }
 
   const productQuery = ProductSendModel.find(filter)
+    .select('product retailer wholesaler note status createdAt updatedAt')
     .populate({
-      path: "product._id",
-      select: "productName unit quantity additionalInfo retailer status ",
+      path: 'product._id',
+      select: 'productName unit quantity additionalInfo status',
+      options: { lean: true },
     })
     .populate({
-      path: "retailer",
-      select:
-        "name email image phone storeInformation.businessName storeInformation.location",
+      path: 'retailer',
+      select: 'name email phone storeInformation.businessName storeInformation.location image',
+      options: { lean: true },
     })
     .populate({
-      path: "wholesaler",
-      select:
-        "name email image phone storeInformation.businessName storeInformation.location",
-    });
+      path: 'wholesaler',
+      select: 'name email phone storeInformation.businessName storeInformation.location image',
+      options: { lean: true },
+    })
+    .lean();
 
-  const queryBuilder = new QueryBuilder(productQuery, query)
-    .search(["note"])
+  const queryBuilder = new QueryBuilder(productQuery, {
+    ...query,
+    limit: query.limit ? Math.min(Number(query.limit), 100) : 50,
+    page: query.page || 1,
+  })
+    .search(['note'])
     .filter()
     .sort()
     .paginate()
@@ -123,14 +130,11 @@ const getAllProductSendToWholeSalerFromDB = async (
 
   const data = await queryBuilder.modelQuery.exec();
   const meta = await queryBuilder.getPaginationInfo();
-  // for 1 hour ahead time display
-  const updatedData = data.map((doc: any) => {
-    const obj = doc.toObject(); // Mongoose document -> plain object
-    obj.createdAt = new Date(
-      new Date(obj.createdAt).getTime() + 60 * 60 * 1000
-    );
-    return obj;
-  });
+
+  const updatedData = data.map((doc: any) => ({
+    ...doc,
+    createdAt: new Date(new Date(doc.createdAt).getTime() + 3600000),
+  }));
 
   return {
     meta,
