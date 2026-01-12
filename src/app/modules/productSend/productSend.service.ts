@@ -131,7 +131,7 @@ const getAllProductSendToWholeSalerFromDB = async (
   const data = await queryBuilder.modelQuery.exec();
   const meta = await queryBuilder.getPaginationInfo();
 
-  const updatedData = data.map((doc: any) => ({
+  const updatedData = data?.map((doc: any) => ({
     ...doc,
     createdAt: new Date(new Date(doc.createdAt).getTime() + 3600000),
   }));
@@ -151,7 +151,10 @@ const updateProductSendDetailIntoDB = async (
     availability: boolean;
   }[]
 ) => {
-  const details = await ProductSendModel.findById(id);
+  const [details, findThisUser] = await Promise.all([
+    ProductSendModel.findById(id),
+    User.findById(user.id),
+  ]);
   const updateStatusRequest = await ProductSendModel.findByIdAndUpdate(id, {
     status: "received",
   });
@@ -165,7 +168,6 @@ const updateProductSendDetailIntoDB = async (
       "No products found in the order"
     );
   }
-  const findThisUser = await User.findById(user.id);
   if (findThisUser?.role !== USER_ROLES.Wholesaler) return;
 
   const currentOrder = findThisUser.order ?? 0;
