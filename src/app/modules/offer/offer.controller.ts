@@ -14,7 +14,7 @@ const createOfferController = catchAsync(
       if (!io) {
         throw new ApiError(
           StatusCodes.INTERNAL_SERVER_ERROR,
-          "Socket.IO is not initialized"
+          "Socket.IO is not initialized",
         );
       }
 
@@ -22,7 +22,7 @@ const createOfferController = catchAsync(
       if (!req.body || !Array.isArray(req.body) || req.body.length === 0) {
         throw new ApiError(
           StatusCodes.BAD_REQUEST,
-          "Request body must be an array with at least one order"
+          "Request body must be an array with at least one order",
         );
       }
 
@@ -31,18 +31,19 @@ const createOfferController = catchAsync(
       sendResponse(res, {
         statusCode: StatusCodes.CREATED,
         success: true,
-        message: `Successfully created ${result.orders.length} order${result.orders.length > 1 ? "s" : ""
-          } and sent notifications`,
+        message: `Successfully created ${result.orders.length} order${
+          result.orders.length > 1 ? "s" : ""
+        } and sent notifications`,
         data: result.orders,
       });
     } catch (error) {
       console.error("Error in createOfferController:", error);
       throw new ApiError(
         StatusCodes.INTERNAL_SERVER_ERROR,
-        "Failed to create orders"
+        "Failed to create orders",
       );
     }
-  }
+  },
 );
 
 // update offer from wholesaler
@@ -55,7 +56,7 @@ const updateOffer = catchAsync(async (req: Request, res: Response) => {
   if (!io) {
     throw new ApiError(
       StatusCodes.INTERNAL_SERVER_ERROR,
-      "Socket.IO instance not initialized"
+      "Socket.IO instance not initialized",
     );
   }
 
@@ -65,7 +66,7 @@ const updateOffer = catchAsync(async (req: Request, res: Response) => {
     id,
     productUpdates,
     status,
-    io
+    io,
   );
 
   // Return a structured response with updated offer data
@@ -75,16 +76,16 @@ const updateOffer = catchAsync(async (req: Request, res: Response) => {
     message: "Offer updated and notification sent successfully",
     data: result.updatedOffer
       ? {
-        status: result.updatedOffer.status,
-        productUpdates: result.updatedOffer.product?.map((p) => ({
-          // @ts-ignore
-          productId: p.productId?.toString(),
-          // @ts-ignore
-          availability: p.availability,
-          // @ts-ignore
-          price: p.price,
-        })),
-      }
+          status: result.updatedOffer.status,
+          productUpdates: result.updatedOffer.product?.map((p) => ({
+            // @ts-ignore
+            productId: p.productId?.toString(),
+            // @ts-ignore
+            availability: p.availability,
+            // @ts-ignore
+            price: p.price,
+          })),
+        }
       : {}, // Prevent sending empty data if no updated offer
   });
 });
@@ -98,7 +99,7 @@ const confirmOrderFromRetailer = catchAsync(
     const result = await sendOfferService.updateOfferFromRetailer(
       id,
       req.body,
-      io
+      io,
     );
 
     sendResponse(res, {
@@ -107,7 +108,7 @@ const confirmOrderFromRetailer = catchAsync(
       message: "Offer updated and notification sent successfully from retailer",
       data: result.updatedOffer,
     });
-  }
+  },
 );
 // get all pending product from retailer
 const getPendingOffersFromRetailer = catchAsync(
@@ -120,14 +121,14 @@ const getPendingOffersFromRetailer = catchAsync(
     }
     const result = await sendOfferService.getPendingOffersFromRetailerIntoDB(
       req.user.id,
-      req.user.role
+      req.user.role,
     );
     return sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
       data: result.data,
     });
-  }
+  },
 );
 
 // get single offer from db for retailer
@@ -146,7 +147,7 @@ const getSinglePendingOfferFromRetailer = catchAsync(
     const offer =
       await sendOfferService.getSinglePendingOfferFromRetailerIntoDB(
         user.id,
-        id
+        id,
       );
 
     sendResponse(res, {
@@ -155,7 +156,7 @@ const getSinglePendingOfferFromRetailer = catchAsync(
       message: "Successfully fetched single pending offer",
       data: offer,
     });
-  }
+  },
 );
 
 // delete single pending offers from retailer
@@ -172,7 +173,7 @@ const deleteSinglePendingOfferFromRetailer = catchAsync(
     }
     const offer = await sendOfferService.deleteSinglePendingOfferFromRetailer(
       user.id,
-      id
+      id,
     );
     sendResponse(res, {
       statusCode: StatusCodes.OK,
@@ -180,7 +181,7 @@ const deleteSinglePendingOfferFromRetailer = catchAsync(
       message: "Successfully deleted single pending offer",
       data: offer,
     });
-  }
+  },
 );
 
 // ! delete single pending offers from retailer
@@ -209,7 +210,7 @@ const getSingleReceiveOfferFromRetailerIntoDB = catchAsync(
     const offer =
       await sendOfferService.getSingleReceiveOfferFromRetailerIntoDB(
         user.id,
-        id
+        id,
       );
     sendResponse(res, {
       statusCode: StatusCodes.OK,
@@ -217,7 +218,7 @@ const getSingleReceiveOfferFromRetailerIntoDB = catchAsync(
       message: "Successfully fetched single receive offer",
       data: offer,
     });
-  }
+  },
 );
 
 // delete single received offers from retailer
@@ -238,7 +239,7 @@ const deleteSingleReceiveOfferFromRetailer = catchAsync(
       message: "Successfully deleted single receive offer",
       data: null,
     });
-  }
+  },
 );
 
 // confirm
@@ -287,14 +288,14 @@ const deleteSingleConfirmOffer = catchAsync(
     if (!id) {
       throw new ApiError(StatusCodes.BAD_REQUEST, "Offer ID is required");
     }
-    await sendOfferService.deleteConfirmOffers(user);
+    await sendOfferService.deleteConfirmOffers(user as JwtPayload);
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,
       message: "Successfully deleted single confirm offer",
       data: null,
     });
-  }
+  },
 );
 
 const updateOfferFromRetailer = catchAsync(
@@ -303,9 +304,9 @@ const updateOfferFromRetailer = catchAsync(
     const { id } = req.params;
     const payload = req.body;
     const result = await sendOfferService.updateOfferFromRetailerIntoDB(
-      user,
+      user as any,
       id,
-      payload
+      payload,
     );
     sendResponse(res, {
       statusCode: StatusCodes.OK,
@@ -313,7 +314,7 @@ const updateOfferFromRetailer = catchAsync(
       message: "Successfully updated offer",
       data: result,
     });
-  }
+  },
 );
 
 export const sendOfferController = {

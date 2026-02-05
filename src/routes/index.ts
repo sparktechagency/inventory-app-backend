@@ -6,7 +6,6 @@ import { wholeSalerRoutes } from "../app/modules/wholesaler & Retailer/wholesale
 // import { offerRoutes } from "../app/modules/offer/offer.routes";
 // import { packageRoutes } from '../app/modules/package/package.routes';
 import { paymentRoutes } from "../app/modules/subscription/payment.routes";
-import { PackageRoutes } from "../app/modules/PaymentPaystack/PaymentPaystack.routes";
 import { TransactionRoutes } from "../app/modules/Transaction/ITransaction.routes";
 import { NotificationRoutes } from "../app/modules/notification/notification.route";
 import { flutterWaveRouter } from "../app/modules/flutterwavePackage/flutterwavePackage.route";
@@ -20,6 +19,7 @@ import { inviteLinkRoutes } from "../app/modules/inviteLink/inviteLink.routes";
 import { aboutUsContactUsTermsAndConditionsRoutes } from "../app/modules/about-us-contact-us-terms-and-conditions/about-us-contact-us-terms-and-conditions.routes";
 import { faqRoutes } from "../app/modules/faq/faq.routes";
 import { applinkGeneratedRoutes } from "../app/modules/applinkGenerated/applinkGenerated.routes";
+import { PackageRoutes } from "../app/modules/PaymentPaystack/PaymentPaystack.routes";
 const router = express.Router();
 
 const apiRoutes = [

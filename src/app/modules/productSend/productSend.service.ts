@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { JwtPayload } from "jsonwebtoken";
 import ApiError from "../../../errors/ApiError";
 import { IProductSend } from "./productSend.interface";
@@ -13,11 +13,10 @@ import { USER_ROLES } from "../../../enums/user";
 
 const sendProductToWholesalerIntoDB = async (
   user: JwtPayload,
-  payload: any
+  payload: any,
 ) => {
   const session = await mongoose.startSession();
   session.startTransaction();
-
 
   try {
     const productIds = payload.flatMap((item: any) => item.product);
@@ -26,7 +25,7 @@ const sendProductToWholesalerIntoDB = async (
     await SendOfferModelForRetailer.updateMany(
       { retailer: user.id, _id: { $in: productIds } },
       { status: true },
-      { session }
+      { session },
     );
 
     const formattedPayload: IProductSend[] = payload.map((item: any) => ({
@@ -48,7 +47,7 @@ const sendProductToWholesalerIntoDB = async (
     if (!result) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
-        "Failed to send product to wholesaler"
+        "Failed to send product to wholesaler",
       );
     }
 
@@ -66,7 +65,6 @@ const sendProductToWholesalerIntoDB = async (
       }
     });
 
-
     return result;
   } catch (error) {
     await session.abortTransaction();
@@ -74,23 +72,23 @@ const sendProductToWholesalerIntoDB = async (
     throw error;
   }
   // collect all product IDs from payload
-
 };
 
 // get all just status true
 const getAllProductSendToWholeSalerFromDB = async (
   user: JwtPayload,
-  type: 'pending' | 'confirmed' | 'received',
-  query: Record<string, any>
+  type: "pending" | "confirmed" | "received" | "delivered",
+  query: Record<string, any>,
 ) => {
+  if (type === "confirmed") type = "delivered";
   const filter: Record<string, any> = {
     status: type,
     isDeleted: false,
   };
 
-  if (user.role === 'Retailer') {
-    filter.retailer = user.id;
-  } else if (user.role === 'Wholesaler') {
+  if (user.role === "Retailer") {
+    filter.retailer = new Types.ObjectId(user.id);
+  } else if (user.role === "Wholesaler") {
     filter.wholesaler = { $in: [user.id] };
   }
 
@@ -99,30 +97,33 @@ const getAllProductSendToWholeSalerFromDB = async (
   }
 
   const productQuery = ProductSendModel.find(filter)
-    .select('product retailer wholesaler note status createdAt updatedAt')
+    .select("product retailer wholesaler note status createdAt updatedAt")
     .populate({
-      path: 'product._id',
-      select: 'productName unit quantity additionalInfo status',
+      path: "product._id",
+      select: "productName unit quantity additionalInfo status",
       options: { lean: true },
     })
     .populate({
-      path: 'retailer',
-      select: 'name email phone storeInformation.businessName storeInformation.location image',
+      path: "retailer",
+      select:
+        "name email phone storeInformation.businessName storeInformation.location image",
       options: { lean: true },
     })
     .populate({
-      path: 'wholesaler',
-      select: 'name email phone storeInformation.businessName storeInformation.location image',
+      path: "wholesaler",
+      select:
+        "name email phone storeInformation.businessName storeInformation.location image",
       options: { lean: true },
     })
     .lean();
+
 
   const queryBuilder = new QueryBuilder(productQuery, {
     ...query,
     limit: query.limit ? Math.min(Number(query.limit), 100) : 50,
     page: query.page || 1,
   })
-    .search(['note'])
+    .search(["note"])
     .filter()
     .sort()
     .paginate()
@@ -133,7 +134,7 @@ const getAllProductSendToWholeSalerFromDB = async (
 
   const updatedData = data?.map((doc: any) => ({
     ...doc,
-    createdAt: new Date(new Date(doc.createdAt).getTime() + 3600000),
+    createdAt: new Date(new Date(doc?.updatedAt).getTime() + 3600000),
   }));
 
   return {
@@ -149,7 +150,7 @@ const updateProductSendDetailIntoDB = async (
     product: string;
     price: number;
     availability: boolean;
-  }[]
+  }[],
 ) => {
   const [details, findThisUser] = await Promise.all([
     ProductSendModel.findById(id),
@@ -165,7 +166,7 @@ const updateProductSendDetailIntoDB = async (
   if (!details.product || details.product.length === 0) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "No products found in the order"
+      "No products found in the order",
     );
   }
   if (findThisUser?.role !== USER_ROLES.Wholesaler) return;
@@ -175,7 +176,7 @@ const updateProductSendDetailIntoDB = async (
   if (!findThisUser.isSubscribed && currentOrder <= 0) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "Free trial order count is over please subscribe to continue"
+      "Free trial order count is over please subscribe to continue",
     );
   }
 
@@ -188,7 +189,7 @@ const updateProductSendDetailIntoDB = async (
     if (!item.product || !item.price || item.availability === undefined) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
-        "Missing product, price or availability"
+        "Missing product, price or availability",
       );
     }
 
@@ -230,17 +231,19 @@ const getAllReceivedProductFromWholesalerDB = async (user: JwtPayload) => {
   const updatedData = details?.map((doc: any) => {
     const obj = doc.toObject(); // Mongoose document -> plain object
     obj.createdAt = new Date(
-      new Date(obj.createdAt).getTime() + 60 * 60 * 1000
+      new Date(obj.createdAt).getTime() + 60 * 60 * 1000,
     );
     return obj;
   });
+
+  
   return updatedData;
 };
 // TODO: update product jeta wholesaler price and availability update korbe.
 const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
   user: JwtPayload,
   id: string,
-  payload: IProductSend
+  payload: IProductSend,
 ) => {
   const productSend = await ProductSendModel.findById(id);
   if (!productSend) {
@@ -251,7 +254,7 @@ const updateAllProductStatusPriceAndAvailabilityIntoDB = async (
 
   for (const updatedProd of payload.product) {
     const prodIndex = productSend.product.findIndex(
-      (p) => p._id.toString() === updatedProd._id.toString()
+      (p) => p._id.toString() === updatedProd._id.toString(),
     );
     if (prodIndex !== -1) {
       productSend.product[prodIndex].price = updatedProd.price;
@@ -286,7 +289,7 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB =
     const statusUpdate = await ProductSendModel.findByIdAndUpdate(
       id,
       { status: "confirmed" },
-      { new: true }
+      { new: true },
     ).exec();
     if (!statusUpdate) {
       throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product");
@@ -296,7 +299,7 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB =
         await SendOfferModelForRetailer.findByIdAndUpdate(
           prod._id,
           { quantity: prod.quantity },
-          { new: true }
+          { new: true },
         );
       }
     }
@@ -314,6 +317,8 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB =
 
 // get all confirm base on retailer
 const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
+
+
   const details = await ProductSendModel.find({
     retailer: user.id,
     status: { $in: ["confirmed", "delivered"] },
@@ -332,6 +337,7 @@ const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
         "name email image phone storeInformation.businessName storeInformation.location",
     })
     .lean();
+
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
@@ -339,15 +345,18 @@ const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
   const updatedData = details?.map((doc: any) => {
     const obj = doc.toObject(); // Mongoose document -> plain object
     obj.createdAt = new Date(
-      new Date(obj.createdAt).getTime() + 60 * 60 * 1000
+      new Date(obj.createdAt).getTime() + 60 * 60 * 1000,
     );
     return obj;
   });
+
+
+
   return updatedData;
 };
 
-
 const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
+ 
   const details = await ProductSendModel.find({
     wholesaler: user.id,
     status: "received",
@@ -369,11 +378,15 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
+
+  
+
   return details;
 };
 
 // get all confirm base on wholesaler
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
+ 
   const details = await ProductSendModel.find({
     wholesaler: user.id,
     status: { $in: ["confirmed", "delivered"] },
@@ -392,9 +405,6 @@ const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
     })
     .lean();
 
-  // Add this debug log
-  //   console.log("Populated Details:", JSON.stringify(details, null, 2));
-
   if (!details) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
@@ -403,19 +413,18 @@ const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
     ...doc,
     createdAt: new Date(new Date(doc.createdAt).getTime() + 60 * 60 * 1000),
   }));
-
   return updatedData;
 };
 
 // delivary status change
 const updateDelivaryStatusAsaWholesalerIntoDB = async (
   user: JwtPayload,
-  id: string
+  id: string,
 ) => {
   const statusUpdate = await ProductSendModel.findByIdAndUpdate(
     id,
     { status: "delivered" },
-    { new: true }
+    { new: true },
   ).exec();
   if (!statusUpdate) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Failed to update product");
@@ -428,7 +437,7 @@ const updateDelivaryStatusAsaWholesalerIntoDB = async (
     if (findThisUser.order! > 50) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
-        "Order limit reached. Please subscribe."
+        "Order limit reached. Please subscribe.",
       );
     }
     // Increment order for non-subscribed user
@@ -460,7 +469,7 @@ const deleteProductFromDB = async (id: string) => {
 const saveAsDraftStatusTrueIntoDB = async (
   user: JwtPayload,
   productSendId: string,
-  payload: any
+  payload: any,
 ) => {
   const productSend = await ProductSendModel.findById(productSendId);
   if (!productSend) {
@@ -476,13 +485,13 @@ const saveAsDraftStatusTrueIntoDB = async (
           "product.$.price": prod.price,
           "product.$.availability": prod.availability,
         },
-      }
+      },
     );
 
     if (result.matchedCount === 0) {
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
-        `Failed to update product with ID ${prod._id}`
+        `Failed to update product with ID ${prod._id}`,
       );
     }
   }

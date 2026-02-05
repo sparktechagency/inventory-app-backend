@@ -9,7 +9,7 @@ const sendProductToWholesaler = catchAsync(
     const user = req.user;
     const result = await productSendService.sendProductToWholesalerIntoDB(
       user,
-      req.body
+      req.body,
     );
     sendResponse(res, {
       success: true,
@@ -17,17 +17,21 @@ const sendProductToWholesaler = catchAsync(
       message: "Product sent to wholesaler successfully",
       data: result,
     });
-  }
+  },
 );
 
 const getAllProductToWholesaler = catchAsync(
   async (req: Request, res: Response) => {
-    const type = req.params.type as "pending" | "confirmed" | "received";
+    const type = req.params.type as
+      | "pending"
+      | "confirmed"
+      | "delivered"
+      | "received";
     const user = req.user;
     const result = await productSendService.getAllProductSendToWholeSalerFromDB(
       user,
       type,
-      req.query
+      req.query,
     );
     sendResponse(res, {
       success: true,
@@ -36,7 +40,7 @@ const getAllProductToWholesaler = catchAsync(
       pagination: result.meta,
       data: result.data,
     });
-  }
+  },
 );
 
 const updateProductSendDetail = catchAsync(
@@ -45,7 +49,7 @@ const updateProductSendDetail = catchAsync(
     const result = await productSendService.updateProductSendDetailIntoDB(
       req.params.id,
       user,
-      req.body
+      req.body,
     );
     sendResponse(res, {
       success: true,
@@ -53,7 +57,7 @@ const updateProductSendDetail = catchAsync(
       message: "Product updated successfully",
       data: result,
     });
-  }
+  },
 );
 
 const updateAllProductSendDetail = catchAsync(
@@ -63,7 +67,7 @@ const updateAllProductSendDetail = catchAsync(
       await productSendService.updateAllProductStatusPriceAndAvailabilityIntoDB(
         user,
         req.params.id,
-        req.body
+        req.body,
       );
     sendResponse(res, {
       success: true,
@@ -71,7 +75,7 @@ const updateAllProductSendDetail = catchAsync(
       message: "Product updated successfully",
       data: result,
     });
-  }
+  },
 );
 
 const getAllReceivedProductFromWholesaler = catchAsync(
@@ -85,7 +89,7 @@ const getAllReceivedProductFromWholesaler = catchAsync(
       message: "Get All Received Product from wholesaler",
       data: result,
     });
-  }
+  },
 );
 
 const updateProductReceivedToConfirmRequestFromRetailerToWholesaler =
@@ -95,7 +99,7 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesaler =
       await productSendService.updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB(
         user,
         req.params.id,
-        req.body
+        req.body,
       );
     sendResponse(res, {
       success: true,
@@ -109,7 +113,7 @@ const getAllConfirmProductFromRetailer = catchAsync(
   async (req: Request, res: Response) => {
     const user = req.user;
     const result = await productSendService.getAllConfirmProductFromRetailerDB(
-      user!
+      user!,
     );
     sendResponse(res, {
       success: true,
@@ -117,7 +121,7 @@ const getAllConfirmProductFromRetailer = catchAsync(
       message: "Get All Confirm Product from retailer",
       data: result,
     });
-  }
+  },
 );
 
 const getAllConfirmProductFromWholesaler = catchAsync(
@@ -131,14 +135,14 @@ const getAllConfirmProductFromWholesaler = catchAsync(
       message: "Get All Confirm Product from wholesaler",
       data: result,
     });
-  }
+  },
 );
 
 const getAllReceivedProductFromRetailer = catchAsync(
   async (req: Request, res: Response) => {
     const user = req.user;
     const result = await productSendService.getAllReceivedProductFromRetailerDB(
-      user!
+      user!,
     );
     sendResponse(res, {
       success: true,
@@ -146,7 +150,7 @@ const getAllReceivedProductFromRetailer = catchAsync(
       message: "Get All Received Product from retailer",
       data: result,
     });
-  }
+  },
 );
 
 const deleteProduct = catchAsync(async (req: Request, res: Response) => {
@@ -165,7 +169,7 @@ const updateDelivaryStatusAsaWholesaler = catchAsync(
     const result =
       await productSendService.updateDelivaryStatusAsaWholesalerIntoDB(
         user,
-        req.params.id
+        req.params.id,
       );
     sendResponse(res, {
       success: true,
@@ -173,7 +177,7 @@ const updateDelivaryStatusAsaWholesaler = catchAsync(
       message: "Product updated successfully",
       data: result,
     });
-  }
+  },
 );
 
 // save as draft
@@ -183,7 +187,7 @@ const saveAsDraftStatusTrue = catchAsync(
     const result = await productSendService.saveAsDraftStatusTrueIntoDB(
       user,
       req.params.id,
-      req.body
+      req.body,
     );
     sendResponse(res, {
       success: true,
@@ -191,7 +195,7 @@ const saveAsDraftStatusTrue = catchAsync(
       message: "Product updated successfully",
       data: result,
     });
-  }
+  },
 );
 
 export const productSendControllerFromRetailer = {

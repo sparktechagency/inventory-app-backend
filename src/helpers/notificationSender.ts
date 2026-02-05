@@ -18,7 +18,7 @@ export const notificationSender = async (
       isRead: false,
     };
 
-    await NotificationServices.createNotification(notificationPayload);
+    await NotificationServices.createNotification(notificationPayload as any);
   } catch (error) {
     console.error("Error sending or storing notification:", error);
   }

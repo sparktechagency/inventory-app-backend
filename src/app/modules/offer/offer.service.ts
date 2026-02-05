@@ -1,4 +1,3 @@
-
 import { StatusCodes } from "http-status-codes";
 import ApiError from "../../../errors/ApiError";
 import { IOrder } from "./offer.interface";
@@ -17,7 +16,7 @@ const createOffers = async (payloads: IOrder[], io: Server) => {
     console.error("Invalid payloads: Must be an array with at least 1 item");
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "You must provide at least 1 order"
+      "You must provide at least 1 order",
     );
   }
 
@@ -25,7 +24,7 @@ const createOffers = async (payloads: IOrder[], io: Server) => {
     console.error("Too many orders: Cannot exceed 5");
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "You can only send between 1 to 5 orders at a time"
+      "You can only send between 1 to 5 orders at a time",
     );
   }
 
@@ -36,13 +35,13 @@ const createOffers = async (payloads: IOrder[], io: Server) => {
     if (
       !payload.wholeSeller ||
       !payload.retailer ||
-      !Array.isArray(payload.products) ||
-      payload.products.length === 0
+      !Array.isArray((payload as any).products) ||
+      (payload as any).products.length === 0
     ) {
       console.error("Missing required fields in payload:", payload);
       throw new ApiError(
         StatusCodes.BAD_REQUEST,
-        "Wholesaler, Retailer, and at least one Product ID are required"
+        "Wholesaler, Retailer, and at least one Product ID are required",
       );
     }
 
@@ -82,7 +81,7 @@ const createOffers = async (payloads: IOrder[], io: Server) => {
     await notificationSender(
       io,
       `getNotification::${payload.wholeSeller}`,
-      notificationData
+      notificationData,
     );
   }
 
@@ -100,12 +99,12 @@ const updateOfferIntoDB = async (
   }[],
   status?: string,
   // @ts-ignore
-  io: Server
+  io: Server,
 ) => {
   if (!Array.isArray(productUpdates)) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "productUpdates must be an array"
+      "productUpdates must be an array",
     );
   }
 
@@ -115,7 +114,7 @@ const updateOfferIntoDB = async (
   ) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      "Invalid Offer ID or Product ID format"
+      "Invalid Offer ID or Product ID format",
     );
   }
 
@@ -179,60 +178,67 @@ const updateOfferIntoDB = async (
 
   // Only apply this logic for Wholesalers
   if (role === USER_ROLES.Wholesaler) {
-  //   if (offersUpdatedCount && offersUpdatedCount >= 10) {
-  //     throw new ApiError(
-  //       StatusCodes.BAD_REQUEST,
-  //       "You have already send 10 offers. Please subscribe to update more."
-  //     );
-  //   } else {
-  //     await User.findByIdAndUpdate(user.id, {
-  //       $inc: { offersUpdatedCount: 1 },
-  //     });
-  //   }
-  // }
+    //   if (offersUpdatedCount && offersUpdatedCount >= 10) {
+    //     throw new ApiError(
+    //       StatusCodes.BAD_REQUEST,
+    //       "You have already send 10 offers. Please subscribe to update more."
+    //     );
+    //   } else {
+    //     await User.findByIdAndUpdate(user.id, {
+    //       $inc: { offersUpdatedCount: 1 },
+    //     });
+    //   }
+    // }
 
-  // Prepare notification data
-  const notificationData = {
-    userId: updatedOffer.retailer!.toString(),
-    title: "Offer Updated",
-    message: `Your offer ${offerId} has been updated with new product details and status.`,
-    type: "offer-update",
-  };
+    // Prepare notification data
+    const notificationData = {
+      userId: updatedOffer.retailer!.toString(),
+      title: "Offer Updated",
+      message: `Your offer ${offerId} has been updated with new product details and status.`,
+      type: "offer-update",
+    };
 
-  // Send the notification using Socket.IO
-  await notificationSender(
-    io,
-    `getNotification::${updatedOffer.retailer}`,
-    notificationData
-  );
+    // Send the notification using Socket.IO
+    await notificationSender(
+      io,
+      `getNotification::${updatedOffer.retailer}`,
+      notificationData,
+    );
 
-  // Return success response
+    // Return success response
+    return {
+      success: true,
+      message: `Offer (ID: ${offerId}) and product details updated successfully.`,
+      updatedOffer,
+    };
+  }
+
+  // If not wholesaler, just return the updated offer
   return {
     success: true,
-    message: `Offer (ID: ${offerId}) and product details updated successfully.`,
+    message: `Offer (ID: ${offerId}) updated successfully.`,
     updatedOffer,
   };
 };
 
 // update offer from retailer
 const updateOfferFromRetailerIntoDB = async (
-  id: string,
   user: JwtPayload,
-  payload: any
+  id: string,
+  payload: any,
 ) => {
   const userId = user.id;
 
   const result = await OfferModel.findByIdAndUpdate(
     id,
     { ...payload, retailer: userId },
-    { new: true }
+    { new: true },
   );
 
   if (!result) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Offer not found");
   }
 
-  console.log("Offer updated successfully:", result);
   return result;
 };
 
@@ -242,7 +248,7 @@ const updateOfferFromRetailer = async (
     productQuantities?: { productId: string; quantity: number }[];
     status?: STATUS;
   },
-  io: Server
+  io: Server,
 ) => {
   try {
     // Step 1: Find the offer and populate product.productId
@@ -259,7 +265,7 @@ const updateOfferFromRetailer = async (
     if (!existingOffer.product || existingOffer.product.length === 0) {
       throw new ApiError(
         StatusCodes.NOT_FOUND,
-        "No products found in this offer."
+        "No products found in this offer.",
       );
     }
 
@@ -271,14 +277,14 @@ const updateOfferFromRetailer = async (
 
         // Find the product in the offer by comparing ObjectId
         // @ts-ignore
-        const product = existingOffer.product.find((p) =>
-          p.productId.equals(productObjectId)
+        const product = existingOffer.product.find((p: any) =>
+          p.productId.equals(productObjectId),
         ); // Use `.equals()` to compare ObjectId
 
         if (!product) {
           throw new ApiError(
             StatusCodes.NOT_FOUND,
-            `Product with ID ${prodQty.productId} not found in the offer.`
+            `Product with ID ${prodQty.productId} not found in the offer.`,
           );
         }
 
@@ -288,7 +294,7 @@ const updateOfferFromRetailer = async (
           throw new ApiError(
             StatusCodes.BAD_REQUEST,
             // @ts-ignore
-            `Insufficient stock for ${product.productId.name}. Available: ${product.productId.quantity}`
+            `Insufficient stock for ${product.productId.name}. Available: ${product.productId.quantity}`,
           );
         }
 
@@ -302,7 +308,7 @@ const updateOfferFromRetailer = async (
       // Save updated product stocks
       // @ts-ignore
       await Promise.all(
-        existingOffer.product.map((prod) => prod.productId?.save())
+        existingOffer.product.map((prod: any) => prod.productId?.save()),
       );
     }
 
@@ -325,7 +331,7 @@ const updateOfferFromRetailer = async (
     await notificationSender(
       io,
       `getNotification::${existingOffer.wholeSeller}`,
-      notificationData
+      notificationData,
     );
 
     return { updatedOffer: existingOffer };
@@ -333,7 +339,7 @@ const updateOfferFromRetailer = async (
     console.error("Error updating order:", error);
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
-      `Error updating order: ${error}`
+      `Error updating order: ${error}`,
     );
   }
 };
@@ -341,7 +347,7 @@ const updateOfferFromRetailer = async (
 // get all pending product from retailer
 const getPendingOffersFromRetailerIntoDB = async (
   userId: string,
-  role: string
+  role: string,
 ) => {
   try {
     if (!userId || !role) {
@@ -376,7 +382,7 @@ const getPendingOffersFromRetailerIntoDB = async (
     console.error("Error fetching pending offers:", error);
     throw new ApiError(
       StatusCodes.INTERNAL_SERVER_ERROR,
-      "Failed to fetch pending offers"
+      "Failed to fetch pending offers",
     );
   }
 };
@@ -384,7 +390,7 @@ const getPendingOffersFromRetailerIntoDB = async (
 // single pending Offer From retailer
 const getSinglePendingOfferFromRetailerIntoDB = async (
   retailerId: string,
-  offerId: string
+  offerId: string,
 ) => {
   const offer = await OfferModel.findOne({
     _id: offerId,
@@ -404,10 +410,9 @@ const getSinglePendingOfferFromRetailerIntoDB = async (
 };
 
 //  delete single pending offers from retailer
-
 const deleteSinglePendingOfferFromRetailer = async (
   retailerId: string,
-  offerId: string
+  offerId: string,
 ) => {
   const deletedOffer = await OfferModel.findByIdAndDelete({
     _id: offerId,
@@ -439,7 +444,7 @@ const getAllReceiveOffers = async (user: JwtPayload) => {
 // single receive offer from wholesaler
 const getSingleReceiveOfferFromRetailerIntoDB = async (
   retailerId: string,
-  offerId: string
+  offerId: string,
 ) => {
   const offer = await OfferModel.findOne({
     _id: offerId,
@@ -470,10 +475,7 @@ const deleteReceiveOffers = async (user: JwtPayload, offerId: string) => {
   return deletedOffer;
 };
 
-// confirm
-
 // get all from confirm
-
 const getAllConfirmOffers = async (user: JwtPayload) => {
   let query: any = {};
 
@@ -530,7 +532,7 @@ const deleteConfirmOffers = async (user: JwtPayload) => {
   if (!deletedOffers) {
     throw new ApiError(
       StatusCodes.NOT_FOUND,
-      "No confirmed offers found to delete"
+      "No confirmed offers found to delete",
     );
   }
   return deletedOffers;
@@ -546,14 +548,11 @@ export const sendOfferService = {
   // receive
   getAllReceiveOffers,
   getSingleReceiveOfferFromRetailerIntoDB,
-
   deleteReceiveOffers,
-
   // confirm
   getAllConfirmOffers,
   getSingleConfirmOffer,
   deleteConfirmOffers,
-
   // last time update function
   updateOfferFromRetailerIntoDB,
 };

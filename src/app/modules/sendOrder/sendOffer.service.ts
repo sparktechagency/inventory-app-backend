@@ -28,14 +28,14 @@ const getAllNewOrdersFromDB = async (user: JwtPayload) => {
     ?.map((doc: any) => {
       const obj = doc.toObject(); // Mongoose document -> plain object
       obj.createdAt = new Date(
-        new Date(obj.createdAt).getTime() + 60 * 60 * 1000
+        new Date(obj.createdAt).getTime() + 60 * 60 * 1000,
       );
       return obj;
     })
     .sort((first, sec) =>
       first.productName
         .toLowerCase()
-        .localeCompare(sec.productName.toLowerCase())
+        .localeCompare(sec.productName.toLowerCase()),
     );
 
   return {
@@ -46,12 +46,12 @@ const getAllNewOrdersFromDB = async (user: JwtPayload) => {
 const updateSingleProductIntoDB = async (
   id: string,
   user: JwtPayload,
-  payload: any
+  payload: any,
 ) => {
   const result = await SendOfferModelForRetailer.findByIdAndUpdate(
     { _id: id, retailer: user.id },
     payload,
-    { new: true }
+    { new: true },
   );
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
@@ -63,7 +63,7 @@ const updateSingleProductIntoDB = async (
 
 const deleteSingleOrMulifulOrderIntoDB = async (
   id: string,
-  user: JwtPayload
+  user: JwtPayload,
 ) => {
   const result = await SendOfferModelForRetailer.findByIdAndDelete({
     _id: id,
@@ -88,7 +88,7 @@ const productHistoryFromDB = async (user: JwtPayload) => {
     .map((doc: any) => doc.toObject())
     .filter((doc: any) => doc._id) // only keep docs with _id
     .sort((a, b) =>
-      a.productName.toLowerCase().localeCompare(b.productName.toLowerCase())
+      a.productName.toLowerCase().localeCompare(b.productName.toLowerCase()),
     ); // case-insensitive alphabetical sort
 
   return {
@@ -101,7 +101,7 @@ const updateHistoryIntoDB = async (user: JwtPayload, id: string) => {
   const result = await SendOfferModelForRetailer.findByIdAndUpdate(
     { _id: id, retailer: user.id },
     { status: false, price: 0, availability: false },
-    { new: true }
+    { new: true },
   );
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");

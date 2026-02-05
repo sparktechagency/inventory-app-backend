@@ -18,4 +18,3 @@ const createProductZodSchema = z.object({
 });
 
 export const packageValidation = { createProductZodSchema }
-
