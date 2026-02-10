@@ -22,6 +22,7 @@ const sendProductToWholesaler = catchAsync(
 
 const getAllProductToWholesaler = catchAsync(
   async (req: Request, res: Response) => {
+     console.log("✋✋✋✋✋✋✋✋✋✋✋✋✋✋ 2");
     const type = req.params.type as
       | "pending"
       | "confirmed"

@@ -80,6 +80,7 @@ const getAllProductSendToWholeSalerFromDB = async (
   type: "pending" | "confirmed" | "received" | "delivered",
   query: Record<string, any>,
 ) => {
+  console.log("✋✋✋✋✋✋✋✋✋✋✋✋✋✋    3");
   if (type === "confirmed") type = "delivered";
   const filter: Record<string, any> = {
     status: type,
@@ -318,7 +319,7 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB =
 // get all confirm base on retailer
 const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
 
-  console.log("User in getAllConfirmProductFromRetailerDB:", user);
+  console.log("✋✋✋✋✋✋✋✋✋✋✋✋✋✋    1");
   const details = await ProductSendModel.find({
     retailer: user.id,
     status: { $in: ["confirmed", "delivered"] },
@@ -386,7 +387,7 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
 
 // get all confirm base on wholesaler
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
-  console.log("User in getAllConfirmProductFromWholesalerDB:", user);
+
   const details = await ProductSendModel.find({
     wholesaler: user.id,
     status: { $in: ["confirmed", "delivered"] },
