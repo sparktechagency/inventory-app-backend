@@ -96,6 +96,9 @@ const getAllProductSendToWholeSalerFromDB = async (
     filter.status = query.status;
   }
 
+
+  console.log("Filter applied in getAllProductSendToWholeSalerFromDB:", "confirm");
+
   const productQuery = ProductSendModel.find(filter)
     .select("product retailer wholesaler note status createdAt updatedAt")
     .populate({
