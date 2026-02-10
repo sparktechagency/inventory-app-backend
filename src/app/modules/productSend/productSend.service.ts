@@ -80,7 +80,6 @@ const getAllProductSendToWholeSalerFromDB = async (
   type: "pending" | "confirmed" | "received" | "delivered",
   query: Record<string, any>,
 ) => {
-  console.log("✋✋✋✋✋✋✋✋✋✋✋✋✋✋    3");
   if (type === "confirmed") type = "delivered";
   const filter: Record<string, any> = {
     status: type,
@@ -89,7 +88,6 @@ const getAllProductSendToWholeSalerFromDB = async (
 
   if (user.role === "Retailer") {
     filter.retailer = new Types.ObjectId(user.id);
-    console.log("👤 RETAILER Filter:", filter);
   } else if (user.role === "Wholesaler") {
     filter.wholesaler = { $in: [user.id] };
   }
@@ -97,7 +95,8 @@ const getAllProductSendToWholeSalerFromDB = async (
   if (query.status) {
     filter.status = query.status;
   }
-
+  console.log("Filter::::::::::", filter);
+  console.log(await ProductSendModel.find({ retailer: user.id }));
   const productQuery = ProductSendModel.find(filter)
     .select("product retailer wholesaler note status createdAt updatedAt")
     .populate({
