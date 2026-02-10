@@ -22,13 +22,15 @@ const sendProductToWholesaler = catchAsync(
 
 const getAllProductToWholesaler = catchAsync(
   async (req: Request, res: Response) => {
-     console.log("✋✋✋✋✋✋✋✋✋✋✋✋✋✋ 2");
+    console.log("✋✋✋✋✋✋✋✋✋✋✋✋✋✋ 2");
     const type = req.params.type as
       | "pending"
       | "confirmed"
       | "delivered"
       | "received";
     const user = req.user;
+    console.error("🔥🔥🔥 About to call service with type:", type);
+
     const result = await productSendService.getAllProductSendToWholeSalerFromDB(
       user,
       type,
