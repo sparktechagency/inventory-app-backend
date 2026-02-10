@@ -95,8 +95,6 @@ const sendProductToWholesalerIntoDB = async (
 //   if (query.status) {
 //     filter.status = query.status;
 //   }
-//   console.log("Filter::::::::::", filter);
-//   console.log(await ProductSendModel.find({ retailer: user.id }));
 //   const productQuery = ProductSendModel.find(filter)
 //     .select("product retailer wholesaler note status createdAt updatedAt")
 //     .populate({
@@ -162,8 +160,6 @@ const getAllProductSendToWholeSalerFromDB = async (
   // Decide requested status from query.status first, else from type
   const requestedStatus = query?.status ?? type;
 
-  // IMPORTANT: prevent QueryBuilder.filter() from re-applying status again
-  // (otherwise it can override and return 0)
   if (query?.status !== undefined) {
     delete query.status;
   }
@@ -176,8 +172,6 @@ const getAllProductSendToWholeSalerFromDB = async (
     filter.status = requestedStatus;
   }
 
-  // Debug (optional)
-  // console.log("FINAL FILTER:", filter);
 
   const productQuery = ProductSendModel.find(filter)
     .select("product retailer wholesaler note status createdAt updatedAt")
@@ -217,7 +211,7 @@ const getAllProductSendToWholeSalerFromDB = async (
   const updatedData = (data || []).map((doc: any) => ({
     ...doc,
     createdAtLocal: doc?.createdAt
-      ? new Date(new Date(doc.createdAt).getTime() + 3600000)
+      ? new Date(new Date(doc?.createdAt).getTime() + 3600000)
       : doc?.createdAt,
   }));
 
@@ -403,7 +397,6 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB =
 // get all confirm base on retailer
 const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
 
-  console.log("✋✋✋✋✋✋✋✋✋✋✋✋✋✋    1");
   const details = await ProductSendModel.find({
     retailer: user.id,
     status: { $in: ["confirmed", "delivered"] },
@@ -471,7 +464,6 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
 
 // get all confirm base on wholesaler
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
-  console.log("✋✋✋✋✋✋✋✋✋✋✋✋✋✋      Final one");
   const details = await ProductSendModel.find({
     wholesaler: user.id,
     status: { $in: ["confirmed", "delivered"] },

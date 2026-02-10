@@ -75,8 +75,6 @@ export const initiateSubscriptionPayment = async (
       }
     );
 
-    // console.log(response)
-
     // Store subscription in the database
     const subscription = await flutterWaveService.createSubscriptionPackage(
       userEmail,
