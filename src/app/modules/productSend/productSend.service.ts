@@ -75,28 +75,105 @@ const sendProductToWholesalerIntoDB = async (
 };
 
 // get all just status true
+// const getAllProductSendToWholeSalerFromDB = async (
+//   user: JwtPayload,
+//   type: "pending" | "confirmed" | "received" | "delivered",
+//   query: Record<string, any>,
+// ) => {
+//   if (type === "confirmed") type = "delivered";
+//   const filter: Record<string, any> = {
+//     status: type,
+//     isDeleted: false,
+//   };
+
+//   if (user.role === "Retailer") {
+//     filter.retailer = new Types.ObjectId(user.id);
+//   } else if (user.role === "Wholesaler") {
+//     filter.wholesaler = { $in: [user.id] };
+//   }
+
+//   if (query.status) {
+//     filter.status = query.status;
+//   }
+//   console.log("Filter::::::::::", filter);
+//   console.log(await ProductSendModel.find({ retailer: user.id }));
+//   const productQuery = ProductSendModel.find(filter)
+//     .select("product retailer wholesaler note status createdAt updatedAt")
+//     .populate({
+//       path: "product._id",
+//       select: "productName unit quantity additionalInfo status",
+//       options: { lean: true },
+//     })
+//     .populate({
+//       path: "retailer",
+//       select:
+//         "name email phone storeInformation.businessName storeInformation.location image",
+//       options: { lean: true },
+//     })
+//     .populate({
+//       path: "wholesaler",
+//       select:
+//         "name email phone storeInformation.businessName storeInformation.location image",
+//       options: { lean: true },
+//     })
+//     .lean();
+
+
+//   const queryBuilder = new QueryBuilder(productQuery, {
+//     ...query,
+//     limit: query.limit ? Math.min(Number(query.limit), 100) : 50,
+//     page: query.page || 1,
+//   })
+//     .search(["note"])
+//     .filter()
+//     .sort()
+//     .paginate()
+//     .fields();
+
+//   const data = await queryBuilder.modelQuery.exec();
+//   const meta = await queryBuilder.getPaginationInfo();
+
+//   const updatedData = data?.map((doc: any) => ({
+//     ...doc,
+//     createdAt: new Date(new Date(doc?.updatedAt).getTime() + 3600000),
+//   }));
+
+//   return {
+//     meta,
+//     data: updatedData,
+//   };
+// };
 const getAllProductSendToWholeSalerFromDB = async (
   user: JwtPayload,
   type: "pending" | "confirmed" | "received" | "delivered",
   query: Record<string, any>,
 ) => {
-  if (type === "confirmed") type = "delivered";
+  // convert confirmed -> delivered
+  if (type === "confirmed") {
+    type = "delivered";
+  }
+
   const filter: Record<string, any> = {
     status: type,
     isDeleted: false,
   };
 
+  // role based filter
   if (user.role === "Retailer") {
     filter.retailer = new Types.ObjectId(user.id);
   } else if (user.role === "Wholesaler") {
-    filter.wholesaler = { $in: [user.id] };
+    filter.wholesaler = { $in: [new Types.ObjectId(user.id)] };
   }
 
+  // if query.status আসে
   if (query.status) {
-    filter.status = query.status;
+    if (query.status === "confirmed") {
+      filter.status = "delivered";
+    } else {
+      filter.status = query.status;
+    }
   }
-  console.log("Filter::::::::::", filter);
-  console.log(await ProductSendModel.find({ retailer: user.id }));
+
   const productQuery = ProductSendModel.find(filter)
     .select("product retailer wholesaler note status createdAt updatedAt")
     .populate({
@@ -118,11 +195,10 @@ const getAllProductSendToWholeSalerFromDB = async (
     })
     .lean();
 
-
   const queryBuilder = new QueryBuilder(productQuery, {
     ...query,
     limit: query.limit ? Math.min(Number(query.limit), 100) : 50,
-    page: query.page || 1,
+    page: query.page ? Number(query.page) : 1,
   })
     .search(["note"])
     .filter()
@@ -133,9 +209,11 @@ const getAllProductSendToWholeSalerFromDB = async (
   const data = await queryBuilder.modelQuery.exec();
   const meta = await queryBuilder.getPaginationInfo();
 
-  const updatedData = data?.map((doc: any) => ({
+  const updatedData = (data || []).map((doc: any) => ({
     ...doc,
-    createdAt: new Date(new Date(doc?.updatedAt).getTime() + 3600000),
+    createdAtLocal: doc?.createdAt
+      ? new Date(new Date(doc.createdAt).getTime() + 3600000)
+      : doc?.createdAt,
   }));
 
   return {
