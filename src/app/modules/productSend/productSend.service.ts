@@ -148,13 +148,7 @@ const getAllProductSendToWholeSalerFromDB = async (
   type: "pending" | "confirmed" | "received" | "delivered",
   query: Record<string, any>,
 ) => {
-  // convert confirmed -> delivered
-  if (type === "confirmed") {
-    type = "delivered";
-  }
-
   const filter: Record<string, any> = {
-    status: type,
     isDeleted: false,
   };
 
@@ -165,14 +159,25 @@ const getAllProductSendToWholeSalerFromDB = async (
     filter.wholesaler = { $in: [new Types.ObjectId(user.id)] };
   }
 
-  // if query.status আসে
-  if (query.status) {
-    if (query.status === "confirmed") {
-      filter.status = "delivered";
-    } else {
-      filter.status = query.status;
-    }
+  // Decide requested status from query.status first, else from type
+  const requestedStatus = query?.status ?? type;
+
+  // IMPORTANT: prevent QueryBuilder.filter() from re-applying status again
+  // (otherwise it can override and return 0)
+  if (query?.status !== undefined) {
+    delete query.status;
   }
+
+  // status mapping / compatibility
+  if (requestedStatus === "confirmed") {
+    // safest: support both confirmed + delivered (legacy + new)
+    filter.status = { $in: ["confirmed", "delivered"] };
+  } else {
+    filter.status = requestedStatus;
+  }
+
+  // Debug (optional)
+  // console.log("FINAL FILTER:", filter);
 
   const productQuery = ProductSendModel.find(filter)
     .select("product retailer wholesaler note status createdAt updatedAt")
@@ -221,6 +226,7 @@ const getAllProductSendToWholeSalerFromDB = async (
     data: updatedData,
   };
 };
+
 
 const updateProductSendDetailIntoDB = async (
   id: string,
