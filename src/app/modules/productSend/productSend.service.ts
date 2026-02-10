@@ -89,6 +89,7 @@ const getAllProductSendToWholeSalerFromDB = async (
 
   if (user.role === "Retailer") {
     filter.retailer = new Types.ObjectId(user.id);
+    console.log("👤 RETAILER Filter:", filter);
   } else if (user.role === "Wholesaler") {
     filter.wholesaler = { $in: [user.id] };
   }
