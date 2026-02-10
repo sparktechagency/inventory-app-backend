@@ -96,9 +96,6 @@ const getAllProductSendToWholeSalerFromDB = async (
     filter.status = query.status;
   }
 
-
-  console.log("Filter applied in getAllProductSendToWholeSalerFromDB:", "confirm");
-
   const productQuery = ProductSendModel.find(filter)
     .select("product retailer wholesaler note status createdAt updatedAt")
     .populate({
@@ -389,7 +386,7 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
 
 // get all confirm base on wholesaler
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
-
+  console.log("User in getAllConfirmProductFromWholesalerDB:", user);
   const details = await ProductSendModel.find({
     wholesaler: user.id,
     status: { $in: ["confirmed", "delivered"] },
