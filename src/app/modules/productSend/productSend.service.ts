@@ -236,7 +236,7 @@ const getAllReceivedProductFromWholesalerDB = async (user: JwtPayload) => {
     return obj;
   });
 
-  
+
   return updatedData;
 };
 // TODO: update product jeta wholesaler price and availability update korbe.
@@ -318,7 +318,7 @@ const updateProductReceivedToConfirmRequestFromRetailerToWholesalerIntoDB =
 // get all confirm base on retailer
 const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
 
-
+  console.log("User in getAllConfirmProductFromRetailerDB:", user);
   const details = await ProductSendModel.find({
     retailer: user.id,
     status: { $in: ["confirmed", "delivered"] },
@@ -356,7 +356,7 @@ const getAllConfirmProductFromRetailerDB = async (user: JwtPayload) => {
 };
 
 const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
- 
+
   const details = await ProductSendModel.find({
     wholesaler: user.id,
     status: "received",
@@ -379,14 +379,14 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order not found");
   }
 
-  
+
 
   return details;
 };
 
 // get all confirm base on wholesaler
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
- 
+
   const details = await ProductSendModel.find({
     wholesaler: user.id,
     status: { $in: ["confirmed", "delivered"] },
