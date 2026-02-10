@@ -387,7 +387,7 @@ const getAllReceivedProductFromRetailerDB = async (user: JwtPayload) => {
 
 // get all confirm base on wholesaler
 const getAllConfirmProductFromWholesalerDB = async (user: JwtPayload) => {
-
+  console.log("✋✋✋✋✋✋✋✋✋✋✋✋✋✋      Final one");
   const details = await ProductSendModel.find({
     wholesaler: user.id,
     status: { $in: ["confirmed", "delivered"] },
